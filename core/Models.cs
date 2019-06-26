@@ -1,6 +1,6 @@
 using System;
 
-namespace Api.Models
+namespace Core.Models
 {
     public enum InstantCoachStatus
     {

@@ -1,13 +1,14 @@
 using System;
 using Xunit;
 
-namespace test_api
+namespace Tests.Core
 {
-    public class UnitTest1
+    public class CoreTests
     {
         [Fact]
         public void Test1()
         {
+            Assert.True(true);
 
         }
     }
