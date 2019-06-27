@@ -9,7 +9,7 @@ Best to install specific version via `dotnet-install` scripts, for unix/linux:
     # or 2.1, also -Version can be applied if particular version needed
     ./dotnet-install.sh -Channel 2.2
 
-.NET Core will be installed in `~/.dotnet` add it to your `$PATH` in bashrc, zshrc, etc
+.NET Core will be installed in `~/.dotnet` add this to your `$PATH` in .bashrc, .zshrc, etc
 
     export PATH=$HOME/.dotnet:$PATH
 
@@ -43,7 +43,7 @@ Make sure that Web or class library project have this packages installed:
     dotnet add package Microsoft.EntityFrameworkCore.Design
 
 
-## .NET SDK 2.0
+### .NET SDK 2.0
 
 Note: package `Microsoft.EntityFrameworkCore.Tools.DotNet` is part of .NET SDK 2.1 and above, so it only refers to .NET SDK 2.0.
 
@@ -57,6 +57,8 @@ Make sure that is `DotNetCliToolReference` and remove it as `PackageReference` i
         <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
     </ItemGroup>
 
+
+### Migrations
 
 Change dir to directory having EF DbContext, either web project or class lib, in this case it is class lib folder and project `core` and going via web project that is startup project `web`:
 
