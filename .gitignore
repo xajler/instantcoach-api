@@ -30,3 +30,7 @@ msbuild.wrn
 
 # Visual Studio 201x
 .vs/
+
+# Test folder
+
+test/**

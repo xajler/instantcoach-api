@@ -2,23 +2,33 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Core.Context;
 
 namespace InstantCoach
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddDbContext<ICContext>(options => options.UseSqlServer(new ICContextFactory().CreateDbContext()));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<ICContext>().Database.Migrate();
+                if (!serviceScope.ServiceProvider.GetService<ICContext>().AllMigrationsApplied())
+                {
+                     serviceScope.ServiceProvider.GetService<ICContext>().Database.Migrate();
+                     serviceScope.ServiceProvider.GetService<ICContext>().EnsureSeeded();
+                }
             }
 
             app.Run(async (context) =>
