@@ -1,8 +1,10 @@
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using Core.Context;
 
-namespace Core
+namespace InstantCoach
 {
     //
     // NOTE:
@@ -11,13 +13,15 @@ namespace Core
     //
     public class ICContextDesignTimeFactory : IDesignTimeDbContextFactory<ICContext>
     {
-        // TODO: change from hardcode but it can be hardcoded, needed only of ef commands.
-        private const string DbConnString = "Data Source=localhost;Initial Catalog=test;User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
-
         public ICContext CreateDbContext(string[] args)
         {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+            var connectionString = configuration.GetConnectionString("TestDb");
             var builder = new DbContextOptionsBuilder<ICContext>();
-            builder.UseSqlServer(DbConnString,
+            builder.UseSqlServer(connectionString,
                providerOptions => providerOptions.CommandTimeout(180))
                                                  .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
