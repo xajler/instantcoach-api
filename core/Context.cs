@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Design;
 using Core.Entities;
 using Core.Enums;
 
@@ -12,7 +11,6 @@ namespace Core.Context
 {
     public class ICContext : DbContext
     {
-        public const string SchemaName = "test";
         public ICContext(DbContextOptions<ICContext> options)
             : base(options)
         {
@@ -24,9 +22,7 @@ namespace Core.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema(schema: SchemaName);
             modelBuilder.ApplyConfiguration(new InstantCoachConfiguration());
-
             base.OnModelCreating(modelBuilder);
         }
 
@@ -67,8 +63,10 @@ namespace Core.Context
             var statusConvert = new EnumToNumberConverter<InstantCoachStatus, byte>();
             builder.Property(x => x.Status)
                    .HasConversion(statusConvert);
+            // String as JSON
             builder.Property(x => x.QuestionComments)
                    .HasColumnType("NVARCHAR(MAX)");
+            // String as JSON
             builder.Property(x => x.BookmarkPins)
                    .HasColumnType("NVARCHAR(MAX)");
             builder.Property(x => x.Status)

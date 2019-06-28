@@ -2,7 +2,9 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Core;
 using Core.Context;
+using static System.Console;
 
 namespace InstantCoach
 {
@@ -19,12 +21,11 @@ namespace InstantCoach
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
-            var connectionString = configuration.GetConnectionString("TestDb");
+            Config config = configuration.GetSection(Config.Name).Get<Config>();
+            var connectionString = config.GetConnectionString();
+            WriteLine($"conn string: {connectionString}");
             var builder = new DbContextOptionsBuilder<ICContext>();
-            builder.UseSqlServer(connectionString,
-               providerOptions => providerOptions.CommandTimeout(180))
-                                                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-
+            builder.UseSqlServer(connectionString);
             return new ICContext(builder.Options);
         }
     }

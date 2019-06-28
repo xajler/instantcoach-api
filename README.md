@@ -1,5 +1,35 @@
 # InstantCoach app
 
+## Run
+
+### Local Env
+
+#### First time docker
+
+    cd <app-root>
+    docker pull microsoft/mssql-server-linux
+    ./docker-run.sh
+
+#### Usual usage
+
+For local run without docker for app, but for `mssql` (make sure docker service is running) use this commands:
+
+    cd <app-root>
+    docker start sql1
+    # Set env vars for local dev (or add to bashrc, zsrhc, etc, then this is not necessary)
+    source ./EnvVar.sh
+    dotnet build
+    # On run will run migrations if DB not existing or not updated to latest migration
+    dotnet run
+
+Before running EF CLI locally make sure on each opening terminal instance to run (or add to bashrc, zsrhc, etc, then this is not necessary):
+
+    cd <app-root>
+    source ./EnvVar.sh
+
+Now updating database or add migrations will not throw error.
+
+
 ## .NET Core
 
 Best to install specific version via `dotnet-install` scripts, for unix/linux:
