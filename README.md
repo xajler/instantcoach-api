@@ -1,5 +1,22 @@
 # InstantCoach app
 
+## Features
+
+* ~~EF Migrations~~
+* ~~Config through IOption<T>~~
+* ~~ Docker MSSQL~~
+* Db CRUD
+* REST API
+* Swagger
+* Unit Testing
+* Dockerfile MSSQL
+* Dockerfile Build/Run App
+* Docker Compose
+* CI/CD Bitbucket pipelines (?)
+* Integration Testing (?)
+* Message Queue (?)
+* CQRS (?)
+
 ## Run
 
 ### Local Env
@@ -106,5 +123,8 @@ Change dir to directory having EF DbContext, either web project or class lib, in
 
     # To drop database and start from scratch
     dotnet ef database drop -s ../web
+
+    # To get DB script
+    dotnet ef migrations script -s ../web
 
 Connection string using `sa` user and password for docker, good for dev and testing, but for production there is `db-create.sh` good MSSQL template for creating in production environment.
