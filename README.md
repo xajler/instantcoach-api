@@ -4,11 +4,13 @@
 
 * ~~EF Migrations~~
 * ~~Config through IOption<T>~~
-* ~~ Docker MSSQL~~
+* ~~Docker MSSQL~~
 * Db CRUD
 * REST API
 * Swagger
+* JWT Auth
 * Unit Testing
+* Health checks
 * Dockerfile MSSQL
 * Dockerfile Build/Run App
 * Docker Compose
