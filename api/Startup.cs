@@ -9,7 +9,7 @@ using Core.Context;
 using Core;
 using static System.Console;
 
-namespace Web
+namespace Api
 {
     public class Startup
     {

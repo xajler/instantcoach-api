@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RootNamespace>Tests.Core</RootNamespace>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

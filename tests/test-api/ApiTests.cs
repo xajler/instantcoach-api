@@ -1,9 +1,9 @@
 using System;
 using Xunit;
 
-namespace Tests.Web
+namespace Tests.Api
 {
-    public class WebTests
+    public class ApiTests
     {
         [Fact]
         public void Test1()

@@ -6,7 +6,7 @@ Using ASP.NET Core API for sample microservices REST API.
 >
 > Most of C# files contain multiple classes, because of microservices nature, if this wouldn't be microservice, those would go to folders and separate files.
 >
-> And this README at this point is very chaotic, it will change when started Docker for all. Probably most of this README will go to separate file NOTES.
+> README state at this point is very chaotic, it will change when Dockerfile's are created for all. Then most of this README will go to separate file NOTES, since it will represent local notes, and most of it will be part of Dockerfile.
 
 Created using:
 
@@ -21,7 +21,7 @@ Unit Testing will come last, because there is possibility of major changes and r
 ## Features
 
 * ~~EF Migrations~~
-* ~~Config through IOption<T>~~
+* ~~Config through IOptions&lt;T&gt;~~
 * ~~Docker MSSQL~~
 * ~~API Versioning~~
 * ~~REST API Endpoint~~ (TODO: connect with CRUD and Auth)
@@ -34,7 +34,9 @@ Unit Testing will come last, because there is possibility of major changes and r
 * Dockerfile MSSQL
 * Dockerfile Build/Run App
 * Docker Compose
+* Nginx web server
 * GraphQL (?)
+* SSL (?)
 * CI/CD Bitbucket pipelines (?)
 * Integration Testing (?)
 * Message Queue (?)
@@ -114,7 +116,7 @@ Make sure on linux to create `docker` group and add dev user to this group.
 ## Entity Framework
 
 
-Make sure that Web or class library project have this packages installed:
+Make sure that WebApi or class library project have this packages installed:
 
     dotnet add package Microsoft.EntityFrameworkCore.Design
 
@@ -136,11 +138,11 @@ Make sure that is `DotNetCliToolReference` and remove it as `PackageReference` i
 
 ### Migrations
 
-Change dir to directory having EF DbContext, either web project or class lib, in this case it is class lib folder and project `core` and going via web project that is startup project `web`:
+Change dir to directory having EF DbContext, either api project or class lib, in this case it is class lib folder and project `core` and going via webapi project that is startup project `api`:
 
     cd core
-    # -s means startup project 'web' dir in this case
-    dotnet ef migrations add Initial -s ../web
+    # -s means startup project 'api' dir in this case
+    dotnet ef migrations add Initial -s ../api
 
     # If there any errors remove migrations, fix errors then run add again
     dotnet ef migrations remove
@@ -148,12 +150,12 @@ Change dir to directory having EF DbContext, either web project or class lib, in
     # Make sure no errors on creating initial migration
     # Make sure you're running docker mssql instance!!!
     # Then run this command to create database
-    dotnet ef database update -s ../web
+    dotnet ef database update -s ../api
 
     # To drop database and start from scratch
-    dotnet ef database drop -s ../web
+    dotnet ef database drop -s ../api
 
     # To get DB script
-    dotnet ef migrations script -s ../web
+    dotnet ef migrations script -s ../api
 
 Connection string using `sa` user and password for docker, good for dev and testing, but for production there is `db-create.sh` good MSSQL template for creating in production environment.

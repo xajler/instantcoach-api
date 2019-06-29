@@ -6,7 +6,7 @@ using Core;
 using Core.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
-namespace Web.Controllers
+namespace Api.Controllers.Version1
 {
     [Route(Config.ApiRoute)]
     [ApiVersion(Config.ApiVersion1)]
