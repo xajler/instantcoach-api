@@ -60,16 +60,18 @@ For local run without docker for app, but for `mssql` (make sure docker service 
     docker start sql1
     # Set env vars for local dev (or add to bashrc, zsrhc, etc, then this is not necessary)
     source ./EnvVar.sh
+    cd api
     dotnet build
     # On run will run migrations if DB not existing or not updated to latest migration
     dotnet run
 
-Before running EF CLI locally make sure on each opening terminal instance to run (or add to bashrc, zsrhc, etc, then this is not necessary):
+### Swagger
 
-    cd <app-root>
-    source ./EnvVar.sh
+Make sure having app running (currently only locally see more in `Usual usage` section).
+Navigate to url:
 
-Now updating database or add migrations will not throw error.
+    http://localhost:5000/swagger
+
 
 ### Postman
 
@@ -137,6 +139,11 @@ Make sure that is `DotNetCliToolReference` and remove it as `PackageReference` i
 
 
 ### Migrations
+
+Before running EF CLI locally make sure on each opening terminal instance to run (or add to bashrc, zsrhc, etc, then this is not necessary):
+
+    cd <app-root>
+    source ./EnvVar.sh
 
 Change dir to directory having EF DbContext, either api project or class lib, in this case it is class lib folder and project `core` and going via webapi project that is startup project `api`:
 
