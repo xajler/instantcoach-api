@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Core.Context;
 using Core;
 using static System.Console;
 
-namespace InstantCoach
+namespace Web
 {
     public class Startup
     {
@@ -24,7 +23,7 @@ namespace InstantCoach
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //
+            services.AddApiVersioning();
             services.AddOptions<Config>()
                     .Configure(options => Configuration.GetSection(Config.Name).Bind(options))
                     .ValidateDataAnnotations();
@@ -40,6 +39,27 @@ namespace InstantCoach
                             errorNumbersToAdd: null);
                         })
                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+            services.AddSwaggerDocument(configure =>
+            {
+                configure.PostProcess = document =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "InstantCoach API";
+                    document.Info.Description = "A sample ASP.NET Core web API for microservices";
+                    document.Info.TermsOfService = "None";
+                    document.Info.Contact = new NSwag.OpenApiContact
+                    {
+                        Name = "Kornelije Sajler",
+                        Email = "ks@metaintellect.com",
+                        Url = "https://git.430n.com/x430n/instantcoach"
+                    };
+                    document.Info.License = new NSwag.OpenApiLicense
+                    {
+                        Name = "Use under MIT",
+                        Url = "https://git.430n.com/x430n/instantcoach/src/branch/master/LICENSE"
+                    };
+                };
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -65,7 +85,9 @@ namespace InstantCoach
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
             app.UseMvc();
         }
     }

@@ -1,19 +1,40 @@
 # InstantCoach app
 
+Using ASP.NET Core API for sample microservices REST API.
+
+> Note:
+>
+> Most of C# files contain multiple classes, because of microservices nature, if this wouldn't be microservice, those would go to folders and separate files.
+>
+> And this README at this point is very chaotic, it will change when started Docker for all. Probably most of this README will go to separate file NOTES.
+
+Created using:
+
+* Linux (ArchLinux)
+* .NET Core 2.2 (Local and Docker)
+* SQL Server 2017 (Docker)
+* VS Code (With C# Extensions)
+* Azure Data Studio (Local GUI for SQL Server)
+
+Unit Testing will come last, because there is possibility of major changes and refactoring throughout creating this microservices API architecture.
+
 ## Features
 
 * ~~EF Migrations~~
 * ~~Config through IOption<T>~~
 * ~~Docker MSSQL~~
-* Db CRUD
-* REST API
-* Swagger
+* ~~API Versioning~~
+* ~~REST API Endpoint~~ (TODO: connect with CRUD and Auth)
+* ~~Swagger~~ (TODO: Auth)
+* Db CRUD / Service
 * JWT Auth
-* Unit Testing
+* Error Handling
+* Unit Testing / Refactoring
 * Health checks
 * Dockerfile MSSQL
 * Dockerfile Build/Run App
 * Docker Compose
+* GraphQL (?)
 * CI/CD Bitbucket pipelines (?)
 * Integration Testing (?)
 * Message Queue (?)
@@ -47,6 +68,12 @@ Before running EF CLI locally make sure on each opening terminal instance to run
     source ./EnvVar.sh
 
 Now updating database or add migrations will not throw error.
+
+### Postman
+
+Run all API calls through Postman.
+
+Import postman collection `InstantCoach API.postman_collection.json` from `postman` folder.
 
 
 ## .NET Core

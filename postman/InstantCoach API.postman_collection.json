@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "371463d3-152a-47dc-8076-470f9d9868c1",
+		"name": "InstantCoach API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/instantcoaches/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"instantcoaches",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/instantcoaches/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"instantcoaches",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 0,\n    \"description\": null,\n    \"status\": 0,\n    \"ticketId\": null,\n    \"reference\": null,\n    \"createdAt\": \"0001-01-01T00:00:00\",\n    \"updatedAt\": \"0001-01-01T00:00:00\",\n    \"evaluatorId\": 0,\n    \"agentId\": 0,\n    \"templateId\": 0,\n    \"questionComments\": null,\n    \"questionCount\": 0,\n    \"bookmarkPins\": null\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/instantcoaches",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"instantcoaches"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update by Id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 0,\n    \"description\": null,\n    \"status\": 0,\n    \"ticketId\": null,\n    \"reference\": null,\n    \"createdAt\": \"0001-01-01T00:00:00\",\n    \"updatedAt\": \"0001-01-01T00:00:00\",\n    \"evaluatorId\": 0,\n    \"agentId\": 0,\n    \"templateId\": 0,\n    \"questionComments\": null,\n    \"questionCount\": 0,\n    \"bookmarkPins\": null\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/instantcoaches/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"instantcoaches",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Completed by Id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/instantcoaches/1/completed",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"instantcoaches",
+						"1",
+						"completed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deleted by Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/instantcoaches/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"instantcoaches",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

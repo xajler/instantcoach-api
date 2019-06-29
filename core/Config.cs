@@ -7,6 +7,9 @@ namespace Core
     public class Config
     {
         public const string Name = "Config";
+        public const string ApiRoute = "api/v{version:apiVersion}/instantcoaches";
+        public const string ApiVersion1 = "1";
+        public const string ProducesJsonContent = "application/json";
 
         [Required]
         public string DbName { get; set; }

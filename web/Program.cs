@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.Net;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace InstantCoach
+namespace Web
 {
     public class Program
     {
@@ -12,6 +13,9 @@ namespace InstantCoach
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel(options => {
+                    options.Listen(IPAddress.Loopback, 5000); //HTTP port
+                })
                 .UseStartup<Startup>()
                 .Build();
     }

@@ -6,7 +6,7 @@ using Core;
 using Core.Context;
 using static System.Console;
 
-namespace InstantCoach
+namespace Web
 {
     //
     // NOTE:
