@@ -74,11 +74,11 @@ namespace Api
                                          .GetRequiredService<IServiceScopeFactory>()
                                          .CreateScope())
             {
-                serviceScope.ServiceProvider.GetService<ICContext>().Database.Migrate();
-                if (!serviceScope.ServiceProvider.GetService<ICContext>().AllMigrationsApplied())
+                var context = serviceScope.ServiceProvider.GetService<ICContext>();
+                if (!context.AllMigrationsApplied())
                 {
-                    serviceScope.ServiceProvider.GetService<ICContext>().Database.Migrate();
-                    serviceScope.ServiceProvider.GetService<ICContext>().EnsureSeeded();
+                    context.Database.Migrate();
+                    context.EnsureSeeded();
                 }
             }
 

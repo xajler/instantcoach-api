@@ -5,7 +5,10 @@ project.lock.json
 *.pyc
 
 # Visual Studio Code
-.vscode
+# .vscode
+
+# F# .ionide
+.ionide
 
 # User-specific files
 *.suo

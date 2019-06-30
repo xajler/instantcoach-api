@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/api/api.csproj"
+            ],
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "./run-local.sh",
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/api/api.csproj"
+            ],
+            "problemMatcher": "$tsc"
+        }
+    ]
+}
