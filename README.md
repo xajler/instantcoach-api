@@ -48,15 +48,24 @@ Unit Testing will come last, because there is possibility of major changes and r
 
 #### First time docker
 
-    cd <app-root>
+    cd <src-root>
     docker pull microsoft/mssql-server-linux
     ./docker-run.sh
+
+### Quick usage
+
+Run VS Code with Debug or Task named `run`.
+
+Or in terminal run:
+
+    cd <src-root>
+    ./run-local.sh
 
 #### Usual usage
 
 For local run without docker for app, but for `mssql` (make sure docker service is running) use this commands:
 
-    cd <app-root>
+    cd <src-root>
     docker start sql1
     # Set env vars for local dev (or add to bashrc, zsrhc, etc, then this is not necessary)
     source ./EnvVar.sh
@@ -142,7 +151,7 @@ Make sure that is `DotNetCliToolReference` and remove it as `PackageReference` i
 
 Before running EF CLI locally make sure on each opening terminal instance to run (or add to bashrc, zsrhc, etc, then this is not necessary):
 
-    cd <app-root>
+    cd <src-root>
     source ./EnvVar.sh
 
 Change dir to directory having EF DbContext, either api project or class lib, in this case it is class lib folder and project `core` and going via webapi project that is startup project `api`:
