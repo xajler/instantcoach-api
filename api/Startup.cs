@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Core.Context;
 using Core;
+using Core.Contracts;
+using Core.Repositories;
 using static System.Console;
 
 namespace Api
@@ -60,6 +62,7 @@ namespace Api
                     };
                 };
             });
+            services.AddScoped<IInstantCoachRepository, InstantCoachRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

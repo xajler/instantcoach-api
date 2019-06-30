@@ -8,4 +8,23 @@ namespace Core.Enums
         InProgress,
         Completed
     }
+
+    public enum EvaluationCommentAuthor
+    {
+        Evaluator = 1,
+        Agent
+    }
+
+    public enum CommentType
+    {
+        Text = 1,
+        Bookmark,
+        Attachment
+    }
+
+    public enum UpdateType
+    {
+        Save = 1,
+        Review
+    }
 }

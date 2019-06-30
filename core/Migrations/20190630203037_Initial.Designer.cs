@@ -7,17 +7,16 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Core.Migrations
+namespace core.Migrations
 {
     [DbContext(typeof(ICContext))]
-    [Migration("20190627200920_Initial")]
+    [Migration("20190630203037_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("test")
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -33,6 +32,12 @@ namespace Core.Migrations
                     b.Property<string>("BookmarkPins")
                         .HasColumnType("NVARCHAR(MAX)");
 
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(MAX)");
+
+                    b.Property<int>("CommentsCount");
+
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Description")
@@ -41,12 +46,6 @@ namespace Core.Migrations
 
                     b.Property<int>("EvaluatorId");
 
-                    b.Property<string>("QuestionComments")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(MAX)");
-
-                    b.Property<int>("QuestionCount");
-
                     b.Property<string>("Reference")
                         .IsRequired()
                         .HasMaxLength(16);
@@ -54,8 +53,6 @@ namespace Core.Migrations
                     b.Property<byte>("Status")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue((byte)1);
-
-                    b.Property<int>("TemplateId");
 
                     b.Property<string>("TicketId")
                         .IsRequired()
@@ -69,24 +66,7 @@ namespace Core.Migrations
 
                     b.HasIndex("EvaluatorId");
 
-                    b.HasIndex("TemplateId");
-
                     b.ToTable("InstantCoaches");
-                });
-
-            modelBuilder.Entity("Core.Entities.Template", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Templates");
                 });
 
             modelBuilder.Entity("Core.Entities.User", b =>
@@ -115,11 +95,6 @@ namespace Core.Migrations
                         .WithMany("EvaluatorInstantCoaches")
                         .HasForeignKey("EvaluatorId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Core.Entities.Template", "Template")
-                        .WithMany("InstantCoaches")
-                        .HasForeignKey("TemplateId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

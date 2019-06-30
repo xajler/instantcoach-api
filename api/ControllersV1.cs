@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Core;
 using Core.Models;
+using Core.Contracts;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace Api.Controllers.Version1
@@ -14,29 +15,42 @@ namespace Api.Controllers.Version1
     [ApiController]
     public class ApiV1Controller : ControllerBase
     {
+        private readonly IInstantCoachRepository _repository;
+
+        public ApiV1Controller(IInstantCoachRepository repository)
+        {
+            _repository = repository;
+        }
+
         [HttpGet]
-        [ProducesResponseType(typeof(List<InstantCoach>), Status200OK)]
+        [ProducesResponseType(typeof(ListResult<InstantCoachList>), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         public async Task<IActionResult> GetAsync(
             int skip = 0, int take = 10, bool showCompleted = false)
         {
             await Task.CompletedTask; // Dummy await, to supress compiler warnings
-            return Ok(new List<InstantCoach> { new InstantCoach() });
+            var result = new ListResult<InstantCoachList>
+            {
+                Items = new List<InstantCoachList> { new InstantCoachList() },
+                TotalCount = 0
+            };
+            return Ok(result);
         }
 
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(InstantCoach), Status200OK)]
+        [ProducesResponseType(typeof(InstantCoachDb), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> GetAsync(int id)
         {
-            await Task.CompletedTask; // Dummy await, to supress compiler warnings
-            return NotFound();
+            InstantCoachDb result = await _repository.GetById(id);
+            if (result == null) { return NotFound($"Not existing id: {id}"); }
+            return Ok(result);
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(InstantCoach), Status201Created)]
+        [ProducesResponseType(Status201Created)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<ActionResult> PostAsync([FromBody] InstantCoach model)
+        public async Task<ActionResult> PostAsync([FromBody] InstantCoachCreateClient data)
         {
             await Task.CompletedTask; // Dummy await, to supress compiler warnings
             return BadRequest();
@@ -46,7 +60,8 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
-        public async Task<ActionResult> PutAsync(int id, [FromBody] InstantCoach model)
+        public async Task<ActionResult> PutAsync(int id,
+            [FromBody] InstantCoachUpdateClient data)
         {
             await Task.CompletedTask; // Dummy await, to supress compiler warnings
             return NotFound();

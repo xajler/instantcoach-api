@@ -22,11 +22,6 @@ namespace Core.Entities
         public List<InstantCoach> AgentInstantCoaches { get; set; }
     }
 
-    public class Template : Entity
-    {
-        public List<InstantCoach> InstantCoaches { get; set; }
-    }
-
     public class InstantCoach : Entity
     {
         [Required, MaxLength(1000)]
@@ -44,12 +39,9 @@ namespace Core.Entities
         public int AgentId { get; set; }
         public User Agent { get; set; }
         [Required]
-        public int TemplateId { get; set; }
-        public Template Template { get; set; }
+        public string Comments { get; set; }
         [Required]
-        public string QuestionComments { get; set; }
-        [Required]
-        public int QuestionCount { get; set; }
+        public int CommentsCount { get; set; }
         public string BookmarkPins { get; set; }
     }
 }

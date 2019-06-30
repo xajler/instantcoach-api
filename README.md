@@ -29,6 +29,7 @@ Unit Testing will come last, because there is possibility of major changes and r
 * Db CRUD / Service
 * JWT Auth
 * Error Handling
+* Logging
 * Unit Testing / Refactoring
 * Health checks
 * Dockerfile MSSQL

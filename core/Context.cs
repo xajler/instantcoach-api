@@ -17,7 +17,6 @@ namespace Core.Context
         }
 
         public DbSet<InstantCoach> InstantCoaches { get; set; }
-        public DbSet<Template> Templates { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,15 +63,13 @@ namespace Core.Context
             builder.Property(x => x.Status)
                    .HasConversion(statusConvert);
             // String as JSON
-            builder.Property(x => x.QuestionComments)
+            builder.Property(x => x.Comments)
                    .HasColumnType("NVARCHAR(MAX)");
             // String as JSON
             builder.Property(x => x.BookmarkPins)
                    .HasColumnType("NVARCHAR(MAX)");
             builder.Property(x => x.Status)
                    .HasDefaultValue(InstantCoachStatus.New);
-            builder.HasOne(x => x.Template)
-                   .WithMany(x => x.InstantCoaches);
             builder.HasOne(x => x.Evaluator)
                    .WithMany(x => x.EvaluatorInstantCoaches)
                    .OnDelete(DeleteBehavior.Restrict);
