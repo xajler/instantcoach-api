@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace Api.Filters
+namespace Api
 {
 public class OperationCancelledExceptionFilter : ExceptionFilterAttribute
     {

@@ -28,7 +28,7 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Swagger~~ (TODO: Auth)
 * ~~Db CRUD / Service~~
 * JWT Auth
-* Error Handling (Partially using Result and Result<T> for known errors)
+* Error Handling (Partially using Result and Result&gt;T&lt; for known errors)
 * Logging
 * Unit Testing / Refactoring
 * Health checks
