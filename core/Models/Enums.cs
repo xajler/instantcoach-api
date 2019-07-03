@@ -1,4 +1,4 @@
-namespace Core.Enums
+namespace Core.Models
 {
     public enum InstantCoachStatus
     {
@@ -26,5 +26,13 @@ namespace Core.Enums
     {
         Save = 1,
         Review
+    }
+
+    public enum ErrorType
+    {
+        None,
+        UnknownId,
+        InvalidData,
+        SaveChangesFailed
     }
 }

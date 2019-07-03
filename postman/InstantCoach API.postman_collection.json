@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "371463d3-152a-47dc-8076-470f9d9868c1",
+		"_postman_id": "672537b3-a7d7-4d3c-a425-0c742886bc2e",
 		"name": "InstantCoach API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/instantcoaches/",
+					"raw": "http://localhost:5000/api/v1/instantcoaches?skip=0&take=2&showCompleted=true",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -20,8 +20,21 @@
 					"path": [
 						"api",
 						"v1",
-						"instantcoaches",
-						""
+						"instantcoaches"
+					],
+					"query": [
+						{
+							"key": "skip",
+							"value": "0"
+						},
+						{
+							"key": "take",
+							"value": "2"
+						},
+						{
+							"key": "showCompleted",
+							"value": "true"
+						}
 					]
 				}
 			},
@@ -62,7 +75,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": 0,\n    \"description\": null,\n    \"status\": 0,\n    \"ticketId\": null,\n    \"reference\": null,\n    \"createdAt\": \"0001-01-01T00:00:00\",\n    \"updatedAt\": \"0001-01-01T00:00:00\",\n    \"evaluatorId\": 0,\n    \"agentId\": 0,\n    \"templateId\": 0,\n    \"questionComments\": null,\n    \"questionCount\": 0,\n    \"bookmarkPins\": null\n}"
+					"raw": "{\n  \"description\": \"string\",\n  \"ticketId\": \"string\",\n  \"evaluatorId\": 0,\n  \"agentId\": 0,\n  \"evaluatorName\": \"string\",\n  \"agentName\": \"string\",\n  \"comments\": [\n    {\n      \"commentType\": \"Text\",\n      \"text\": \"string\",\n      \"authorType\": \"Evaluator\",\n      \"createdAt\": \"2019-07-03T21:55:54.001Z\",\n      \"pinId\": 0\n    }\n  ],\n  \"bookmarkPins\": [\n    {\n      \"id\": 0,\n      \"index\": 0,\n      \"range\": 0,\n      \"comment\": \"string\",\n      \"mediaUrl\": \"string\"\n    }\n  ]\n}\n\n"
 				},
 				"url": {
 					"raw": "http://localhost:5000/api/v1/instantcoaches",
@@ -75,12 +88,6 @@
 						"api",
 						"v1",
 						"instantcoaches"
-					],
-					"query": [
-						{
-							"key": "",
-							"value": ""
-						}
 					]
 				}
 			},
@@ -99,7 +106,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": 0,\n    \"description\": null,\n    \"status\": 0,\n    \"ticketId\": null,\n    \"reference\": null,\n    \"createdAt\": \"0001-01-01T00:00:00\",\n    \"updatedAt\": \"0001-01-01T00:00:00\",\n    \"evaluatorId\": 0,\n    \"agentId\": 0,\n    \"templateId\": 0,\n    \"questionComments\": null,\n    \"questionCount\": 0,\n    \"bookmarkPins\": null\n}"
+					"raw": "{\n  \"updateType\": \"Save\",\n  \"comments\": [\n    {\n      \"commentType\": \"Text\",\n      \"text\": \"string\",\n      \"authorType\": \"Evaluator\",\n      \"createdAt\": \"2019-07-03T21:56:52.948Z\",\n      \"pinId\": 0\n    }\n  ],\n  \"bookmarkPins\": [\n    {\n      \"id\": 0,\n      \"index\": 0,\n      \"range\": 0,\n      \"comment\": \"string\",\n      \"mediaUrl\": \"string\"\n    }\n  ]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:5000/api/v1/instantcoaches/1",

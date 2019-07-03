@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace core.Migrations
 {
     [DbContext(typeof(ICContext))]
-    [Migration("20190630203037_Initial")]
+    [Migration("20190703181500_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,15 +19,21 @@ namespace core.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("Relational:Sequence:.ic_hilo", "'ic_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Core.Entities.InstantCoach", b =>
+            modelBuilder.Entity("Core.Context.InstantCoachDbEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasAnnotation("SqlServer:HiLoSequenceName", "ic_hilo")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
 
                     b.Property<int>("AgentId");
+
+                    b.Property<string>("AgentName")
+                        .IsRequired()
+                        .HasMaxLength(128);
 
                     b.Property<string>("BookmarkPins")
                         .HasColumnType("NVARCHAR(MAX)");
@@ -46,6 +52,10 @@ namespace core.Migrations
 
                     b.Property<int>("EvaluatorId");
 
+                    b.Property<string>("EvaluatorName")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
                     b.Property<string>("Reference")
                         .IsRequired()
                         .HasMaxLength(16);
@@ -62,39 +72,7 @@ namespace core.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AgentId");
-
-                    b.HasIndex("EvaluatorId");
-
                     b.ToTable("InstantCoaches");
-                });
-
-            modelBuilder.Entity("Core.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Core.Entities.InstantCoach", b =>
-                {
-                    b.HasOne("Core.Entities.User", "Agent")
-                        .WithMany("AgentInstantCoaches")
-                        .HasForeignKey("AgentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Core.Entities.User", "Evaluator")
-                        .WithMany("EvaluatorInstantCoaches")
-                        .HasForeignKey("EvaluatorId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using Core.Enums;
+using Core.Models;
 
 namespace Core
 {

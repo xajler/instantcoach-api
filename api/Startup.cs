@@ -5,18 +5,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Swashbuckle.AspNetCore.Swagger;
 using Core.Context;
 using Core;
 using Core.Contracts;
 using Core.Repositories;
+using Core.Services;
+using Api.Filters;
 using static System.Console;
 
 namespace Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
+            WriteLine($"Env is: {env.EnvironmentName}");
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
             Configuration = configuration;
         }
 
@@ -24,7 +36,17 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+                {
+                    options.Filters.Add<OperationCancelledExceptionFilter>();
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    options.SerializerSettings.Formatting = Formatting.None;
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddApiVersioning();
             services.AddOptions<Config>()
                     .Configure(options => Configuration.GetSection(Config.Name).Bind(options))
@@ -41,37 +63,33 @@ namespace Api
                             errorNumbersToAdd: null);
                         })
                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
-            services.AddSwaggerDocument(configure =>
+
+            services.AddSwaggerGen(s =>
             {
-                configure.PostProcess = document =>
+                s.SwaggerDoc("v1", new Info
                 {
-                    document.Info.Version = "v1";
-                    document.Info.Title = "InstantCoach API";
-                    document.Info.Description = "A sample ASP.NET Core web API for microservices";
-                    document.Info.TermsOfService = "None";
-                    document.Info.Contact = new NSwag.OpenApiContact
+                    Version = "v1",
+                    Title = "InstantCoach API",
+                    Description = "A sample ASP.NET Core web API for microservices",
+                    Contact = new Contact
                     {
                         Name = "Kornelije Sajler",
                         Email = "ks@metaintellect.com",
                         Url = "https://git.430n.com/x430n/instantcoach"
-                    };
-                    document.Info.License = new NSwag.OpenApiLicense
+                    },
+                    License = new License
                     {
-                        Name = "Use under MIT",
+                        Name = "MIT",
                         Url = "https://git.430n.com/x430n/instantcoach/src/branch/master/LICENSE"
-                    };
-                };
+                    }
+                });
             });
-            services.AddScoped<IInstantCoachRepository, InstantCoachRepository>();
+            services.AddSingleton<IInstantCoachRepository, InstantCoachRepository>();
+            services.AddSingleton<IInstantCoachService, InstantCoachServices>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            WriteLine($"Env is: {env.EnvironmentName}");
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
             using (var serviceScope = app.ApplicationServices
                                          .GetRequiredService<IServiceScopeFactory>()
@@ -85,12 +103,12 @@ namespace Api
                 }
             }
 
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
-
             //app.UseHttpsRedirection();
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseSwagger();
+            app.UseSwaggerUI(s =>
+            {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "InstantCoach API v1.0");
+            });
             app.UseMvc();
         }
     }

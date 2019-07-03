@@ -24,11 +24,11 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Config through IOptions&lt;T&gt;~~
 * ~~Docker MSSQL~~
 * ~~API Versioning~~
-* ~~REST API Endpoint~~ (TODO: connect with CRUD and Auth)
+* ~~REST API Endpoint~~ (TODO: Auth)
 * ~~Swagger~~ (TODO: Auth)
-* Db CRUD / Service
+* ~~Db CRUD / Service~~
 * JWT Auth
-* Error Handling
+* Error Handling (Partially using Result and Result<T> for known errors)
 * Logging
 * Unit Testing / Refactoring
 * Health checks

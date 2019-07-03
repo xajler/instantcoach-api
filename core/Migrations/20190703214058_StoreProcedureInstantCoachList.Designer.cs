@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace core.Migrations
 {
     [DbContext(typeof(ICContext))]
-    partial class ICContextModelSnapshot : ModelSnapshot
+    [Migration("20190703214058_StoreProcedureInstantCoachList")]
+    partial class StoreProcedureInstantCoachList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
