@@ -12,6 +12,7 @@ Created using:
 
 * Linux (ArchLinux)
 * .NET Core 2.2 (Local and Docker)
+* C#7
 * SQL Server 2017 (Docker)
 * Nginx (Docker)
 * VS Code (With C# Extensions)
@@ -29,8 +30,8 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Swagger~~ (TODO: Auth)
 * ~~Db CRUD / Service~~
 * JWT Auth
-* Error Handling (Partially using Result and Result&lt;T&gt; for known errors)
-* Logging
+* ~~Error Handling (Known Errors Result and Result&lt;T&gt;, Global Exception through Middleware)~~
+* ~~Logging~~
 * Dockerfile MSSQL
 * Dockerfile nginx
 * Dockerfile Build/Publish/Run App

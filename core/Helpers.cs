@@ -40,7 +40,6 @@ namespace Core
             return new Result { Error = errorType };
         }
 
-
         // TODO: Move to business logic
 
         public static string CreateReference()

@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Core;
 using Core.Models;
 using Core.Contracts;
-using static System.Console;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
 
@@ -15,12 +15,16 @@ namespace Api.Controllers.Version1
     [ApiVersion(Config.ApiVersion1)]
     [Produces(Config.ProducesJsonContent)]
     [ApiController]
-    public class ApiV1Controller : ControllerBase
+    public class ApiV1Controller : BaseController<ApiV1Controller>
     {
+        private readonly ILogger _logger;
         private readonly IInstantCoachService _service;
 
-        public ApiV1Controller(IInstantCoachService service)
+        public ApiV1Controller(ILogger<ApiV1Controller> logger,
+            IInstantCoachService service)
+            : base(logger)
         {
+            _logger = logger;
             _service = service;
         }
 
@@ -29,6 +33,7 @@ namespace Api.Controllers.Version1
         public async Task<IActionResult> GetAsync(CancellationToken cancellationToken,
             int skip = 0, int take = 10, bool showCompleted = false)
         {
+            _logger.LogInformation("GetList params:\nskip: {skip}\ntake: {take}\nshowCompleted: {showCompleted}");
             var result = await _service.GetList(skip, take, showCompleted);
             return Ok(result);
         }
@@ -82,48 +87,6 @@ namespace Api.Controllers.Version1
         {
             var result = await _service.Remove(id);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
-        }
-
-        private ActionResult CreateResult(Result result, int successStatusCode, int id)
-        {
-            WriteLine($"Result is: {result}");
-            WriteLine($"StatusCode is: {successStatusCode}");
-            if (result.Success)
-            {
-                return OnSuccess(successStatusCode, id);
-            }
-            else
-            {
-                return OnError(result.Error, id);
-            }
-        }
-
-        private ActionResult OnSuccess(int successStatusCode, int id)
-        {
-            switch (successStatusCode)
-            {
-                case Status201Created:
-                    var uri = Config.ApiRoute.Replace("{version:apiVersion}", Config.ApiVersion1);
-                    return Created($"{uri}/{id}", id);
-                case Status204NoContent:
-                    WriteLine("its no contet");
-                    return NoContent();
-                default:
-                    WriteLine("its just OK");
-                    return Ok();
-            }
-        }
-
-        private ActionResult OnError(ErrorType error, int id)
-        {
-            switch (error)
-            {
-                case ErrorType.UnknownId:
-                    return NotFound($"Not existing id: {id}");
-                default:
-                    return BadRequest("Invalid data or unable to store changes.");
-
-            }
         }
     }
 }
