@@ -43,6 +43,7 @@ namespace Api
         public void Configure(IApplicationBuilder app)
         {
             RunDbMigrationsAndSeedDataIfNeeded(app);
+            app.UseMiddleware<ExceptionMiddleware>();
             //app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(s => { s.SwaggerEndpoint("/swagger/v1/swagger.json", "InstantCoach API v1.0"); });

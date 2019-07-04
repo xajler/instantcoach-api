@@ -13,6 +13,7 @@ Created using:
 * Linux (ArchLinux)
 * .NET Core 2.2 (Local and Docker)
 * SQL Server 2017 (Docker)
+* Nginx (Docker)
 * VS Code (With C# Extensions)
 * Azure Data Studio (Local GUI for SQL Server)
 
@@ -28,20 +29,21 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Swagger~~ (TODO: Auth)
 * ~~Db CRUD / Service~~
 * JWT Auth
-* Error Handling (Partially using Result and Result&gt;T&lt; for known errors)
+* Error Handling (Partially using Result and Result&lt;T&gt; for known errors)
 * Logging
-* Unit Testing / Refactoring
-* Health checks
 * Dockerfile MSSQL
-* Dockerfile Build/Run App
+* Dockerfile nginx
+* Dockerfile Build/Publish/Run App
 * Docker Compose
+* Health checks
+* Unit Testing / Refactoring
 * Nginx web server
-* GraphQL (?)
+* GraphQL (? maybe separate project)
 * SSL (?)
 * CI/CD Bitbucket pipelines (?)
 * Integration Testing (?)
 * Message Queue (?)
-* CQRS (?)
+* CQRS (? maybe separate project)
 
 ## Run
 
