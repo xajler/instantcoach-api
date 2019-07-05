@@ -37,7 +37,7 @@ namespace Api.Controllers
                 case Status201Created:
                     var uri = Config.ApiRoute.Replace("{version:apiVersion}", Config.ApiVersion1);
                     _logger.LogInformation($"Status Code: {successStatusCode} Creted\nCreated Id:{id}\nURI: {uri}");
-                    return Created($"{uri}/{id}", id);
+                    return Created($"{uri}/{id}", new CreatedId(id));
                 case Status204NoContent:
                     _logger.LogInformation($"Status Code: {successStatusCode} NoContent");
                     return NoContent();

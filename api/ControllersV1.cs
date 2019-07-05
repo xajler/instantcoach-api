@@ -18,7 +18,6 @@ namespace Api.Controllers.Version1
     {
         private readonly ILogger _logger;
         private readonly IInstantCoachService _service;
-
         public ApiV1Controller(ILogger<ApiV1Controller> logger,
             IInstantCoachService service)
             : base(logger)
@@ -27,9 +26,19 @@ namespace Api.Controllers.Version1
             _service = service;
         }
 
+        /// <summary> Gets all InstantCoaches, paginated to 10 rows by default.</summary>
+        /// <param name="skip">skip (page number).</param>
+        /// <param name="take">
+        /// Parameter take (page row number) requires an integer argument.
+        /// Default value is 10.
+        /// </param>
+        /// <param name="showCompleted">
+        /// When false shows all except 'Completed, when true, shows all.
+        /// Shold be renamed to 'showAll', because by default (false) it shows all InstantCoachStatuses except 'Completed'.
+        /// </param>
         [HttpGet]
         [ProducesResponseType(typeof(ListResult<InstantCoachList>), Status200OK)]
-        public async Task<IActionResult> GetAsync(CancellationToken cancellationToken,
+        public async Task<IActionResult> GetAsync( // CancellationToken cancellationToken,
             int skip = 0, int take = 10, bool showCompleted = false)
         {
             _logger.LogInformation($"GET List params:\nskip: {skip}\ntake: {take}\nshowCompleted: {showCompleted}");
@@ -37,6 +46,7 @@ namespace Api.Controllers.Version1
             return CreateResult(SuccessResult(result), successStatusCode: Status200OK);
         }
 
+        /// <summary>Gets InstantCoach by Id.</summary>
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(InstantCoach), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
@@ -47,8 +57,9 @@ namespace Api.Controllers.Version1
             return CreateResult(result, successStatusCode: Status200OK, id);
         }
 
+        /// <summary>Creates InstantCoach with Status 'New'.</summary>
         [HttpPost]
-        [ProducesResponseType(Status201Created)]
+        [ProducesResponseType(typeof(CreatedId), Status201Created)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<ActionResult> PostAsync([FromBody] InstantCoachCreateClient data)
         {
@@ -58,6 +69,7 @@ namespace Api.Controllers.Version1
                 successStatusCode: Status201Created, id: result.Value);
         }
 
+        /// <summary>Updates InstantCoach for Id.</summary>
         [HttpPut("{id:int}")]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
@@ -70,6 +82,7 @@ namespace Api.Controllers.Version1
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }
 
+        /// <summary>Marks InstantCoach as Completed for Id.</summary>
         [HttpPatch("{id:int}/completed")]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
@@ -81,6 +94,7 @@ namespace Api.Controllers.Version1
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }
 
+        /// <summary>Deletes InstantCoach for Id.</summary>
         [HttpDelete("{id:int}")]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]

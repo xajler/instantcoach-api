@@ -33,7 +33,7 @@ namespace Core.Models
         {
             if (Success)
             {
-                string result =  $"No errors. Error Type is: {Error}\n";
+                string result = $"No errors. Error Type is: {Error}\n";
                 if (EqualityComparer<T>.Default.Equals(Value, default))
                 {
                     result += "Value has default value and probably shouldn't have";
@@ -43,6 +43,12 @@ namespace Core.Models
 
             return $"Error of type: {Error}";
         }
+    }
+
+    public class CreatedId
+    {
+        public CreatedId(int id) => Id = id;
+        public int Id { get; }
     }
 
     // Client (Body) Models

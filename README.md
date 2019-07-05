@@ -27,12 +27,13 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Config through IOptions&lt;T&gt;~~
 * ~~Docker MSSQL~~
 * ~~API Versioning~~
-* ~~REST API Endpoint~~ (multiple versions, TODO: Auth)
-* ~~Swagger~~ (multiple versions, TODO: Auth)
+* ~~REST API Endpoint~~ (~~multiple versions~~, TODO: Auth)
+* ~~Swagger~~ (~~multiple versions~~, TODO: Auth)
 * ~~Db CRUD / Service~~
 * JWT Auth
 * ~~Error Handling (Known Errors Result and Result&lt;T&gt;, Global Exception through Middleware)~~
-* ~~Logging (including adding response time in ms in logs and response header as X-Response-Time throug Middleware)~~
+* ~~Logging (including adding response time in ms in logs and response header as X-Response-Time through Middleware)~~
+* Domain Models Validation
 * Dockerfile MSSQL
 * Dockerfile nginx
 * Dockerfile Build/Publish/Run App
@@ -44,7 +45,7 @@ Unit Testing will come last, because there is possibility of major changes and r
 * SSL (?)
 * CI/CD Bitbucket pipelines (?)
 * Integration Testing (?)
-* Message Queue (?)
+* Message Queue (? maybe separate project)
 * CQRS (? maybe separate project)
 
 ## Run
