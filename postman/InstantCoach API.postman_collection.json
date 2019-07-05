@@ -9,9 +9,22 @@
 			"name": "List",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "X-Api-Version",
+						"value": "1",
+						"description": "Not needed for default (latest) version.",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/instantcoaches?skip=0&take=2&showCompleted=true",
+					"raw": "http://localhost:5000/api/instantcoaches?skip=0&take=2&showCompleted=true",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -19,7 +32,6 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"v1",
 						"instantcoaches"
 					],
 					"query": [
@@ -44,9 +56,21 @@
 			"name": "By Id",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "X-Api-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"description": "Not needed for default (latest) version.",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/instantcoaches/1",
+					"raw": "http://localhost:5000/api/instantcoaches/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -54,7 +78,6 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"v1",
 						"instantcoaches",
 						"1"
 					]
@@ -71,6 +94,12 @@
 						"key": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "X-Api-Version",
+						"value": "1",
+						"description": "Not needed for default (latest) version.",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -78,7 +107,7 @@
 					"raw": "{\n  \"description\": \"string\",\n  \"ticketId\": \"string\",\n  \"evaluatorId\": 0,\n  \"agentId\": 0,\n  \"evaluatorName\": \"string\",\n  \"agentName\": \"string\",\n  \"comments\": [\n    {\n      \"commentType\": \"Text\",\n      \"text\": \"string\",\n      \"authorType\": \"Evaluator\",\n      \"createdAt\": \"2019-07-03T21:55:54.001Z\",\n      \"pinId\": 0\n    }\n  ],\n  \"bookmarkPins\": [\n    {\n      \"id\": 0,\n      \"index\": 0,\n      \"range\": 0,\n      \"comment\": \"string\",\n      \"mediaUrl\": \"string\"\n    }\n  ]\n}\n\n"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/v1/instantcoaches",
+					"raw": "http://localhost:5000/api/instantcoaches",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -86,7 +115,6 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"v1",
 						"instantcoaches"
 					]
 				}
@@ -102,6 +130,12 @@
 						"key": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "X-Api-Version",
+						"value": "1",
+						"description": "Not needed for default (latest) version.",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -109,7 +143,7 @@
 					"raw": "{\n  \"updateType\": \"Save\",\n  \"comments\": [\n    {\n      \"commentType\": \"Text\",\n      \"text\": \"string\",\n      \"authorType\": \"Evaluator\",\n      \"createdAt\": \"2019-07-03T21:56:52.948Z\",\n      \"pinId\": 0\n    }\n  ],\n  \"bookmarkPins\": [\n    {\n      \"id\": 0,\n      \"index\": 0,\n      \"range\": 0,\n      \"comment\": \"string\",\n      \"mediaUrl\": \"string\"\n    }\n  ]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/v1/instantcoaches/1",
+					"raw": "http://localhost:5000/api/instantcoaches/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -117,7 +151,6 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"v1",
 						"instantcoaches",
 						"1"
 					]
@@ -129,9 +162,16 @@
 			"name": "Completed by Id",
 			"request": {
 				"method": "PATCH",
-				"header": [],
+				"header": [
+					{
+						"key": "X-Api-Version",
+						"value": "1",
+						"description": "Not needed for default (latest) version.",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/instantcoaches/1/completed",
+					"raw": "http://localhost:5000/api/instantcoaches/1/completed",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -139,7 +179,6 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"v1",
 						"instantcoaches",
 						"1",
 						"completed"
@@ -152,9 +191,16 @@
 			"name": "Deleted by Id",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "X-Api-Version",
+						"value": "1",
+						"description": "Not needed for default (latest) version.",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/instantcoaches/1",
+					"raw": "http://localhost:5000/api/instantcoaches/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -162,7 +208,6 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"v1",
 						"instantcoaches",
 						"1"
 					]

@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Core.Models;
 
 namespace Core
@@ -9,6 +10,17 @@ namespace Core
         public static T FromJson<T>(string json) where T : class
         {
             return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public static string ToLogJson<T>(T value)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Formatting.Indented
+            };
+            settings.Converters.Add(new StringEnumConverter());
+            return JsonConvert.SerializeObject(value, settings);
         }
 
         public static string ToJson<T>(T value) where T : class

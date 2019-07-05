@@ -2,25 +2,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Core;
 using Core.Models;
-using static System.Console;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
 
 namespace Api.Controllers
 {
-    public class BaseController<T> : ControllerBase where T: ControllerBase
+    public class BaseController : ControllerBase
     {
-        private readonly ILogger<T> _logger;
+        private readonly ILogger _logger;
 
-        public BaseController(ILogger<T> logger) => _logger = logger;
+        public BaseController(ILogger logger) => _logger = logger;
 
-        protected ActionResult CreateResult(Result result, int successStatusCode, int id)
+        protected ActionResult CreateResult<T>(Result<T> result, int successStatusCode, int id = 0)
         {
-            WriteLine($"Result is: {result}");
-            WriteLine($"StatusCode is: {successStatusCode}");
+            return CreateResult(result, successStatusCode, id, result.Value);
+        }
+
+        protected ActionResult CreateResult(Result result, int successStatusCode, int id, object data = default)
+        {
             if (result.Success)
             {
-                return OnSuccess(successStatusCode, id);
+                return OnSuccess(successStatusCode, id, data);
             }
             else
             {
@@ -28,7 +30,7 @@ namespace Api.Controllers
             }
         }
 
-        private ActionResult OnSuccess(int successStatusCode, int id)
+        private ActionResult OnSuccess(int successStatusCode, int id, object data)
         {
             switch (successStatusCode)
             {
@@ -41,7 +43,8 @@ namespace Api.Controllers
                     return NoContent();
                 default:
                     _logger.LogInformation($"Status Code: {successStatusCode} OK");
-                    return Ok();
+                    if (data == null) { return Ok(); }
+                    return Ok(data);
             }
         }
 

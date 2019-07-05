@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -31,22 +32,23 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddWebApiService();
-            services.AddApiVersioning();
+            services.AddHeaderApiVersioning();
             services.AddConfigOptionsService(Configuration);
             Config config = Configuration.GetSection(Config.Name).Get<Config>();
             services.AddDbcontextService(config.GetConnectionString());
             services.AddSwaggerService();
             services.AddSingleton<IInstantCoachRepository, InstantCoachRepository>();
-            services.AddSingleton<IInstantCoachService, InstantCoachServices>();
+            services.AddSingleton<IInstantCoachService, InstantCoachService>();
         }
 
         public void Configure(IApplicationBuilder app)
         {
             RunDbMigrationsAndSeedDataIfNeeded(app);
             app.UseMiddleware<ExceptionMiddleware>();
-            //app.UseHttpsRedirection();
+            app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseSwagger();
             app.UseSwaggerUI(s => { s.SwaggerEndpoint("/swagger/v1/swagger.json", "InstantCoach API v1.0"); });
+            // app.UseHttpsRedirection();
             app.UseMvc();
         }
 

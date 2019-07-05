@@ -65,7 +65,7 @@ namespace Core.Models
                 evaluatorId: clientData.EvaluatorId,
                 agentId: clientData.AgentId,
                 evaluatorName: clientData.EvaluatorName,
-                agentName: clientData.EvaluatorName,
+                agentName: clientData.AgentName,
                 comments: clientData.Comments,
                 bookmarkPins: clientData.BookmarkPins
             );

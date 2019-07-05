@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,25 @@ using Core.Context;
 
 namespace Api
 {
-    public static class ServiceCollectionExtensions
+    public static class SatrtupExtensions
     {
+        // public static void UseMeasureRequestTime(this IApplicationBuilder app)
+        // {
+        //     app.Use(async (context, next) =>
+        //     {
+        //         var stopWatch = new Stopwatch();
+        //         stopWatch.Start();
+        //         await next.Invoke();
+        //         stopWatch.Stop();
+        //         WriteLine($"Request processing time: {stopWatch.ElapsedMilliseconds}ms");
+        //     });
+        // }
         public static void AddWebApiService(this IServiceCollection services)
         {
             services.AddMvc(options =>
                 {
-                    options.Filters.Add<OperationCancelledExceptionFilter>();
+                    // TODO: Not sure to use it or not
+                    // options.Filters.Add<OperationCancelledExceptionFilter>();
                 })
                 .AddJsonOptions(options =>
                 {
@@ -27,12 +40,24 @@ namespace Api
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
+
         public static void AddConfigOptionsService(this IServiceCollection services,
             IConfiguration configuration)
         {
             services.AddOptions<Config>()
                     .Configure(options => configuration.GetSection(Config.Name).Bind(options))
                     .ValidateDataAnnotations();
+        }
+
+        public static void AddHeaderApiVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(v =>
+            {
+                v.AssumeDefaultVersionWhenUnspecified = true;
+                v.ReportApiVersions = true;
+                v.ErrorResponses = new ApiVersioningErrorResponseProvider();
+                v.ApiVersionReader = new HeaderApiVersionReader("X-Api-Version");
+            });
         }
 
         public static void AddDbcontextService(this IServiceCollection services, string connectionString)

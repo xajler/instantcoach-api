@@ -13,6 +13,7 @@ Created using:
 * Linux (ArchLinux)
 * .NET Core 2.2 (Local and Docker)
 * C#7
+* EF Core (Commands) / ADO.NET via EF Core (Queries)
 * SQL Server 2017 (Docker)
 * Nginx (Docker)
 * VS Code (With C# Extensions)
@@ -20,7 +21,7 @@ Created using:
 
 Unit Testing will come last, because there is possibility of major changes and refactoring throughout creating this microservices API architecture.
 
-## Features
+## TODO Features
 
 * ~~EF Migrations~~
 * ~~Config through IOptions&lt;T&gt;~~
@@ -31,7 +32,7 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Db CRUD / Service~~
 * JWT Auth
 * ~~Error Handling (Known Errors Result and Result&lt;T&gt;, Global Exception through Middleware)~~
-* ~~Logging~~
+* ~~Logging (including adding response time in ms in logs and response header as X-Response-Time throug Middleware)~~
 * Dockerfile MSSQL
 * Dockerfile nginx
 * Dockerfile Build/Publish/Run App

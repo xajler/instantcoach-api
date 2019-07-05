@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Core.Context;
 using Core.Contracts;
 using Core.Models;
@@ -6,30 +7,36 @@ using static Core.Helpers;
 
 namespace Core.Services
 {
-    public class InstantCoachServices : IInstantCoachService
+    public class InstantCoachService : IInstantCoachService
     {
+        private readonly ILogger _logger;
         private readonly IInstantCoachRepository _repository;
 
-        public InstantCoachServices(IInstantCoachRepository repository)
+        public InstantCoachService(ILogger<InstantCoachService> logger,
+            IInstantCoachRepository repository)
         {
+            _logger = logger;
             _repository = repository;
         }
 
-        public async Task<Result<ListResult<InstantCoachList>>> GetList(
+        public async Task<ListResult<InstantCoachList>> GetList(
             int skip, int take, bool showCompleted)
         {
             var result = await _repository.GetAll(skip, take, showCompleted);
-            return SuccessResult(result);
+            _logger.LogInformation($"Get List Result:\n{ToLogJson(result)}");
+            return result;
         }
 
         public async Task<Result<InstantCoach>> GetById(int id)
         {
             if (await _repository.GetExistingId(id) == 0)
             {
-                return ErrorResult(ErrorType.UnknownId) as Result<InstantCoach>;
+                return ErrorResult<InstantCoach>(ErrorType.UnknownId);
             }
-            InstantCoachDb result = await _repository.GetById(id);
-            return SuccessResult(result.ToInstantCoach());
+            Result<InstantCoachDb> result = await _repository.GetById(id);
+            _logger.LogInformation($"Get List Result:\n{ToLogJson(result)}");
+            if (!result.Success) { return ErrorResult<InstantCoach>(result.Error); }
+            return SuccessResult(result.Value.ToInstantCoach());
         }
 
         public async Task<Result<int>> Create(InstantCoachCreateClient data)
@@ -37,20 +44,22 @@ namespace Core.Services
             // TODO: validation/business logic for create
             //       Checking existence of Agentid or EvaluatorId depending which is loggedin
             //       validation of
-            string reference = Helpers.CreateReference();
+            string reference = CreateReference();
             InstantCoachStatus status = InstantCoachStatus.New;
             InstantCoachCreate model = data.ToInstantCoachCreate(reference, status);
-            // TODO
+            _logger.LogInformation($"Create Domain Model:\n{ToLogJson(model)}");
             var result = await _repository.Add(model);
+            _logger.LogInformation($"Create Result:\n{ToLogJson(result)}");
             return result;
         }
 
         public async Task<Result> Update(int id, InstantCoachUpdateClient data)
         {
             var existingResult = await GetExistingIdResult(id);
+            if (!existingResult.Success) { return OnNotExistingId(id, existingResult); }
             var status = SetStatus(data.UpdateType);
             var model = data.ToInstantCoachUpate(status);
-            if (!existingResult.Success) { return existingResult; }
+            _logger.LogInformation($"Update Domain Model:\n{ToLogJson(model)}");
             var result = await _repository.Update(
                 currentEntity: existingResult.Value, model);
             return result;
@@ -59,7 +68,7 @@ namespace Core.Services
         public async Task<Result> MarkCompleted(int id)
         {
             var existingResult = await GetExistingIdResult(id);
-            if (!existingResult.Success) { return existingResult; }
+            if (!existingResult.Success) { return OnNotExistingId(id, existingResult); }
             var result = await _repository.UpdateAsCompleted(
                 currentEntity: existingResult.Value);
             return result;
@@ -68,7 +77,7 @@ namespace Core.Services
         public async Task<Result> Remove(int id)
         {
             var existingResult = await GetExistingIdResult(id);
-            if (!existingResult.Success) { return existingResult; }
+            if (!existingResult.Success) { return OnNotExistingId(id, existingResult); }
             var result = await _repository.Remove(currentEntity: existingResult.Value);
             return result;
         }
@@ -78,6 +87,12 @@ namespace Core.Services
             var result = await _repository.FetchById(id);
             if (result != null) { return SuccessResult(result); }
             return ErrorResult<InstantCoachDbEntity>(ErrorType.UnknownId);
+        }
+
+        private Result OnNotExistingId(int id, Result result)
+        {
+            _logger.LogError($"Service Error: Not existing Id: {id}");
+            return result;
         }
     }
 }

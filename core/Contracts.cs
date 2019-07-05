@@ -8,7 +8,7 @@ namespace Core.Contracts
     {
         Task<InstantCoachDbEntity> FetchById(int id);
         Task<ListResult<InstantCoachList>> GetAll(int skip, int take, bool showCompleted);
-        Task<InstantCoachDb> GetById(int id);
+        Task<Result<InstantCoachDb>> GetById(int id);
         Task<int> GetExistingId(int id);
         Task<Result<int>> Add(InstantCoachCreate model);
         Task<Result> Update(InstantCoachDbEntity currentEntity,
@@ -19,8 +19,7 @@ namespace Core.Contracts
 
     public interface IInstantCoachService
     {
-        Task<Result<ListResult<InstantCoachList>>> GetList(
-            int skip, int take, bool showCompleted);
+        Task<ListResult<InstantCoachList>> GetList(int skip, int take, bool showCompleted);
         Task<Result<InstantCoach>> GetById(int id);
         Task<Result<int>> Create(InstantCoachCreateClient data);
         Task<Result> Update(int id, InstantCoachUpdateClient data);

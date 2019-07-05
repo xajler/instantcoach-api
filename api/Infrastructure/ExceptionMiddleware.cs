@@ -4,12 +4,14 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using Core;
 
 namespace Api
 {
     public class ExceptionMiddleware
     {
+        private const string PossibleBugText = "****POSSIBLE BUG******.";
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
@@ -25,6 +27,11 @@ namespace Api
             {
                 await _next(httpContext);
             }
+            catch (DbUpdateException ex)
+            {
+                OnDbUpdateException(ex);
+                await HandleExceptionAsync(httpContext);
+            }
             catch (SqlException ex)
             {
                 OnDbException(ex);
@@ -33,7 +40,7 @@ namespace Api
             catch (Exception ex) when (IsUsualExceptionsFilter(ex))
             {
                 _logger.LogError(ex,
-                    $"Possible bug. Exception of Type: {ex.GetType().Name} and Message: {ex.Message}");
+                    $"{PossibleBugText} Exception of Type: {ex.GetType().Name} and Message: {ex.Message}");
                 await HandleExceptionAsync(httpContext);
             }
             catch (Exception ex)
@@ -51,6 +58,18 @@ namespace Api
             return context.Response.WriteAsync("Internal Server Error. Something went wrong on server.");
         }
 
+        private void OnDbUpdateException(DbUpdateException ex)
+        {
+            if (ex.InnerException != null && ex.InnerException is SqlException)
+            {
+                OnDbException(ex.InnerException as SqlException);
+            }
+            else
+            {
+                _logger.LogCritical(ex, "Failed to Save DB Changes");
+            }
+        }
+
         private void OnDbException(SqlException ex)
         {
             var dbError = SqlServerErrorManager.GetError(ex);
@@ -62,7 +81,7 @@ namespace Api
             else
             {
                 _logger.LogError(ex,
-                    $"Possible bug. Database error: {dbError}.");
+                    $"{PossibleBugText} Database error: {dbError}.");
             }
         }
 
