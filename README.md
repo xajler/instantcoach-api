@@ -31,10 +31,10 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Config through IOptions&lt;T&gt;~~
 * ~~Docker MSSQL~~
 * ~~API Versioning~~
-* ~~REST API Endpoint~~ (~~multiple versions~~, TODO: Auth)
-* ~~Swagger~~ (~~multiple versions~~, TODO: Auth)
+* ~~REST API Endpoint (multiple versions, JWT Auth)~~
+* ~~Swagger (multiple versions, JWT Auth)~~
 * ~~Db CRUD / Service~~
-* JWT Auth
+* ~~JWT Auth~~
 * ~~Error Handling (Known Errors Result and Result&lt;T&gt;, Global Exception through Middleware)~~
 * ~~Logging (including adding response time in ms in logs and response header as X-Response-Time through Middleware)~~
 * Domain Models Validation
@@ -96,12 +96,25 @@ Navigate to home url, and choose version of API to try:
 
     http://localhost:5000
 
+To properly run, click in each action at right end lock, and add this token:
+
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EaEVPRFE1TmtJM09VSkJNRGd3TkVJMk1qTTRPREE1TVRWRk0wTXpNekEzUkRVM1JrVkNSZyJ9.eyJpc3MiOiJodHRwczovL2Rldi1hamozOHJtOS5hdXRoMC5jb20vIiwic3ViIjoiNEJXaU4zNlNXR1RMOWR4a295MkRwQkpDVG1LT2ZPcUFAY2xpZW50cyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCIsImlhdCI6MTU2MjMyMzU5NiwiZXhwIjoxNTYyNDA5OTk2LCJhenAiOiI0QldpTjM2U1dHVEw5ZHhrb3kyRHBCSkNUbUtPZk9xQSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.WqTLbjVEVGN-WW3dKTcUYdN_AUDHdOKtjZtFqt1WKt22yEm1_GfZNWItlVfUf6ScTklp0AsVozfUmFcfRtiGcz9KH46NfgjwX6G7Fa2hDZfThAya4BYJFz8gtAJoPgZiSThY-ZjUbvfVXSPH8Db87zBde1y0gtxK7bBqX_rX9_dvQZYgSgu9WYC2GZ4gRVyuNcjpEgzlWvYeCt9cfoQ0HHlEo_N0yDfOTanFvuQPG48mmBY7UGiP7N6uZumKnKD0qmCUFoSzkBwnfB5-MOGH4YvdRqme07zv1tGw7kkFoN2XjsFbuW7UFxdbiRhKTmVdi2EfrdgMt5s2AzhLkhPMbA
+
+> Note:
+>
+> I will try to change this token when is expired, currently set to be valid for a week.
+> If not either comment in Api.BaseController Autorize attribute, or create you own [auth0 account](https://auth0.com) create API and change Env var `JWT_AUTHORITY` in EnvVar.sh.
+
 
 ### Postman
 
 Run all API calls through Postman.
 
 Import postman collection `InstantCoach API.postman_collection.json` from `postman` folder.
+
+>Note:
+>
+>JWT Authentication is applied, but if there is problem, pleas read note in previous Swagger section.
 
 
 ## .NET Core

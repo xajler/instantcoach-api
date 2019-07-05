@@ -1,4 +1,3 @@
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,7 +12,6 @@ namespace Api.Controllers.Version1
     [Route(Config.ApiRoute)]
     [ApiVersion(Config.ApiVersion1)]
     [Produces(Config.ProducesJsonContent)]
-    [ApiController]
     public class ApiV1Controller : BaseController
     {
         private readonly ILogger _logger;
@@ -57,7 +55,7 @@ namespace Api.Controllers.Version1
             return CreateResult(result, successStatusCode: Status200OK, id);
         }
 
-        /// <summary>Creates InstantCoach with Status 'New'.</summary>
+        /// <summary>Creates InstantCoach with Status from Config.InstantCoachStatusDefault.</summary>
         [HttpPost]
         [ProducesResponseType(typeof(CreatedId), Status201Created)]
         [ProducesResponseType(Status400BadRequest)]

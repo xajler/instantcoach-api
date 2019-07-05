@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Core;
 using Core.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
-
 namespace Api.Controllers
 {
+    [Authorize]
+    [ApiController]
     public class BaseController : ControllerBase
     {
         private readonly ILogger _logger;

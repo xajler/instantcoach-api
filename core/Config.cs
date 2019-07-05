@@ -21,6 +21,11 @@ namespace Core
         public string DbPassword { get; set; }
         [Required]
         public InstantCoachStatus InstantCoachStatusDefault { get; set; }
+        [Required]
+        public string JwtAuthority { get; set; }
+        [Required]
+        public string JwtAudience { get; set; }
+
 
         public string GetEnvVarByName(string envVar)
         {

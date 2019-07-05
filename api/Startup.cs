@@ -39,6 +39,7 @@ namespace Api
             services.AddConfigOptionsService(Configuration);
             Config config = Configuration.GetSection(Config.Name).Get<Config>();
             services.AddDbcontextService(config.GetConnectionString());
+            services.AddJwtAuthenticationService(config);
             services.AddSwaggerService();
             services.AddSingleton<IInstantCoachRepository, InstantCoachRepository>();
             services.AddSingleton<IInstantCoachService, InstantCoachService>();
@@ -53,6 +54,7 @@ namespace Api
             app.UseSwagger();
             // More info: https://github.com/microsoft/aspnet-api-versioning/tree/master/samples/aspnetcore/SwaggerSample
             app.UseSwaggerUIWAsHomeRoute(provider);
+            app.UseAuthentication();
             // app.UseHttpsRedirection();
             app.UseMvc();
         }

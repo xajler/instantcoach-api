@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Core.Context;
 using Core.Contracts;
 using Core.Models;
@@ -10,12 +11,16 @@ namespace Core.Services
     public class InstantCoachService : IInstantCoachService
     {
         private readonly ILogger _logger;
+        private readonly Config _config;
         private readonly IInstantCoachRepository _repository;
 
-        public InstantCoachService(ILogger<InstantCoachService> logger,
+        public InstantCoachService(
+            ILogger<InstantCoachService> logger,
+            IOptions<Config> configOptions,
             IInstantCoachRepository repository)
         {
             _logger = logger;
+            _config = configOptions.Value;
             _repository = repository;
         }
 
@@ -45,7 +50,7 @@ namespace Core.Services
             //       Checking existence of Agentid or EvaluatorId depending which is loggedin
             //       validation of
             string reference = CreateReference();
-            InstantCoachStatus status = InstantCoachStatus.New;
+            InstantCoachStatus status = _config.InstantCoachStatusDefault;
             InstantCoachCreate model = data.ToInstantCoachCreate(reference, status);
             _logger.LogInformation($"Create Domain Model:\n{ToLogJson(model)}");
             var result = await _repository.Add(model);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -6,12 +7,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Swashbuckle.AspNetCore.Swagger;
 using Core;
 using Core.Context;
 
@@ -72,7 +75,8 @@ namespace Api
             });
         }
 
-        public static void AddDbcontextService(this IServiceCollection services, string connectionString)
+        public static void AddDbcontextService(this IServiceCollection services,
+            string connectionString)
         {
             // WriteLine($"conn string: {connectionString}");
             services.AddDbContext<ICContext>(options =>
@@ -80,11 +84,25 @@ namespace Api
                           {
                               providerOptions.CommandTimeout(180);
                               providerOptions.EnableRetryOnFailure(
-                                maxRetryCount: 10,
-                                maxRetryDelay: TimeSpan.FromSeconds(30),
-                                errorNumbersToAdd: null);
+                              maxRetryCount: 10,
+                              maxRetryDelay: TimeSpan.FromSeconds(30),
+                              errorNumbersToAdd: null);
                           })
                          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+        }
+
+        public static void AddJwtAuthenticationService(
+            this IServiceCollection services, Config config)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = config.GetEnvVarByName(config.JwtAuthority);
+                options.Audience = config.GetEnvVarByName(config.JwtAudience);
+            });
         }
 
         public static void AddSwaggerService(this IServiceCollection services)
@@ -93,6 +111,19 @@ namespace Api
             {
                 s.OperationFilter<SwaggerDefaultValues>();
                 s.IncludeXmlComments(XmlCommentsFilePath);
+                s.AddSecurityDefinition("Bearer",
+                    new ApiKeyScheme
+                    {
+                        In = "header",
+                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                        Name = "Authorization",
+                        Type = "apiKey"
+                    });
+                s.AddSecurityRequirement(
+                    new Dictionary<string, IEnumerable<string>>
+                {
+                    { "Bearer", Enumerable.Empty<string>() }
+                });
             });
         }
 
