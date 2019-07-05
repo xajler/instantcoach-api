@@ -29,7 +29,7 @@ namespace Api
                 foreach (var description in provider.ApiVersionDescriptions
                                                     .OrderByDescending(x => x.ApiVersion.MajorVersion))
                 {
-                    var name = $"InstantCoach API v{description.GroupName.ToUpperInvariant()}.0";
+                    var name = $"InstantCoach API v{description.GroupName.ToUpperInvariant()}";
                     s.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", name);
                 }
                 s.RoutePrefix = string.Empty;

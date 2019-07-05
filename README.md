@@ -2,6 +2,10 @@
 
 Using ASP.NET Core API for sample microservices REST API.
 
+
+![Swagger](https://git.430n.com/x430n/instantcoach/raw/branch/master/swagger.png)
+
+
 > Note:
 >
 > Most of C# files contain multiple classes, because of microservices nature, if this wouldn't be microservice, those would go to folders and separate files.
