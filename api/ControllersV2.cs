@@ -8,18 +8,24 @@ using Core.Contracts;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static Core.Helpers;
 
-namespace Api.Controllers.Version1
+namespace Api.Controllers.Version2
 {
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! //
+    //                    NOTE:                         //
+    // Same as v1, introduced to test multiple versions //
+    // Smainly testing and setinp up swagger            //
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! //
     [Route(Config.ApiRoute)]
-    [ApiVersion(Config.ApiVersion1)]
+    // Can omit as default version, uncomment on v3
+    [ApiVersion(Config.ApiVersion2)]
     [Produces(Config.ProducesJsonContent)]
     [ApiController]
-    public class ApiV1Controller : BaseController
+    public class ApiV2Controller : BaseController
     {
         private readonly ILogger _logger;
         private readonly IInstantCoachService _service;
 
-        public ApiV1Controller(ILogger<ApiV1Controller> logger,
+        public ApiV2Controller(ILogger<ApiV2Controller> logger,
             IInstantCoachService service)
             : base(logger)
         {

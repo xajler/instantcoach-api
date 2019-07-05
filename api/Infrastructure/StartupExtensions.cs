@@ -1,6 +1,9 @@
 using System;
+using System.Linq;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +17,23 @@ namespace Api
 {
     public static class SatrtupExtensions
     {
-        // public static void UseMeasureRequestTime(this IApplicationBuilder app)
-        // {
-        //     app.Use(async (context, next) =>
-        //     {
-        //         var stopWatch = new Stopwatch();
-        //         stopWatch.Start();
-        //         await next.Invoke();
-        //         stopWatch.Stop();
-        //         WriteLine($"Request processing time: {stopWatch.ElapsedMilliseconds}ms");
-        //     });
-        // }
+        public static void UseSwaggerUIWAsHomeRoute(this IApplicationBuilder app,
+            IApiVersionDescriptionProvider provider)
+        {
+            app.UseSwaggerUI(s =>
+            {
+                // In descaeding order, first show newer (greater) major versions
+                // Add descending order minor version number, if needed!
+                foreach (var description in provider.ApiVersionDescriptions
+                                                    .OrderByDescending(x => x.ApiVersion.MajorVersion))
+                {
+                    var name = $"InstantCoach API v{description.GroupName.ToUpperInvariant()}.0";
+                    s.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", name);
+                }
+                s.RoutePrefix = string.Empty;
+            });
+        }
+
         public static void AddWebApiService(this IServiceCollection services)
         {
             services.AddMvc(options =>
@@ -57,6 +66,7 @@ namespace Api
                 v.ReportApiVersions = true;
                 v.ErrorResponses = new ApiVersioningErrorResponseProvider();
                 v.ApiVersionReader = new HeaderApiVersionReader("X-Api-Version");
+                v.DefaultApiVersion = new ApiVersion(2, 0);
             });
         }
 
@@ -79,23 +89,7 @@ namespace Api
         {
             services.AddSwaggerGen(s =>
             {
-                s.SwaggerDoc("v1", new Info
-                {
-                    Version = "v1",
-                    Title = "InstantCoach API",
-                    Description = "A sample ASP.NET Core web API for microservices",
-                    Contact = new Contact
-                    {
-                        Name = "Kornelije Sajler",
-                        Email = "ks@metaintellect.com",
-                        Url = "https://git.430n.com/x430n/instantcoach"
-                    },
-                    License = new License
-                    {
-                        Name = "MIT",
-                        Url = "https://git.430n.com/x430n/instantcoach/src/branch/master/LICENSE"
-                    }
-                });
+                s.OperationFilter<SwaggerDefaultValues>();
             });
         }
     }

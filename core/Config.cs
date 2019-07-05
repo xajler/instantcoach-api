@@ -9,6 +9,7 @@ namespace Core
         public const string Name = "Config";
         public const string ApiRoute = "api/instantcoaches";
         public const string ApiVersion1 = "1";
+        public const string ApiVersion2 = "2";
         public const string ProducesJsonContent = "application/json";
 
         [Required]

@@ -1,9 +1,11 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Core.Context;
 using Core;
 using Core.Contracts;
@@ -33,21 +35,24 @@ namespace Api
         {
             services.AddWebApiService();
             services.AddHeaderApiVersioning();
+            services.AddVersionedApiExplorer();
             services.AddConfigOptionsService(Configuration);
             Config config = Configuration.GetSection(Config.Name).Get<Config>();
             services.AddDbcontextService(config.GetConnectionString());
             services.AddSwaggerService();
             services.AddSingleton<IInstantCoachRepository, InstantCoachRepository>();
             services.AddSingleton<IInstantCoachService, InstantCoachService>();
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
         {
             RunDbMigrationsAndSeedDataIfNeeded(app);
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseSwagger();
-            app.UseSwaggerUI(s => { s.SwaggerEndpoint("/swagger/v1/swagger.json", "InstantCoach API v1.0"); });
+            // More info: https://github.com/microsoft/aspnet-api-versioning/tree/master/samples/aspnetcore/SwaggerSample
+            app.UseSwaggerUIWAsHomeRoute(provider);
             // app.UseHttpsRedirection();
             app.UseMvc();
         }

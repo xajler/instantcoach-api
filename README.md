@@ -27,8 +27,8 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Config through IOptions&lt;T&gt;~~
 * ~~Docker MSSQL~~
 * ~~API Versioning~~
-* ~~REST API Endpoint~~ (TODO: Auth)
-* ~~Swagger~~ (TODO: Auth)
+* ~~REST API Endpoint~~ (multiple versions, TODO: Auth)
+* ~~Swagger~~ (multiple versions, TODO: Auth)
 * ~~Db CRUD / Service~~
 * JWT Auth
 * ~~Error Handling (Known Errors Result and Result&lt;T&gt;, Global Exception through Middleware)~~
@@ -51,6 +51,10 @@ Unit Testing will come last, because there is possibility of major changes and r
 
 ### Local Env
 
+> Note:
+>
+> `docker-run.sh` might fail first time running in new terminal, because it starts docker mssql instance and sometimes it will compile and run quicker than starting mssql docker instance, in that case, run same command again.
+
 #### First time docker
 
     cd <src-root>
@@ -59,7 +63,7 @@ Unit Testing will come last, because there is possibility of major changes and r
 
 ### Quick usage
 
-Run VS Code with Debug or Task named `run`.
+Run _VS Code_ with _Debug (F5)_ or run _Task_ named `run`.
 
 Or in terminal run:
 
@@ -82,9 +86,10 @@ For local run without docker for app, but for `mssql` (make sure docker service 
 ### Swagger
 
 Make sure having app running (currently only locally see more in `Usual usage` section).
-Navigate to url:
 
-    http://localhost:5000/swagger
+Navigate to home url, and choose version of API to try:
+
+    http://localhost:5000
 
 
 ### Postman
