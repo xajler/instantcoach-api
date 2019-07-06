@@ -30,7 +30,8 @@ namespace Api
             {
                 var path = context.Request.Path.Value;
                 var method = context.Request.Method;
-                _logger.LogInformation($"\n\n----- START {method} {path} ---------------\n\n");
+                _logger.LogInformation("\n\n----- START {HttpMethod} {HttpPath} ---------------\n\n",
+                    method, path);
                 var watch = Stopwatch.StartNew();
 
                 context.Response.OnStarting(() =>
@@ -38,8 +39,9 @@ namespace Api
                     watch.Stop();
                     var responseTime = watch.ElapsedMilliseconds;
                     context.Response.Headers[ResonseTimeHeaderName] = $"{responseTime}ms";
-                    _logger.LogInformation($"Response time: {responseTime}ms");
-                    _logger.LogInformation($"\n\n----- END {method} {path} ---------------\n\n");
+                    _logger.LogInformation("Response time: {ResponseTime}ms", responseTime);
+                    _logger.LogInformation("\n\n----- END {HttpMethod} {HttpPath} ---------------\n\n",
+                        method, path);
                     return Task.CompletedTask;
                 });
             }

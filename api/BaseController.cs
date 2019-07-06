@@ -38,13 +38,14 @@ namespace Api.Controllers
             {
                 case Status201Created:
                     var uri = Config.ApiRoute.Replace("{version:apiVersion}", Config.ApiVersion1);
-                    _logger.LogInformation($"Status Code: {successStatusCode} Creted\nCreated Id:{id}\nURI: {uri}");
+                    _logger.LogInformation("Status Code: {StatusCode} Creted\nCreated Id:{Id}\nURI: {Uri}",
+                    successStatusCode, id, uri);
                     return Created($"{uri}/{id}", new CreatedId(id));
                 case Status204NoContent:
-                    _logger.LogInformation($"Status Code: {successStatusCode} NoContent");
+                    _logger.LogInformation("Status Code: {StatusCode} NoContent", successStatusCode);
                     return NoContent();
                 default:
-                    _logger.LogInformation($"Status Code: {successStatusCode} OK");
+                    _logger.LogInformation("Status Code: {StatusCode} OK", successStatusCode);
                     if (data == null) { return Ok(); }
                     return Ok(data);
             }
@@ -55,10 +56,10 @@ namespace Api.Controllers
             switch (error)
             {
                 case ErrorType.UnknownId:
-                    _logger.LogInformation($"Status Code: {Status404NotFound} NotFound");
+                    _logger.LogInformation("Status Code: {StatusCode} NotFound", Status404NotFound);
                     return NotFound($"Not existing id: {id}");
                 default:
-                    _logger.LogInformation($"Status Code: {Status400BadRequest} BadRequest");
+                    _logger.LogInformation("Status Code: {StatusCode} BadRequest", Status400BadRequest);
                     return BadRequest("Invalid data or unable to store changes.");
 
             }

@@ -28,7 +28,7 @@ namespace Core.Services
             int skip, int take, bool showCompleted)
         {
             var result = await _repository.GetAll(skip, take, showCompleted);
-            _logger.LogInformation($"Get List Result:\n{ToLogJson(result)}");
+            _logger.LogInformation("Get List Result:\n{Result}", ToLogJson(result));
             return result;
         }
 
@@ -39,7 +39,7 @@ namespace Core.Services
                 return ErrorResult<InstantCoach>(ErrorType.UnknownId);
             }
             Result<InstantCoachDb> result = await _repository.GetById(id);
-            _logger.LogInformation($"Get List Result:\n{ToLogJson(result)}");
+            _logger.LogInformation("Get List Result:\n{Result}", ToLogJson(result));
             if (!result.Success) { return ErrorResult<InstantCoach>(result.Error); }
             return SuccessResult(result.Value.ToInstantCoach());
         }
@@ -52,9 +52,9 @@ namespace Core.Services
             string reference = CreateReference();
             InstantCoachStatus status = _config.InstantCoachStatusDefault;
             InstantCoachCreate model = data.ToInstantCoachCreate(reference, status);
-            _logger.LogInformation($"Create Domain Model:\n{ToLogJson(model)}");
+            _logger.LogInformation("Create Domain Model:\n{DomainModel}", ToLogJson(model));
             var result = await _repository.Add(model);
-            _logger.LogInformation($"Create Result:\n{ToLogJson(result)}");
+            _logger.LogInformation("Create Result:\n{Result}", ToLogJson(result));
             return result;
         }
 
@@ -64,7 +64,7 @@ namespace Core.Services
             if (!existingResult.Success) { return OnNotExistingId(id, existingResult); }
             var status = SetStatus(data.UpdateType);
             var model = data.ToInstantCoachUpate(status);
-            _logger.LogInformation($"Update Domain Model:\n{ToLogJson(model)}");
+            _logger.LogInformation("Update Domain Model:\n{DomainModel}", ToLogJson(model));
             var result = await _repository.Update(
                 currentEntity: existingResult.Value, model);
             return result;
@@ -96,7 +96,7 @@ namespace Core.Services
 
         private Result OnNotExistingId(int id, Result result)
         {
-            _logger.LogError($"Service Error: Not existing Id: {id}");
+            _logger.LogError("Service Error: Not existing Id: {Id}", id);
             return result;
         }
     }

@@ -40,13 +40,15 @@ namespace Api
             catch (Exception ex) when (IsUsualExceptionsFilter(ex))
             {
                 _logger.LogError(ex,
-                    $"{PossibleBugText} Exception of Type: {ex.GetType().Name} and Message: {ex.Message}");
+                    "{BugText} Exception of Type: {ExceptionType} and Message: {Message}",
+                    PossibleBugText, ex.GetType().Name, ex.Message);
                 await HandleExceptionAsync(httpContext);
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex,
-                    $"Unknown exception on server of Type: {ex.GetType().Name} and Message: {ex.Message}");
+                    "Unknown exception on server of Type: {ExceptionType} and Message: {Message}",
+                    ex.GetType().Name, ex.Message);
                 await HandleExceptionAsync(httpContext);
             }
         }
@@ -81,7 +83,7 @@ namespace Api
             else
             {
                 _logger.LogError(ex,
-                    $"{PossibleBugText} Database error: {dbError}.");
+                    "{BugText} Database error: {DbError}.", PossibleBugText, dbError);
             }
         }
 

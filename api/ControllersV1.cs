@@ -39,7 +39,9 @@ namespace Api.Controllers.Version1
         public async Task<IActionResult> GetAsync( // CancellationToken cancellationToken,
             int skip = 0, int take = 10, bool showCompleted = false)
         {
-            _logger.LogInformation($"GET List params:\nskip: {skip}\ntake: {take}\nshowCompleted: {showCompleted}");
+            _logger.LogInformation(
+                "GET List params:\nskip: {Skip}\ntake: {Take}\nshowCompleted: {ShowCompleted}",
+                skip, take, showCompleted);
             var result = await _service.GetList(skip, take, showCompleted);
             return CreateResult(SuccessResult(result), successStatusCode: Status200OK);
         }
@@ -50,7 +52,7 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> GetAsync(int id)
         {
-            _logger.LogInformation($"GET by Id params:\nid: {id}");
+            _logger.LogInformation("GET by Id params:\nid: {Id}", id);
             var result = await _service.GetById(id);
             return CreateResult(result, successStatusCode: Status200OK, id);
         }
@@ -61,7 +63,7 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status400BadRequest)]
         public async Task<ActionResult> PostAsync([FromBody] InstantCoachCreateClient data)
         {
-            _logger.LogInformation($"POST params:\ndata:\n{ToLogJson(data)}");
+            _logger.LogInformation("POST params:\ndata:\n{HttpBody}", ToLogJson(data));
             var result = await _service.Create(data);
             return CreateResult(result,
                 successStatusCode: Status201Created, id: result.Value);
@@ -75,7 +77,7 @@ namespace Api.Controllers.Version1
         public async Task<ActionResult> PutAsync(int id,
             [FromBody] InstantCoachUpdateClient data)
         {
-            _logger.LogInformation($"PUT params:\nid: {id}\ndata:\n{ToLogJson(data)}");
+            _logger.LogInformation("PUT params:\nid: {Id}\ndata:\n{HttpBody}", ToLogJson(data));
             var result = await _service.Update(id, data);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }
@@ -87,7 +89,7 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> PatchAsync(int id)
         {
-            _logger.LogInformation($"PATCH params:\nid: {id}");
+            _logger.LogInformation("PATCH params:\nid: {Id}", id);
             var result = await _service.MarkCompleted(id);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }
@@ -99,7 +101,7 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> DeleteAsync(int id)
         {
-            _logger.LogInformation($"DELETE params:\nid: {id}");
+            _logger.LogInformation("DELETE params:\nid: {Id}", id);
             var result = await _service.Remove(id);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }

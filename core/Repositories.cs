@@ -79,7 +79,7 @@ FROM InstantCoaches WHERE Id = @Id";
                 new SqlParameter("@Take", take),
                 new SqlParameter("@ShowCompleted", showCompleted),
             };
-            _logger.LogInformation($"Repository Get All DB Parameters:\n{ToLogJson(dbParams)}");
+            _logger.LogInformation("Repository Get All DB Parameters:\n{DbParams}", ToLogJson(dbParams));
 
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
@@ -118,7 +118,7 @@ FROM InstantCoaches WHERE Id = @Id";
                     {
                         return SuccessResult(InstantCoachDb.FromReader(reader));
                     }
-                    _logger.LogError($"Repository Get By Id Error.\nNot existing Id: {id}");
+                    _logger.LogError("Repository Get By Id Error.\nNot existing Id: {Id}", id);
                     return ErrorResult<InstantCoachDb>(ErrorType.UnknownId);
                 }
             }
@@ -134,7 +134,7 @@ FROM InstantCoaches WHERE Id = @Id";
                 using(var reader = await command.ExecuteReaderAsync())
                 {
                     if (await reader.ReadAsync()) { return reader.GetInt32(0); }
-                    _logger.LogError($"Repository Get Existing Id Error.\nNot existing Id: {id}");
+                    _logger.LogError("Repository Get Existing Id Error.\nNot existing Id: {Id}", id);
                     return 0;
                 }
             }
@@ -144,15 +144,9 @@ FROM InstantCoaches WHERE Id = @Id";
         {
             var commentsWithCount = GetCommentsWithCount(model.Comments);
             var entity = model.ToInstantCoachDbEntity(commentsWithCount);
-            _logger.LogInformation($"Add Entity Model:\n{ToLogJson(entity)}");
+            _logger.LogInformation("Add Entity Model:\n{EntityModel}", ToLogJson(entity));
             var result = await AddOrUpdate(entity);
-            if (result == 0)
-            {
-                _logger.LogError($"Failed to Save DB Changes");
-                return ErrorResult<int>(ErrorType.SaveChangesFailed);
-            }
-            _logger.LogInformation($"Saved Changes rows count: {result}");
-            return SuccessResult(entity.Id);
+            return GetCreateResult(entity.Id, rows: result);
         }
 
         public async Task<Result> Update(InstantCoachDbEntity currentEntity,
@@ -161,7 +155,7 @@ FROM InstantCoaches WHERE Id = @Id";
             var commentsWithCount = GetCommentsWithCount(model.Comments);
             var updatedEntity = model.ToInstantCoachDbEntity(
                 currentState: currentEntity, commentsWithCount);
-            _logger.LogInformation($"Update Entity Model:\n{ToLogJson(updatedEntity)}");
+            _logger.LogInformation("Update Entity Model:\n{EntityModel}", ToLogJson(updatedEntity));
             var result = await AddOrUpdate(updatedEntity);
             return GetResult(rows: result);
         }
@@ -169,7 +163,7 @@ FROM InstantCoaches WHERE Id = @Id";
         public async Task<Result> UpdateAsCompleted(InstantCoachDbEntity currentEntity)
         {
             currentEntity.Status = InstantCoachStatus.Completed;
-            _logger.LogInformation($"Update Completed Entity Model:\n{ToLogJson(currentEntity)}");
+            _logger.LogInformation("Update Completed Entity Model:\n{EntityModel}", ToLogJson(currentEntity));
             var result = await AddOrUpdate(currentEntity);
             return GetResult(rows: result);
         }
@@ -180,15 +174,22 @@ FROM InstantCoaches WHERE Id = @Id";
             return GetResult(rows: result);
         }
 
+        private Result<int> GetCreateResult(int id, int rows)
+        {
+            var result = GetResult(rows);
+            if (result.Success) { return SuccessResult(id); }
+            return ErrorResult<int>(result.Error);
+        }
+
         private Result GetResult(int rows)
         {
             if (rows == 0)
             {
-                _logger.LogError($"Failed to Save DB Changes");
+                _logger.LogError("Failed to Save DB Changes");
                 return ErrorResult(ErrorType.SaveChangesFailed);
             }
 
-            _logger.LogInformation($"Saved Changes rows count: {rows}");
+            _logger.LogInformation("Saved Changes rows count: {RowCount}", rows);
             return SuccessResult();
         }
 
@@ -204,7 +205,7 @@ FROM InstantCoaches WHERE Id = @Id";
         private SqlParameter GetAndLogIdParam(int id)
         {
             var result = new SqlParameter("@Id", id);
-            _logger.LogInformation($"Get By Id DB Parameters:\n{ToLogJson(result)}");
+            _logger.LogInformation("Get By Id DB Parameters:\n{DbParams}", ToLogJson(result));
             return result;
         }
     }

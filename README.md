@@ -116,6 +116,12 @@ Import postman collection `InstantCoach API.postman_collection.json` from `postm
 >
 >JWT Authentication is applied, but if there is problem, pleas read note in previous Swagger section.
 
+## JWT Authentication
+
+Reason why is not used Username/Password in this implementation of JWT Authentication is because Frontend should not have direct access to REST API. It should have access to MVC Web App that would have User Identity through JWT token. Through that web app as Proxy Frontend would call REST API, sending User Identity JWT Token.
+
+If in future MVC Web App would be created, proper JWT Authentication would be implemented and already created JWT token would be pass to REST API and created User Identity as Middleware.
+
 
 ## .NET Core
 
