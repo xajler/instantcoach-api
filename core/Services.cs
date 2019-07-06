@@ -32,15 +32,15 @@ namespace Core.Services
             return result;
         }
 
-        public async Task<Result<InstantCoach>> GetById(int id)
+        public async Task<Result<InstantCoachForId>> GetById(int id)
         {
             if (await _repository.GetExistingId(id) == 0)
             {
-                return ErrorResult<InstantCoach>(ErrorType.UnknownId);
+                return ErrorResult<InstantCoachForId>(ErrorType.UnknownId);
             }
             Result<InstantCoachDb> result = await _repository.GetById(id);
             _logger.LogInformation("Get List Result:\n{Result}", ToLogJson(result));
-            if (!result.Success) { return ErrorResult<InstantCoach>(result.Error); }
+            if (!result.Success) { return ErrorResult<InstantCoachForId>(result.Error); }
             return SuccessResult(result.Value.ToInstantCoach());
         }
 

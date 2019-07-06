@@ -48,7 +48,7 @@ namespace Api.Controllers.Version1
 
         /// <summary>Gets InstantCoach by Id.</summary>
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(InstantCoach), Status200OK)]
+        [ProducesResponseType(typeof(InstantCoachForId), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> GetAsync(int id)
         {

@@ -1,7 +1,7 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Core.Models;
 
 namespace Core
 {
@@ -28,45 +28,41 @@ namespace Core
             return JsonConvert.SerializeObject(value);
         }
 
-        public static Result SuccessResult()
+        public static string CheckStringForLength(string value, string memberName, int length)
         {
-            return new Result { Error = ErrorType.None };
-        }
-
-        public static Result<T> SuccessResult<T>(T value)
-        {
-            return new Result<T>
+            if (string.IsNullOrWhiteSpace(value))
             {
-                Value = value,
-                Error = ErrorType.None
-            };
-        }
-
-        public static Result<T> ErrorResult<T>(ErrorType errorType)
-        {
-            return new Result<T>{ Value = default, Error = errorType };
-        }
-
-        public static Result ErrorResult(ErrorType errorType)
-        {
-            return new Result { Error = errorType };
-        }
-
-        // TODO: Move to business logic
-
-        public static string CreateReference()
-        {
-            string value = DateTime.UtcNow.Ticks.ToString().Substring(5);
-            return $"IC{value}";
-        }
-
-        public static InstantCoachStatus SetStatus(UpdateType updateType)
-        {
-            if (updateType == UpdateType.Save)
-            {
-                return InstantCoachStatus.InProgress;
+                return $"{memberName} should not exceed {length} charactes";
             }
-            return InstantCoachStatus.Waiting;
+            return "";
+        }
+
+        public static List<T> ClenupNullItems<T>(this List<T> items)
+        {
+            return items.Where(x => x != null).ToList();
+        }
+    }
+
+    public static class StringExtensions
+    {
+        public static string CheckForNull(this string value, string memberName)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return $"{memberName} is required.";
+            return null;
+        }
+
+        public static string CheckLength(this string value, string memberName, int maxLength)
+        {
+            if (value.Length > maxLength)
+                return $"{memberName} should not exceed {maxLength} charactes.";
+            return null;
+        }
+
+        public static string CheckExactLength(this string value, string memberName, int maxLength)
+        {
+            if (value.Length != maxLength)
+                return $"{memberName} should be always of {maxLength} charactes.";
+            return null;
         }
     }
 }

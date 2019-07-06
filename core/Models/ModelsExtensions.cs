@@ -41,9 +41,9 @@ namespace Core.Models
             return result;
         }
 
-        public static InstantCoach ToInstantCoach(this InstantCoachDb db)
+        public static InstantCoachForId ToInstantCoach(this InstantCoachDb db)
         {
-            return new InstantCoach(
+            return new InstantCoachForId(
                 id: db.Id,
                 ticketId: db.TicketId,
                 description: db.Description,

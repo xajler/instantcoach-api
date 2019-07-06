@@ -13,7 +13,17 @@ namespace Core.Models
     public class Result
     {
         public bool Success => Error == ErrorType.None;
-        public ErrorType Error { get; set; }
+        protected ErrorType Error { get; set; }
+
+        public static Result AsSuccess()
+        {
+            return new Result { Error = ErrorType.None };
+        }
+
+        public static Result AsError(ErrorType errorType)
+        {
+            return new Result { Error = errorType };
+        }
 
         public override string ToString()
         {
@@ -27,7 +37,21 @@ namespace Core.Models
 
     public class Result<T> : Result
     {
-        public T Value { get; set; }
+        public T Value { get; private set; }
+
+        public static Result<T> AsSuccess(T value)
+        {
+            return new Result<T>
+            {
+                Value = value,
+                Error = ErrorType.None
+            };
+        }
+
+        public static new Result<T> AsError(ErrorType errorType)
+        {
+            return new Result<T> { Value = default, Error = errorType };
+        }
 
         public override string ToString()
         {
@@ -45,10 +69,98 @@ namespace Core.Models
         }
     }
 
+    public class ValidationResult
+    {
+        public bool IsValid => Errors.Count == 0;
+        public List<string> Errors { get; private set; } = new List<string>();
+        public void AddError(string error)
+        {
+            if (string.IsNullOrWhiteSpace(error)) return;
+            Errors.Add(error);
+        }
+        public void AddErrorRange(List<string> errors)
+        {
+            if (errors == null || errors.Count == 0) return;
+            Errors.AddRange(errors);
+        }
+    }
+
     public class CreatedId
     {
         public CreatedId(int id) => Id = id;
         public int Id { get; }
+    }
+
+    // Return Models
+    // Read-Only For List and GetById
+    public class InstantCoachList
+    {
+        public InstantCoachList(
+            int id,
+            InstantCoachStatus status,
+            string reference,
+            string description,
+            DateTime createdAt,
+            DateTime updatedAt,
+            int commentsCount,
+            string evaluatorName)
+        {
+            Id = id;
+            Status = status;
+            Reference = reference;
+            Description = description;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            CommentsCount = commentsCount;
+            EvaluatorName = evaluatorName;
+        }
+        public int Id { get; }
+        public InstantCoachStatus Status { get; }
+        public string Reference { get; }
+        public string Description { get; }
+        public DateTime CreatedAt { get; }
+        public DateTime UpdatedAt { get; }
+        public int CommentsCount { get; }
+        public string EvaluatorName { get; }
+
+        public static InstantCoachList FromReader(DbDataReader reader)
+        {
+            return new InstantCoachList(
+                id: reader.GetInt32(1),
+                status: (InstantCoachStatus)reader.GetByte(2),
+                reference: reader.GetString(3),
+                description: reader.GetString(4),
+                createdAt: reader.GetDateTime(5),
+                updatedAt: reader.GetDateTime(6),
+                commentsCount: reader.GetInt32(7),
+                evaluatorName: reader.GetString(8));
+        }
+    }
+
+    public class InstantCoachForId
+    {
+        public InstantCoachForId(
+            int id,
+            string ticketId,
+            string description,
+            string evaluatorName,
+            List<Comment> comments,
+            List<BookmarkPin> bookmarkPins)
+        {
+            Id = id;
+            TicketId = ticketId;
+            Description = description;
+            EvaluatorName = evaluatorName;
+            Comments = comments;
+            BookmarkPins = bookmarkPins;
+        }
+
+        public int Id { get; }
+        public string TicketId { get; }
+        public string Description { get; }
+        public string EvaluatorName { get; }
+        public List<Comment> Comments { get; }
+        public List<BookmarkPin> BookmarkPins { get; }
     }
 
     // Client (Body) Models

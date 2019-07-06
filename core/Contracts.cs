@@ -20,7 +20,7 @@ namespace Core.Contracts
     public interface IInstantCoachService
     {
         Task<ListResult<InstantCoachList>> GetList(int skip, int take, bool showCompleted);
-        Task<Result<InstantCoach>> GetById(int id);
+        Task<Result<InstantCoachForId>> GetById(int id);
         Task<Result<int>> Create(InstantCoachCreateClient data);
         Task<Result> Update(int id, InstantCoachUpdateClient data);
         Task<Result> MarkCompleted(int id);
