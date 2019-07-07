@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using Core.Domain;
 
 namespace Core.Models
 {
@@ -71,6 +72,8 @@ namespace Core.Models
 
     public class ValidationResult
     {
+        public ValidationResult(string model) => Model = model;
+        public string Model { get; }
         public bool IsValid => Errors.Count == 0;
         public List<string> Errors { get; private set; } = new List<string>();
         public void AddError(string error)

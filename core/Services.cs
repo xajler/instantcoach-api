@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Core.Repositories;
 using Core.Contracts;
+using Core.Domain;
 using Core.Models;
 using static Core.Helpers;
 

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Core.Context;
+using Core.Domain;
 using static Core.Helpers;
 
 namespace Core.Models
@@ -17,7 +17,7 @@ namespace Core.Models
                 evaluatorName: create.EvaluatorName,
                 agentName: create.AgentName,
                 comments: CreateCommentsFromClient(create.Comments),
-                commentsCount: create.Comments.Count,
+               // commentsCount: create.Comments.Count,
                 bookmarkPins: CreateBookmarkPinsFromClient(create.BookmarkPins)
 
             );

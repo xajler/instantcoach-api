@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
-using static System.Console;
+using Core.Models;
 using static Core.Helpers;
 
-namespace Core.Models
+namespace Core.Domain
 {
     public class InstantCoach : AggregateRoot, IAuditable
     {
         private const string CommentsContractMsg = "Comments are required";
+        private ValidationResult _errors = new ValidationResult(typeof(Comment).Name);
+        private List<ValidationResult> _allErrors = new List<ValidationResult>();
+
         public InstantCoach(
             string description,
             string ticketId,
@@ -15,11 +18,10 @@ namespace Core.Models
             int agentId,
             string evaluatorName,
             string agentName,
-            int commentsCount,
             List<Comment> comments,
             List<BookmarkPin> bookmarkPins)
         {
-            NotNullOrEmpty(comments, CommentsContractMsg);
+            CheckCommentsNotNullOrEmpty(comments);
             Description = description;
             // TODO: It would be nice to get this one from Config
             Status = InstantCoachStatus.New;
@@ -31,7 +33,7 @@ namespace Core.Models
             AgentName = agentName;
             Comments = comments;
             BookmarkPins = bookmarkPins;
-            CommentsCount = commentsCount;
+            CommentsCount = Comments.Count;
         }
 
         public string Description { get; }
@@ -52,7 +54,7 @@ namespace Core.Models
         public void Update(int id, UpdateType updateType,
             List<Comment> comments, List<BookmarkPin> bookmarkPins)
         {
-            NotNullOrEmpty(comments, CommentsContractMsg);
+            CheckCommentsNotNullOrEmpty(comments);
             UpdateId(id);
             Status = SetStatus(updateType);
             Comments = comments;
@@ -61,9 +63,8 @@ namespace Core.Models
 
         public ValidationResult Validate()
         {
-            var result = new ValidationResult();
-            result.AddErrorRange(CreateValidationErrors());
-            return result;
+            _errors.AddErrorRange(CreateValidationErrors());
+            return _errors;
         }
 
         private InstantCoachStatus SetStatus(UpdateType updateType)
@@ -94,23 +95,24 @@ namespace Core.Models
 
         private string CreateReference()
         {
-            string value = DateTime.UtcNow.Ticks.ToString().Substring(5);
+            string value = GetTicksExcludingFirst5Digits();
             return $"IC{value}";
+        }
+
+        private void CheckCommentsNotNullOrEmpty(List<Comment> comments)
+        {
+            if (comments == null || comments.Count == 0)
+            {
+                _errors.AddError(CommentsContractMsg);
+            }
         }
     }
 
     public class Range : ValueObject
     {
+
         public int Start { get; private set; }
         public int End { get; private set; }
-
-        public ValidationResult Validate()
-        {
-            var result = new ValidationResult();
-            if (End >= Start)
-                result.AddError("Range start number must be greater than end number.");
-            return result;
-        }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
@@ -121,11 +123,19 @@ namespace Core.Models
 
     public class BookmarkPin : ValueObject
     {
+        private ValidationResult _errors = new ValidationResult(typeof(Comment).Name);
         public int Id { get; set; }
         public int Index { get; set; }
         public Range Range { get; set; }
         public string Comment { get; set; }
         public string MediaUrl { get; set; }
+
+        public ValidationResult Validate()
+        {
+            if (Range.End >= Range.Start)
+                _errors.AddError("Range start number must be greater than end number.");
+            return _errors;
+        }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
@@ -138,11 +148,11 @@ namespace Core.Models
 
     public class Comment : ValueObject
     {
+        private ValidationResult _errors = new ValidationResult(typeof(Comment).Name);
         private Comment(CommentType type, string text,
             EvaluationCommentAuthor authorType,
             DateTime createdAt)
         {
-            WriteLine("inside Comment, and text value is: {0}", text);
             if (type == CommentType.Textual)
             {
                 NotNullOrEmpty(text, "Text is required for Textual comment.");

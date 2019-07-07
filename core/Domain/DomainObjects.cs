@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace Core.Models
+namespace Core.Domain
 {
     public class DomainAssertionException : Exception
     {

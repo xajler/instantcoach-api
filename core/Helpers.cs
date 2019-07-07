@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Core.Models;
+using Core.Domain;
 
 namespace Core
 {
@@ -27,6 +28,11 @@ namespace Core
         public static string ToJson<T>(T value) where T : class
         {
             return JsonConvert.SerializeObject(value);
+        }
+
+        public static string GetTicksExcludingFirst5Digits()
+        {
+            return DateTime.UtcNow.Ticks.ToString().Substring(5);
         }
 
         public static string CheckStringForLength(string value, string memberName, int length)

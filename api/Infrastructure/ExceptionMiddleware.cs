@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Core;
-using Core.Models;
+using Core.Domain;
 
 namespace Api
 {
