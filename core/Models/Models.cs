@@ -13,7 +13,7 @@ namespace Core.Models
     public class Result
     {
         public bool Success => Error == ErrorType.None;
-        protected ErrorType Error { get; set; }
+        public ErrorType Error { get; set; }
 
         public static Result AsSuccess()
         {
@@ -173,8 +173,32 @@ namespace Core.Models
         public int AgentId { get; set; }
         public string EvaluatorName { get; set; }
         public string AgentName { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<BookmarkPin> BookmarkPins { get; set; }
+        public List<CommentClient> Comments { get; set; }
+        public List<BookmarkPinClient> BookmarkPins { get; set; }
+    }
+
+    public class CommentClient
+    {
+        public CommentType CommentType { get; set; }
+        public string Text { get; }
+        public EvaluationCommentAuthor AuthorType { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int BookmarkPinId { get; set; }
+    }
+
+    public class BookmarkPinClient
+    {
+        public int Id { get; set; }
+        public int Index { get; set; }
+        public Range Range { get; set; }
+        public string Comment { get; set; }
+        public string MediaUrl { get; set; }
+    }
+
+    public class RangeClient
+    {
+        public int Start { get; set; }
+        public int End { get; set; }
     }
 
     public class InstantCoachUpdateClient

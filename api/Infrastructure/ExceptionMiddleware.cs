@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Core;
+using Core.Models;
 
 namespace Api
 {
@@ -26,6 +27,13 @@ namespace Api
             try
             {
                 await _next(httpContext);
+            }
+            catch (DomainAssertionException ex)
+            {
+                _logger.LogError(ex,
+                    "Domain Failure, data sent is not correct.Exception of Type: {ExceptionType} and Message: {Message}", ex.GetType().Name, ex.Message);
+
+                await HandleDomainExceptionAsync(httpContext, ex.Message);
             }
             catch (DbUpdateException ex)
             {
@@ -58,6 +66,13 @@ namespace Api
             context.Response.ContentType = "text/plain";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             return context.Response.WriteAsync("Internal Server Error. Something went wrong on server.");
+        }
+
+        private static Task HandleDomainExceptionAsync(HttpContext context, string message)
+        {
+            context.Response.ContentType = "text/plain";
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return context.Response.WriteAsync($"Domain error message: {message}");
         }
 
         private void OnDbUpdateException(DbUpdateException ex)

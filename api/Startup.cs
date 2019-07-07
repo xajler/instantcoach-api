@@ -41,8 +41,9 @@ namespace Api
             services.AddDbcontextService(config.GetConnectionString());
             services.AddJwtAuthenticationService(config);
             services.AddSwaggerService();
-            services.AddSingleton<IInstantCoachRepository, InstantCoachRepository>();
-            services.AddSingleton<IInstantCoachService, InstantCoachService>();
+            services.AddScoped(typeof(Repository<>));
+            services.AddScoped<InstantCoachRepository>();
+            services.AddScoped<IInstantCoachService, InstantCoachService>();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
         }
 

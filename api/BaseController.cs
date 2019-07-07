@@ -9,11 +9,11 @@ namespace Api.Controllers
 {
     [Authorize]
     [ApiController]
-    public class BaseController : ControllerBase
+    public abstract class BaseController : ControllerBase
     {
         private readonly ILogger _logger;
 
-        public BaseController(ILogger logger) => _logger = logger;
+        protected BaseController(ILogger logger) => _logger = logger;
 
         protected ActionResult CreateResult<T>(Result<T> result, int successStatusCode, int id = 0)
         {

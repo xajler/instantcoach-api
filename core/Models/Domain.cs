@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using static System.Console;
+using static Core.Helpers;
 
 namespace Core.Models
 {
-    public class InstantCoach : Entity
+    public class InstantCoach : AggregateRoot, IAuditable
     {
         private const string CommentsContractMsg = "Comments are required";
         public InstantCoach(
@@ -14,11 +15,11 @@ namespace Core.Models
             int agentId,
             string evaluatorName,
             string agentName,
+            int commentsCount,
             List<Comment> comments,
             List<BookmarkPin> bookmarkPins)
         {
-            Contract.Requires(comments != null, CommentsContractMsg);
-            Id = 0;
+            NotNullOrEmpty(comments, CommentsContractMsg);
             Description = description;
             // TODO: It would be nice to get this one from Config
             Status = InstantCoachStatus.New;
@@ -30,24 +31,28 @@ namespace Core.Models
             AgentName = agentName;
             Comments = comments;
             BookmarkPins = bookmarkPins;
+            CommentsCount = commentsCount;
         }
 
         public string Description { get; }
         public InstantCoachStatus Status { get; private set; }
         public string TicketId { get; }
-        public string Reference { get; }
+        public string Reference { get; private set; }
         public int EvaluatorId { get; }
         public int AgentId { get; }
         public string EvaluatorName { get; }
         public string AgentName { get; }
         public List<Comment> Comments { get; private set; }
         public List<BookmarkPin> BookmarkPins { get; private set; }
-        public int CommentsCount => Comments.Count;
+        public int CommentsCount { get; private set; }
+
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public void Update(int id, UpdateType updateType,
             List<Comment> comments, List<BookmarkPin> bookmarkPins)
         {
-            Contract.Requires(comments != null, CommentsContractMsg);
+            NotNullOrEmpty(comments, CommentsContractMsg);
             UpdateId(id);
             Status = SetStatus(updateType);
             Comments = comments;
@@ -72,7 +77,7 @@ namespace Core.Models
 
         private List<string> CreateValidationErrors()
         {
-            return new List<String>
+            return new List<string>
                 {
                     Description.CheckForNull(nameof(Description)),
                     Description.CheckLength(nameof(Description), 1000),
@@ -114,52 +119,80 @@ namespace Core.Models
         }
     }
 
-    public class BookmarkPin : Entity
+    public class BookmarkPin : ValueObject
     {
+        public int Id { get; set; }
         public int Index { get; set; }
         public Range Range { get; set; }
         public string Comment { get; set; }
         public string MediaUrl { get; set; }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return Id;
+            yield return Index;
+            yield return Range;
+            yield return MediaUrl;
+        }
     }
 
     public class Comment : ValueObject
     {
-        public CommentType CommentType { get; private set; }
-        public string Text { get; private set; }
-        public EvaluationCommentAuthor AuthorType { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public int PinId { get; private set; }
-
-        public void AsText(string text,
+        private Comment(CommentType type, string text,
             EvaluationCommentAuthor authorType,
             DateTime createdAt)
         {
-            Contract.Requires(!string.IsNullOrWhiteSpace(text));
-            CommentType = CommentType.Text;
+            WriteLine("inside Comment, and text value is: {0}", text);
+            if (type == CommentType.Textual)
+            {
+                NotNullOrEmpty(text, "Text is required for Textual comment.");
+            }
+            else
+            {
+                NotEmptyOrContains(text, "http", "Text is required and must be a valid URL link for Attachment comment.");
+            }
+
             AuthorType = authorType;
             CreatedAt = createdAt;
             Text = text;
         }
 
-        public void AsAttachment(string text,
+        private Comment(int bookmarkPinId,
             EvaluationCommentAuthor authorType,
             DateTime createdAt)
         {
-            Contract.Requires(!string.IsNullOrWhiteSpace(text));
-            CommentType = CommentType.Attachment;
-            AuthorType = authorType;
-            CreatedAt = createdAt;
-            Text = text;
-        }
-
-        public void AsBookmark(int pinId,
-            EvaluationCommentAuthor authorType,
-            DateTime createdAt)
-        {
+            GreaterThanZero(bookmarkPinId, "Bookmark Pin Id must have value greter than 0.");
             CommentType = CommentType.Bookmark;
             AuthorType = authorType;
             CreatedAt = createdAt;
-            PinId = pinId;
+            BookmarkPinId = bookmarkPinId;
+        }
+
+        public CommentType CommentType { get;  }
+        public string Text { get; }
+        public EvaluationCommentAuthor AuthorType { get; }
+        public DateTime CreatedAt { get; }
+        public int BookmarkPinId { get; }
+
+        public static Comment Textual(string text,
+            EvaluationCommentAuthor authorType,
+            DateTime createdAt)
+        {
+            return new Comment(CommentType.Textual, text, authorType, createdAt);
+        }
+
+        public static Comment Attachment(string text,
+            EvaluationCommentAuthor authorType,
+            DateTime createdAt)
+        {
+            return new Comment(CommentType.Attachment, text, authorType, createdAt);
+        }
+
+        public static Comment Bookmark(int bookmarkPinId,
+             EvaluationCommentAuthor authorType,
+             DateTime createdAt)
+        {
+            return new Comment(bookmarkPinId, authorType, createdAt);
         }
 
         protected override IEnumerable<object> GetAtomicValues()

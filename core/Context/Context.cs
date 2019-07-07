@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,18 +7,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Core.Models;
+using static Core.Helpers;
 
 namespace Core.Context
 {
-    public class ICContext : DbContext
+    public sealed class ICContext : DbContext
     {
         public ICContext(DbContextOptions<ICContext> options)
             : base(options)
         {
         }
 
-        public DbSet<InstantCoachDbEntity> InstantCoaches { get; set; }
-        public DbSet<BookmarkPinDbEntity> BookmarkPins { get; set; }
+        public DbSet<InstantCoach> InstantCoaches { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,7 +36,7 @@ namespace Core.Context
             CancellationToken cancellationToken = default)
         {
             SetAuditInfo();
-            return (await base.SaveChangesAsync(true, cancellationToken));
+            return await SaveChangesAsync(true, cancellationToken);
         }
 
         private void SetAuditInfo()
@@ -58,55 +57,14 @@ namespace Core.Context
         }
     }
 
-    public interface IAuditable
+    internal class InstantCoachConfiguration : IEntityTypeConfiguration<InstantCoach>
     {
-        DateTime CreatedAt { get; set; }
-        DateTime UpdatedAt { get; set; }
-    }
-
-    public class InstantCoachDbEntity : Entity, IAuditable
-    {
-        public string Description { get; set; }
-        public InstantCoachStatus Status { get; set; }
-        public string TicketId { get; set; }
-        public string Reference { get; set; }
-        public int EvaluatorId { get; set; }
-        public int AgentId { get; set; }
-        public string EvaluatorName { get; set; }
-        public string AgentName { get; set; }
-        public string Comments { get; set; }
-        public int CommentsCount { get; set; }
-        public List<InstantCoachBookmarkPinDbEntity> InstantCoachBookmarkPins { get; set; }
-        [Required]
-        public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime UpdatedAt { get; set; }
-    }
-
-    public class BookmarkPinDbEntity : Entity
-    {
-        public int Index { get; set; }
-        public int Range { get; set; }
-        public string Comment { get; set; }
-        public string MediaUrl { get; set; }
-        public List<InstantCoachBookmarkPinDbEntity> InstantCoachBookmarkPins { get; set; }
-    }
-
-    public class InstantCoachBookmarkPinDbEntity
-    {
-        public int InstantCoachId { get; set; }
-        public InstantCoachDbEntity InstantCoach { get; set; }
-        public int BookmarkPinId { get; set; }
-        public BookmarkPinDbEntity BookmarkPin { get; set; }
-    }
-
-    internal class InstantCoachConfiguration : IEntityTypeConfiguration<InstantCoachDbEntity>
-    {
-        public void Configure(EntityTypeBuilder<InstantCoachDbEntity> builder)
+        public void Configure(EntityTypeBuilder<InstantCoach> builder)
         {
             var statusConvert = new EnumToNumberConverter<InstantCoachStatus, byte>();
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
+                   //.HasColumnName("Id")
                    .ForSqlServerUseSequenceHiLo("ic_hilo");
             builder.Property(x => x.Description)
                    .HasMaxLength(1000)
@@ -132,52 +90,61 @@ namespace Core.Context
             builder.Property(x => x.AgentName)
                    .HasMaxLength(128)
                    .IsRequired();
-            builder.Property(x => x.CommentsCount)
-                   .IsRequired();
             // String as JSON
             builder.Property(x => x.Comments)
+                   .HasConversion(
+                       x => ToJson(x),
+                       x => FromJson<List<Comment>>(x))
                    .HasColumnType("NVARCHAR(MAX)")
                    .IsRequired();
-        }
-    }
-
-    internal class BookmarkPinConfiguration
-        : IEntityTypeConfiguration<BookmarkPinDbEntity>
-    {
-        public void Configure(
-            EntityTypeBuilder<BookmarkPinDbEntity> builder)
-        {
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id)
-                   .ForSqlServerUseSequenceHiLo("ic_hilo");
-            builder.Property(x => x.Index)
-                   .IsRequired();
-            builder.Property(x => x.Range)
-                   .IsRequired();
-            builder.Property(x => x.MediaUrl)
-                   .HasMaxLength(1000)
-                   .IsRequired();
-            builder.Property(x => x.Comment)
+            // String as JSON
+            builder.Property(x => x.BookmarkPins)
+                   .HasConversion(
+                       x => ToJson(x),
+                       x => FromJson<List<BookmarkPin>>(x))
                    .HasColumnType("NVARCHAR(MAX)");
         }
     }
 
-    internal class InstantCoachBookmarkPinConfiguration
-        : IEntityTypeConfiguration<InstantCoachBookmarkPinDbEntity>
-    {
-        public void Configure(
-            EntityTypeBuilder<InstantCoachBookmarkPinDbEntity> builder)
-        {
-            builder.HasKey(x =>
-                new { x.InstantCoachId, x.BookmarkPinId });
 
-            builder.HasOne(x => x.InstantCoach)
-                   .WithMany(x => x.InstantCoachBookmarkPins)
-                   .HasForeignKey(x => x.InstantCoachId);
 
-            builder.HasOne(x => x.BookmarkPin)
-                   .WithMany(x => x.InstantCoachBookmarkPins)
-                   .HasForeignKey(x => x.BookmarkPinId);
-        }
-    }
+    // internal class BookmarkPinConfiguration
+    //     : IEntityTypeConfiguration<BookmarkPinDbEntity>
+    // {
+    //     public void Configure(
+    //         EntityTypeBuilder<BookmarkPinDbEntity> builder)
+    //     {
+    //         builder.HasKey(x => x.Id);
+    //         builder.Property(x => x.Id)
+    //                .ForSqlServerUseSequenceHiLo("ic_hilo");
+    //         builder.Property(x => x.Index)
+    //                .IsRequired();
+    //         builder.Property(x => x.Range)
+    //                .IsRequired();
+    //         builder.Property(x => x.MediaUrl)
+    //                .HasMaxLength(1000)
+    //                .IsRequired();
+    //         builder.Property(x => x.Comment)
+    //                .HasColumnType("NVARCHAR(MAX)");
+    //     }
+    // }
+
+    // internal class InstantCoachBookmarkPinConfiguration
+    //     : IEntityTypeConfiguration<InstantCoachBookmarkPinDbEntity>
+    // {
+    //     public void Configure(
+    //         EntityTypeBuilder<InstantCoachBookmarkPinDbEntity> builder)
+    //     {
+    //         builder.HasKey(x =>
+    //             new { x.InstantCoachId, x.BookmarkPinId });
+
+    //         builder.HasOne(x => x.InstantCoach)
+    //                .WithMany(x => x.InstantCoachBookmarkPins)
+    //                .HasForeignKey(x => x.InstantCoachId);
+
+    //         builder.HasOne(x => x.BookmarkPin)
+    //                .WithMany(x => x.InstantCoachBookmarkPins)
+    //                .HasForeignKey(x => x.BookmarkPinId);
+    //     }
+    // }
 }

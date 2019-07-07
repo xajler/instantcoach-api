@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace core.Migrations
 {
     [DbContext(typeof(ICContext))]
-    [Migration("20190703214058_StoreProcedureInstantCoachList")]
+    [Migration("20190707125445_StoreProcedureInstantCoachList")]
     partial class StoreProcedureInstantCoachList
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace core.Migrations
                 .HasAnnotation("Relational:Sequence:.ic_hilo", "'ic_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Core.Context.InstantCoachDbEntity", b =>
+            modelBuilder.Entity("Core.Models.InstantCoach", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,6 +36,7 @@ namespace core.Migrations
                         .HasMaxLength(128);
 
                     b.Property<string>("BookmarkPins")
+                        .IsRequired()
                         .HasColumnType("NVARCHAR(MAX)");
 
                     b.Property<string>("Comments")
@@ -60,9 +61,7 @@ namespace core.Migrations
                         .IsRequired()
                         .HasMaxLength(16);
 
-                    b.Property<byte>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue((byte)1);
+                    b.Property<byte>("Status");
 
                     b.Property<string>("TicketId")
                         .IsRequired()

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Core.Models;
 
 namespace Core
 {
@@ -40,6 +41,47 @@ namespace Core
         public static List<T> ClenupNullItems<T>(this List<T> items)
         {
             return items.Where(x => x != null).ToList();
+        }
+
+        public static void NotNull(object obj, string message)
+        {
+            if (obj == null)
+            {
+                throw new DomainAssertionException(message);
+            }
+        }
+
+        public static void NotNullOrEmpty<T>(List<T> list, string message)
+        {
+            if (list == null || list.Count == 0)
+            {
+                throw new DomainAssertionException(message);
+            }
+        }
+
+        public static void NotNullOrEmpty(string stringValue, string message)
+        {
+            if (string.IsNullOrWhiteSpace(stringValue))
+            {
+                throw new DomainAssertionException(message);
+            }
+        }
+
+        public static void NotEmptyOrContains(string stringValue, string containsText, string message)
+        {
+            if (string.IsNullOrWhiteSpace(stringValue)
+                || !stringValue.Contains(containsText))
+            {
+                throw new DomainAssertionException(message);
+            }
+        }
+
+        public static void GreaterThanZero(int value, string message)
+        {
+            if (value <= 0)
+            {
+                throw new DomainAssertionException(message);
+            }
         }
     }
 

@@ -20,7 +20,7 @@ namespace core.Migrations
                 .HasAnnotation("Relational:Sequence:.ic_hilo", "'ic_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Core.Context.InstantCoachDbEntity", b =>
+            modelBuilder.Entity("Core.Models.InstantCoach", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,6 +34,7 @@ namespace core.Migrations
                         .HasMaxLength(128);
 
                     b.Property<string>("BookmarkPins")
+                        .IsRequired()
                         .HasColumnType("NVARCHAR(MAX)");
 
                     b.Property<string>("Comments")
@@ -58,9 +59,7 @@ namespace core.Migrations
                         .IsRequired()
                         .HasMaxLength(16);
 
-                    b.Property<byte>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue((byte)1);
+                    b.Property<byte>("Status");
 
                     b.Property<string>("TicketId")
                         .IsRequired()

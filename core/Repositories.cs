@@ -5,50 +5,73 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Core.Context;
-using Core.Contracts;
 using Core.Models;
 using static Core.Helpers;
 
 namespace Core.Repositories
 {
-    public class Repository<T> where T : DbEntity
+    public class Repository<T> where T : AggregateRoot
     {
+        private readonly ILogger<Repository<T>> _logger;
         private readonly DbContext _context;
 
-        protected Repository(DbContext context)
+        protected Repository(ILoggerFactory loggerFactory, DbContext context)
         {
+            _logger = loggerFactory.CreateLogger<Repository<T>>();
             _context = context;
         }
 
-        public virtual async Task<T> FetchById(int id)
+        public async Task<T> FindById(int id)
         {
             T result = await _context.Set<T>().FindAsync(id);
             return result;
         }
 
-        protected async Task<int> AddOrUpdate(T entity)
+        public async Task<Result<T>> Save(T entity)
         {
             if (entity.Id == default)
             {
+                _logger.LogInformation("Add Entity Model:\n{EntityModel}", ToLogJson(entity));
                 _context.Set<T>().Add(entity);
             }
             else
             {
+                _logger.LogInformation("Update Entity Model:\n{EntityModel}", ToLogJson(entity));
                 _context.Entry(entity).State = EntityState.Modified;
             }
 
-            return await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+            return GetCreateResult(entity, rows: result);
         }
 
-        protected async Task<int> Delete(T entity)
+        public async Task<Result> Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
-            return await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+            return GetResult(result);
+        }
+
+        private Result<T> GetCreateResult(T entity, int rows)
+        {
+            var result = GetResult(rows);
+            if (result.Success) { return Result<T>.AsSuccess(entity); }
+            return Result<T>.AsError(result.Error);
+        }
+
+        private Result GetResult(int rows)
+        {
+            if (rows == 0)
+            {
+                _logger.LogError("Failed to Save DB Changes");
+                return Result.AsError(ErrorType.SaveChangesFailed);
+            }
+
+            _logger.LogInformation("Saved Changes rows count: {RowCount}", rows);
+            return Result.AsSuccess();
         }
     }
 
-    public class InstantCoachRepository : Repository<InstantCoachDbEntity>,
-        IInstantCoachRepository
+    public class InstantCoachRepository : Repository<InstantCoach>
     {
         private const string GetAllStoreProcedure = "InstantCoach_List";
         private const string GetByIdQuery = @"SELECT Id, TicketId, Description, EvaluatorName, Comments, BookmarkPins
@@ -58,16 +81,11 @@ FROM InstantCoaches WHERE Id = @Id";
         private readonly ILogger<InstantCoachRepository> _logger;
         private readonly ICContext _context;
 
-        public InstantCoachRepository(ILogger<InstantCoachRepository> logger, ICContext context)
-            : base(context)
+        public InstantCoachRepository(ILoggerFactory loggerFactory, ICContext context)
+            : base(loggerFactory, context)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<InstantCoachRepository>();
             _context = context;
-        }
-
-        public override async Task<InstantCoachDbEntity> FetchById(int id)
-        {
-            return await base.FetchById(id);
         }
 
         public async Task<ListResult<InstantCoachList>> GetAll(
@@ -116,10 +134,10 @@ FROM InstantCoaches WHERE Id = @Id";
                 {
                     if (await reader.ReadAsync())
                     {
-                        return SuccessResult(InstantCoachDb.FromReader(reader));
+                        return Result<InstantCoachDb>.AsSuccess(InstantCoachDb.FromReader(reader));
                     }
                     _logger.LogError("Repository Get By Id Error.\nNot existing Id: {Id}", id);
-                    return ErrorResult<InstantCoachDb>(ErrorType.UnknownId);
+                    return Result<InstantCoachDb>.AsError(ErrorType.UnknownId);
                 }
             }
         }
@@ -138,68 +156,6 @@ FROM InstantCoaches WHERE Id = @Id";
                     return 0;
                 }
             }
-        }
-
-        public async Task<Result<int>> Add(InstantCoachCreate model)
-        {
-            var commentsWithCount = GetCommentsWithCount(model.Comments);
-            var entity = model.ToInstantCoachDbEntity(commentsWithCount);
-            _logger.LogInformation("Add Entity Model:\n{EntityModel}", ToLogJson(entity));
-            var result = await AddOrUpdate(entity);
-            return GetCreateResult(entity.Id, rows: result);
-        }
-
-        public async Task<Result> Update(InstantCoachDbEntity currentEntity,
-            InstantCoachUpdate model)
-        {
-            var commentsWithCount = GetCommentsWithCount(model.Comments);
-            var updatedEntity = model.ToInstantCoachDbEntity(
-                currentState: currentEntity, commentsWithCount);
-            _logger.LogInformation("Update Entity Model:\n{EntityModel}", ToLogJson(updatedEntity));
-            var result = await AddOrUpdate(updatedEntity);
-            return GetResult(rows: result);
-        }
-
-        public async Task<Result> UpdateAsCompleted(InstantCoachDbEntity currentEntity)
-        {
-            currentEntity.Status = InstantCoachStatus.Completed;
-            _logger.LogInformation("Update Completed Entity Model:\n{EntityModel}", ToLogJson(currentEntity));
-            var result = await AddOrUpdate(currentEntity);
-            return GetResult(rows: result);
-        }
-
-        public async Task<Result> Remove(InstantCoachDbEntity currentEntity)
-        {
-            var result = await Delete(currentEntity);
-            return GetResult(rows: result);
-        }
-
-        private Result<int> GetCreateResult(int id, int rows)
-        {
-            var result = GetResult(rows);
-            if (result.Success) { return SuccessResult(id); }
-            return ErrorResult<int>(result.Error);
-        }
-
-        private Result GetResult(int rows)
-        {
-            if (rows == 0)
-            {
-                _logger.LogError("Failed to Save DB Changes");
-                return ErrorResult(ErrorType.SaveChangesFailed);
-            }
-
-            _logger.LogInformation("Saved Changes rows count: {RowCount}", rows);
-            return SuccessResult();
-        }
-
-        private (int, string) GetCommentsWithCount(List<Comment> comments)
-        {
-            if (comments == null)
-            {
-                return (0, null);
-            }
-            return (comments.Count, ToJson(comments));
         }
 
         private SqlParameter GetAndLogIdParam(int id)

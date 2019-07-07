@@ -1,17 +1,35 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace Core.Models
 {
+    public class DomainAssertionException : Exception
+    {
+        public DomainAssertionException(string message)
+            : base(message)
+        { }
+    }
+
+    public interface IAuditable
+    {
+        DateTime CreatedAt { get; set; }
+        DateTime UpdatedAt { get; set; }
+    }
+
+    public abstract class AggregateRoot : Entity
+    {
+    }
+
     public abstract class Entity
     {
-        public virtual int Id { get; protected set; }
         protected virtual object Actual => this;
+        public int Id { get; private set; } = 0;
 
         protected void UpdateId(int id)
         {
-             Contract.Requires(id > 0, "Id must be greater than 0 on update");
+            Contract.Requires(id > 0, "Id must be greater than 0 on update");
             if (id == 0) { Id = id; }
         }
 
@@ -60,16 +78,16 @@ namespace Core.Models
     {
         protected static bool EqualOperator(ValueObject left, ValueObject right)
         {
-            if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
+            if (left is null ^ right is null)
             {
                 return false;
             }
-            return ReferenceEquals(left, null) || left.Equals(right);
+            return left is null || left.Equals(right);
         }
 
         protected static bool NotEqualOperator(ValueObject left, ValueObject right)
         {
-            return !(EqualOperator(left, right));
+            return !EqualOperator(left, right);
         }
 
         protected abstract IEnumerable<object> GetAtomicValues();
@@ -86,8 +104,8 @@ namespace Core.Models
             IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
             while (thisValues.MoveNext() && otherValues.MoveNext())
             {
-                if (ReferenceEquals(thisValues.Current, null) ^
-                    ReferenceEquals(otherValues.Current, null))
+                if (thisValues.Current is null ^
+                    otherValues.Current is null)
                 {
                     return false;
                 }

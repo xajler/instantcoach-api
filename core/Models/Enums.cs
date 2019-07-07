@@ -17,7 +17,7 @@ namespace Core.Models
 
     public enum CommentType
     {
-        Text = 1,
+        Textual = 1,
         Bookmark,
         Attachment
     }
