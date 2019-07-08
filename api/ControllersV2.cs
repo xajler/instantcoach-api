@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Core;
-using Core.Contracts;
+using Core.Services;
 using Api.Controllers.Version1;
 
 namespace Api.Controllers.Version2

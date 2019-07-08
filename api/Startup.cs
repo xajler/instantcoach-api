@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Core.Context;
 using Core;
-using Core.Contracts;
 using Core.Repositories;
 using Core.Services;
 using static System.Console;

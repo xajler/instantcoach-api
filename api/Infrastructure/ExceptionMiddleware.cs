@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Core;
-using Core.Domain;
 
 namespace Api
 {
@@ -28,13 +27,6 @@ namespace Api
             {
                 await _next(httpContext);
             }
-            catch (DomainAssertionException ex)
-            {
-                _logger.LogError(ex,
-                    "Domain Failure, data sent is not correct.Exception of Type: {ExceptionType} and Message: {Message}", ex.GetType().Name, ex.Message);
-
-                await HandleDomainExceptionAsync(httpContext, ex.Message);
-            }
             catch (DbUpdateException ex)
             {
                 OnDbUpdateException(ex);
@@ -47,16 +39,16 @@ namespace Api
             }
             catch (Exception ex) when (IsUsualExceptionsFilter(ex))
             {
-                _logger.LogError(ex,
-                    "{BugText} Exception of Type: {ExceptionType} and Message: {Message}",
-                    PossibleBugText, ex.GetType().Name, ex.Message);
+                _logger.LogError(
+                    "{BugText} Exception of Type: {ExceptionType} and Message: {Message}\nStack Trace:\n{StackTrace}",
+                    PossibleBugText, ex.GetType().Name, ex.Message, ex.ToInnerMessagesDump());
                 await HandleExceptionAsync(httpContext);
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex,
-                    "Unknown exception on server of Type: {ExceptionType} and Message: {Message}",
-                    ex.GetType().Name, ex.Message);
+                _logger.LogCritical(
+                    "Unknown exception on server of Type: {ExceptionType} and Message: {Message}\nStack Trace:\n{StackTrace}",
+                    ex.GetType().Name, ex.Message, ex.ToInnerMessagesDump());
                 await HandleExceptionAsync(httpContext);
             }
         }
@@ -68,13 +60,6 @@ namespace Api
             return context.Response.WriteAsync("Internal Server Error. Something went wrong on server.");
         }
 
-        private static Task HandleDomainExceptionAsync(HttpContext context, string message)
-        {
-            context.Response.ContentType = "text/plain";
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return context.Response.WriteAsync($"Domain error message: {message}");
-        }
-
         private void OnDbUpdateException(DbUpdateException ex)
         {
             if (ex.InnerException != null && ex.InnerException is SqlException)
@@ -83,7 +68,8 @@ namespace Api
             }
             else
             {
-                _logger.LogCritical(ex, "Failed to Save DB Changes");
+                _logger.LogCritical("Failed to Save DB Changes.\nStack Trace:\n{StackTrace}",
+                    ex.ToInnerMessagesDump());
             }
         }
 
@@ -92,13 +78,15 @@ namespace Api
             var dbError = SqlServerErrorManager.GetError(ex);
             if (dbError == DatabaseError.Unhandled)
             {
-                _logger.LogCritical(ex,
-                    "Unhandled DB exception. Possible connection error.");
+                _logger.LogCritical(
+                    "Unhandled DB exception. Possible connection error.\nStack Trace:\n{StackTrace}",
+                        ex.ToInnerMessagesDump());
             }
             else
             {
-                _logger.LogError(ex,
-                    "{BugText} Database error: {DbError}.", PossibleBugText, dbError);
+                _logger.LogError(
+                    "{BugText} Database error: {DbError}.\nStack Trace:\n{StackTrace}",
+                    PossibleBugText, dbError, ex.ToInnerMessagesDump());
             }
         }
 

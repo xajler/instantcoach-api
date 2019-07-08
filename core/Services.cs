@@ -1,15 +1,23 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Core.Repositories;
-using Core.Contracts;
-using Core.Domain;
+using Domain;
 using Core.Models;
 using static Core.Helpers;
 
 namespace Core.Services
 {
+    public interface IInstantCoachService
+    {
+        Task<ListResult<InstantCoachList>> GetList(int skip, int take, bool showCompleted);
+        Task<Result<InstantCoachForId>> GetById(int id);
+        Task<Result<InstantCoach>> Create(InstantCoachCreateClient data);
+        Task<Result> Update(int id, InstantCoachUpdateClient data);
+        Task<Result> MarkCompleted(int id);
+        Task<Result> Remove(int id);
+    }
+
     public class InstantCoachService : IInstantCoachService
     {
         private readonly ILogger _logger;
@@ -49,61 +57,78 @@ namespace Core.Services
 
         public async Task<Result<InstantCoach>> Create(InstantCoachCreateClient data)
         {
-            // TODO: validation/business logic for create
-            //       Checking existence of Agentid or EvaluatorId depending which is loggedin
-            //       validation of
-            InstantCoach entity = data.ToInstantCoach();
-            var result = await _repository.Save(entity);
+            // TODO: Checking existence of Agentid or EvaluatorId depending which is loggedin
+            //       validation of bookmarkId in comments
+            InstantCoach entity = data.ToNewInstantCoach();
+            var validationResult = entity.Validate();
+            _logger.LogInformation("Entity after validate:\n{EntityModel}", ToLogJson(entity));
+            return await OnSave(entity, validationResult);
+        }
+
+        public async Task<Result> Update(int id, InstantCoachUpdateClient data)
+        {
+            // TODO: Guard those with status completed, they cannot be updated.
+            var entityResult = await GetExistingIdResult(id);
+            if (!entityResult.Success) { return OnNotExistingId(id); }
+            var entity = entityResult.Value;
+            ValidationResult validationResult = entity.UpdateAndValidate(
+                data.UpdateType,
+                data.Comments.ToComments(),
+                data.BookmarkPins.ToBookmarkPins());
+            return await OnSave(entity, validationResult);
+        }
+
+        public async Task<Result> MarkCompleted(int id)
+        {
+            var entityResult = await GetExistingIdResult(id);
+            if (!entityResult.Success) { return OnNotExistingId(id); }
+            var entity = entityResult.Value;
+            ValidationResult validationResult = entity.UpdateAsCompletedAndValidate();
+            return await OnSave(entity, validationResult);
+        }
+
+        public async Task<Result> Remove(int id)
+        {
+            var entityResult = await GetExistingIdResult(id);
+            if (!entityResult.Success) { return OnNotExistingId(id); }
+            var result = await _repository.Delete(entity: entityResult.Value);
+            return result;
+        }
+
+        private async Task<Result<InstantCoach>> OnSave(InstantCoach entity, ValidationResult validationResult)
+        {
+            Result vResult;
+
+            if (validationResult.IsValid)
+                vResult = Result.AsSuccess();
+            else
+                vResult = Result.AsDomainError(validationResult.Errors);
+
+            Result<InstantCoach> result;
+
+            if (vResult.Success)
+            {
+                _logger.LogInformation("Entity on Save:\n{EntityModel}", ToLogJson(entity));
+                result = await _repository.Save(entity);
+            }
+            else
+                result = Result<InstantCoach>.AsDomainError(validationResult.Errors);
+
             _logger.LogInformation("Create Result:\n{Result}", ToLogJson(result));
             return result;
         }
 
-        // public async Task<Result> Update(int id, InstantCoachUpdateClient data)
-        // {
-        //     var commentsWithCount = GetCommentsWithCount(model.Comments);
-        //     var updatedEntity = model.ToInstantCoachDbEntity(
-        //         currentState: currentEntity, commentsWithCount);
-        //     _logger.LogInformation("Update Entity Model:\n{EntityModel}", ToLogJson(updatedEntity));
-        //     var existingResult = await GetExistingIdResult(id);
-        //     if (!existingResult.Success) { return OnNotExistingId(id, existingResult); }
-        //     var status = SetStatus(data.UpdateType);
-        //     var model = data.ToInstantCoachUpate(status);
-        //     _logger.LogInformation("Update Domain Model:\n{DomainModel}", ToLogJson(model));
-        //     var result = await _repository.Update(
-        //         currentEntity: existingResult.Value, model);
-        //     return result;
-        // }
+        private async Task<Result<InstantCoach>> GetExistingIdResult(int id)
+        {
+            var result = await _repository.FindById(id);
+            if (result != null) { return Result<InstantCoach>.AsSuccess(result); }
+            return Result<InstantCoach>.AsError(ErrorType.UnknownId);
+        }
 
-        // public async Task<Result> MarkCompleted(int id)
-        // {
-        //     currentEntity.Status = InstantCoachStatus.Completed;
-        //     _logger.LogInformation("Update Completed Entity Model:\n{EntityModel}", ToLogJson(currentEntity));
-        //     var existingResult = await GetExistingIdResult(id);
-        //     if (!existingResult.Success) { return OnNotExistingId(id, existingResult); }
-        //     var result = await _repository.UpdateAsCompleted(
-        //         currentEntity: existingResult.Value);
-        //     return result;
-        // }
-
-        // public async Task<Result> Remove(int id)
-        // {
-        //     var existingResult = await GetExistingIdResult(id);
-        //     if (!existingResult.Success) { return OnNotExistingId(id, existingResult); }
-        //     var result = await _repository.Remove(currentEntity: existingResult.Value);
-        //     return result;
-        // }
-
-        // private async Task<Result<InstantCoachDbEntity>> GetExistingIdResult(int id)
-        // {
-        //     var result = await _repository.FetchById(id);
-        //     if (result != null) { return SuccessResult(result); }
-        //     return ErrorResult<InstantCoachDbEntity>(ErrorType.UnknownId);
-        // }
-
-        // private Result OnNotExistingId(int id, Result result)
-        // {
-        //     _logger.LogError("Service Error: Not existing Id: {Id}", id);
-        //     return result;
-        // }
+        private Result<InstantCoach> OnNotExistingId(int id)
+        {
+            _logger.LogError("Service Error: Not existing Id: {Id}", id);
+            return Result<InstantCoach>.AsError(ErrorType.UnknownId);
+        }
     }
 }

@@ -4,8 +4,8 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Domain;
 using Core.Context;
-using Core.Domain;
 using Core.Models;
 using static Core.Helpers;
 

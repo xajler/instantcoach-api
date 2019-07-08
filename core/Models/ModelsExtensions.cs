@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using Core.Domain;
+using Domain;
 using static Core.Helpers;
 
 namespace Core.Models
 {
     public static class ModelsExtensions
     {
-        public static InstantCoach ToInstantCoach(
+        public static InstantCoach ToNewInstantCoach(
             this InstantCoachCreateClient create)
         {
             return new InstantCoach(
@@ -16,75 +16,67 @@ namespace Core.Models
                 agentId: create.AgentId,
                 evaluatorName: create.EvaluatorName,
                 agentName: create.AgentName,
-                comments: CreateCommentsFromClient(create.Comments),
-               // commentsCount: create.Comments.Count,
-                bookmarkPins: CreateBookmarkPinsFromClient(create.BookmarkPins)
-
+                comments: create.Comments.ToComments(),
+                bookmarkPins: create.BookmarkPins.ToBookmarkPins()
             );
         }
 
-        // TODO: move to factory or something
-        private static List<Comment> CreateCommentsFromClient(List<CommentClient> data)
+        public static List<Comment> ToComments(this List<CommentClient> comments)
         {
-            var result = new List<Comment>();
-            if (data == null || data.Count == 0) { return result; }
+            List<Comment> result = null;
 
-            foreach(var item in data)
+            if (comments != null && comments.Count > 0)
             {
-                switch (item.CommentType)
+                result = new List<Comment>();
+
+                foreach (var item in comments)
                 {
-                    case CommentType.Textual:
-                        result.Add(Comment.Textual(item.Text, item.AuthorType, item.CreatedAt));
-                        break;
-                    case CommentType.Attachment:
-                        result.Add(Comment.Attachment(item.Text, item.AuthorType, item.CreatedAt));
-                        break;
-                    case CommentType.Bookmark:
-                        result.Add(Comment.Bookmark(item.BookmarkPinId, item.AuthorType, item.CreatedAt));
-                        break;
-                    default:
-                        // TODO do logging
-                        break;
+                    Comment comment = null;
+                    switch (item.CommentType)
+                    {
+                        case CommentType.Textual:
+                            comment = Comment.Textual(item.Text, item.AuthorType, item.CreatedAt);
+                            break;
+                        case CommentType.Attachment:
+                            comment = Comment.Attachment(item.Text, item.AuthorType, item.CreatedAt);
+                            break;
+                        case CommentType.Bookmark:
+                            comment = Comment.Bookmark(item.BookmarkPinId, item.AuthorType, item.CreatedAt);
+                            break;
+                    }
+
+                    if (result != null)
+                        result.Add(comment);
                 }
             }
 
             return result;
         }
 
-        // TODO: move to factory or something
-        private static List<BookmarkPin> CreateBookmarkPinsFromClient(List<BookmarkPinClient> data)
+        public static List<BookmarkPin> ToBookmarkPins(this List<BookmarkPinClient> bookmarkPins)
         {
-            var result = new List<BookmarkPin>();
-            if (data == null || data.Count == 0) { return result; }
+            List<BookmarkPin> result = null;
 
-            foreach (var item in data)
+            if (bookmarkPins != null && bookmarkPins.Count > 0)
             {
-                result.Add(new BookmarkPin
-                {
-                    Id = item.Id,
-                    Index = item.Index,
-                    Range = item.Range,
-                    Comment = item.Comment,
-                    MediaUrl = item.MediaUrl
-                });
-            }
+                result = new List<BookmarkPin>();
 
+                foreach (var item in bookmarkPins)
+                {
+                    var pin = new BookmarkPin(
+                        item.Id,
+                        item.Index,
+                        item.Range,
+                        item.MediaUrl,
+                        item.Comment);
+
+                    result.Add(pin);
+                }
+            }
             return result;
         }
 
-        // public static InstantCoachDbEntity ToInstantCoachDbEntity(
-        //     this InstantCoachUpdate update,
-        //     InstantCoachDbEntity currentState,
-        //     (int, string) commentsWithCount)
-        // {
-        //     (int count, string comments) = commentsWithCount;
-        //     var result = currentState;
-        //     result.Status = update.Status;
-        //     result.Comments = comments;
-        //     result.CommentsCount = count;
-        //     result.BookmarkPins = ToJson(update.BookmarkPins);
-        //     return result;
-        // }
+
 
         public static InstantCoachForId ToInstantCoachForId(this InstantCoachDb db)
         {

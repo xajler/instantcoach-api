@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Core;
 using Core.Models;
-using Core.Contracts;
+using Core.Services;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static Core.Helpers;
 
@@ -67,45 +67,45 @@ namespace Api.Controllers.Version1
         {
             _logger.LogInformation("POST params:\ndata:\n{HttpBody}", ToLogJson(data));
             var result = await _service.Create(data);
-            return CreateResult(result,
-                successStatusCode: Status201Created, id: result.Value.Id);
+            int id = result.Value == null ? 0 : result.Value.Id;
+            return CreateResult(result, successStatusCode: Status201Created, id: id);
         }
 
         // /// <summary>Updates InstantCoach for Id.</summary>
-        // [HttpPut("{id:int}")]
-        // [ProducesResponseType(Status204NoContent)]
-        // [ProducesResponseType(Status400BadRequest)]
-        // [ProducesResponseType(Status404NotFound)]
-        // public async Task<ActionResult> PutAsync(int id,
-        //     [FromBody] InstantCoachUpdateClient data)
-        // {
-        //     _logger.LogInformation("PUT params:\nid: {Id}\ndata:\n{HttpBody}", ToLogJson(data));
-        //     var result = await _service.Update(id, data);
-        //     return CreateResult(result, successStatusCode: Status204NoContent, id);
-        // }
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        [ProducesResponseType(Status404NotFound)]
+        public async Task<ActionResult> PutAsync(int id,
+            [FromBody] InstantCoachUpdateClient data)
+        {
+            _logger.LogInformation("PUT params:\nid: {Id}\ndata:\n{HttpBody}", id, ToLogJson(data));
+            var result = await _service.Update(id, data);
+            return CreateResult(result, successStatusCode: Status204NoContent, id);
+        }
 
-        // /// <summary>Marks InstantCoach as Completed for Id.</summary>
-        // [HttpPatch("{id:int}/completed")]
-        // [ProducesResponseType(Status204NoContent)]
-        // [ProducesResponseType(Status400BadRequest)]
-        // [ProducesResponseType(Status404NotFound)]
-        // public async Task<ActionResult> PatchAsync(int id)
-        // {
-        //     _logger.LogInformation("PATCH params:\nid: {Id}", id);
-        //     var result = await _service.MarkCompleted(id);
-        //     return CreateResult(result, successStatusCode: Status204NoContent, id);
-        // }
+        /// <summary>Marks InstantCoach as Completed for Id.</summary>
+        [HttpPatch("{id:int}/completed")]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        [ProducesResponseType(Status404NotFound)]
+        public async Task<ActionResult> PatchAsync(int id)
+        {
+            _logger.LogInformation("PATCH params:\nid: {Id}", id);
+            var result = await _service.MarkCompleted(id);
+            return CreateResult(result, successStatusCode: Status204NoContent, id);
+        }
 
-        // /// <summary>Deletes InstantCoach for Id.</summary>
-        // [HttpDelete("{id:int}")]
-        // [ProducesResponseType(Status204NoContent)]
-        // [ProducesResponseType(Status400BadRequest)]
-        // [ProducesResponseType(Status404NotFound)]
-        // public async Task<ActionResult> DeleteAsync(int id)
-        // {
-        //     _logger.LogInformation("DELETE params:\nid: {Id}", id);
-        //     var result = await _service.Remove(id);
-        //     return CreateResult(result, successStatusCode: Status204NoContent, id);
-        // }
+        /// <summary>Deletes InstantCoach for Id.</summary>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        [ProducesResponseType(Status404NotFound)]
+        public async Task<ActionResult> DeleteAsync(int id)
+        {
+            _logger.LogInformation("DELETE params:\nid: {Id}", id);
+            var result = await _service.Remove(id);
+            return CreateResult(result, successStatusCode: Status204NoContent, id);
+        }
     }
 }

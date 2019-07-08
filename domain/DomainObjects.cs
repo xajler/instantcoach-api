@@ -1,17 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace Core.Domain
+namespace Domain
 {
-    public class DomainAssertionException : Exception
-    {
-        public DomainAssertionException(string message)
-            : base(message)
-        { }
-    }
-
     public interface IAuditable
     {
         DateTime CreatedAt { get; set; }
@@ -29,8 +21,7 @@ namespace Core.Domain
 
         protected void UpdateId(int id)
         {
-            Contract.Requires(id > 0, "Id must be greater than 0 on update");
-            if (id == 0) { Id = id; }
+            if (Id == 0 && id > 0) { Id = id; }
         }
 
         public override bool Equals(object obj)
@@ -125,6 +116,5 @@ namespace Core.Domain
             .Select(x => x != null ? x.GetHashCode() : 0)
             .Aggregate((x, y) => x ^ y);
         }
-        // Other utility methods
     }
 }

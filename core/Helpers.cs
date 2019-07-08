@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Core.Domain;
 
 namespace Core
 {
@@ -29,88 +27,90 @@ namespace Core
         {
             return JsonConvert.SerializeObject(value);
         }
-
-        public static string GetTicksExcludingFirst5Digits()
-        {
-            return DateTime.UtcNow.Ticks.ToString().Substring(5);
-        }
-
-        public static string CheckStringForLength(string value, string memberName, int length)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return $"{memberName} should not exceed {length} charactes";
-            }
-            return "";
-        }
-
-        public static List<T> ClenupNullItems<T>(this List<T> items)
-        {
-            return items.Where(x => x != null).ToList();
-        }
-
-        public static void NotNull(object obj, string message)
-        {
-            if (obj == null)
-            {
-                throw new DomainAssertionException(message);
-            }
-        }
-
-        public static void NotNullOrEmpty<T>(List<T> list, string message)
-        {
-            if (list == null || list.Count == 0)
-            {
-                throw new DomainAssertionException(message);
-            }
-        }
-
-        public static void NotNullOrEmpty(string stringValue, string message)
-        {
-            if (string.IsNullOrWhiteSpace(stringValue))
-            {
-                throw new DomainAssertionException(message);
-            }
-        }
-
-        public static void NotEmptyOrContains(string stringValue, string containsText, string message)
-        {
-            if (string.IsNullOrWhiteSpace(stringValue)
-                || !stringValue.Contains(containsText))
-            {
-                throw new DomainAssertionException(message);
-            }
-        }
-
-        public static void GreaterThanZero(int value, string message)
-        {
-            if (value <= 0)
-            {
-                throw new DomainAssertionException(message);
-            }
-        }
     }
 
-    public static class StringExtensions
+    public static class ExceptionExtensions
     {
-        public static string CheckForNull(this string value, string memberName)
+        public static string ToStackTraceDump(this Exception exception)
         {
-            if (string.IsNullOrWhiteSpace(value)) return $"{memberName} is required.";
-            return null;
+            if (exception == null) { return string.Empty; }
+
+            var stringBuilder = new StringBuilder();
+            int index = 0;
+
+            while (exception != null)
+            {
+                if (index > 0)
+                {
+                    stringBuilder.AppendFormat("Inner Exception {0}", index).AppendLine();
+                    stringBuilder.AppendLine("-------------------");
+                    stringBuilder.AppendLine();
+                }
+
+                if (!string.IsNullOrEmpty(exception.Message))
+                {
+                    stringBuilder.AppendFormat("Message: {0}", exception.Message);
+                }
+
+                if (!string.IsNullOrEmpty(exception.StackTrace))
+                {
+                    stringBuilder.AppendLine();
+                    stringBuilder.AppendFormat("Stack Trace: {0}", exception.StackTrace);
+                }
+
+                if (index > 0)
+                {
+                    stringBuilder.AppendLine();
+                    stringBuilder.AppendLine("-------------------");
+                    stringBuilder.AppendLine();
+                }
+
+                exception = exception.InnerException;
+                index++;
+            }
+
+            return stringBuilder.ToString();
         }
 
-        public static string CheckLength(this string value, string memberName, int maxLength)
+        public static string ToInnerMessagesDump(this Exception exception)
         {
-            if (value.Length > maxLength)
-                return $"{memberName} should not exceed {maxLength} charactes.";
-            return null;
-        }
+            if (exception == null) { return string.Empty; }
 
-        public static string CheckExactLength(this string value, string memberName, int maxLength)
-        {
-            if (value.Length != maxLength)
-                return $"{memberName} should be always of {maxLength} charactes.";
-            return null;
+            var stringBuilder = new StringBuilder();
+            int index = 0;
+
+            while (exception != null)
+            {
+                if (index > 0)
+                {
+                    stringBuilder.AppendFormat("Inner Exception {0}", index).AppendLine();
+                    stringBuilder.AppendLine("-------------------");
+                    stringBuilder.AppendLine();
+                }
+
+                if (!string.IsNullOrEmpty(exception.Message))
+                {
+                    stringBuilder.AppendFormat("Message: {0}", exception.Message);
+                }
+
+                if (!string.IsNullOrEmpty(exception.StackTrace))
+                {
+                    stringBuilder.AppendLine();
+                    stringBuilder.AppendFormat("Stack Trace: {0}", exception.StackTrace);
+                }
+
+                if (index > 0)
+                {
+                    stringBuilder.AppendLine();
+                    stringBuilder.AppendLine("-------------------");
+                    stringBuilder.AppendLine();
+                }
+
+                exception = exception.InnerException;
+                index++;
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }

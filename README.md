@@ -3,7 +3,15 @@
 Using ASP.NET Core API for sample microservices REST API.
 
 
-![Swagger](https://git.430n.com/x430n/instantcoach/raw/branch/master/swagger.png)
+![Swagger](https://git.430n.com/x430n/instantcoach/raw/branch/master/screenshots/swagger.png)
+
+Unit testing with code coverage in VS Code
+
+![unit_testing](https://git.430n.com/x430n/instantcoach/raw/branch/master/screenshots/unit_testing_code_coverage.png)
+
+Domain Errors and Endpoint Request Logging
+
+![domain_errors](https://git.430n.com/x430n/instantcoach/raw/branch/master/screenshots/domain_errors_logging.png)
 
 
 > Note:
@@ -22,6 +30,7 @@ Created using:
 * Nginx (Docker)
 * VS Code (With C# Extensions)
 * Azure Data Studio (Local GUI for SQL Server)
+* Unit Testing (xUnit, FluentAssertions, Coverlet, Moq)
 
 Unit Testing will come last, because there is possibility of major changes and refactoring throughout creating this microservices API architecture.
 
@@ -37,13 +46,14 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~JWT Auth~~
 * ~~Error Handling (Known Errors Result and Result&lt;T&gt;, Global Exception through Middleware)~~
 * ~~Logging (including adding response time in ms in logs and response header as X-Response-Time through Middleware)~~
-* Domain Models Validation
+* ~~Domain Models Validation~~ (Maybe refactor to FluentValidations?)
+* ~~Unit Testing (Only Domain, other projects will be Integration Tests)~~
+* ~~Refactoring (Domain to DDD and separate project)~~
 * Dockerfile MSSQL
 * Dockerfile nginx
 * Dockerfile Build/Publish/Run App
 * Docker Compose
 * Health checks
-* Unit Testing / Refactoring
 * Nginx web server
 * GraphQL (? maybe separate project)
 * SSL (?)

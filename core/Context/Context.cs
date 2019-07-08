@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Core.Domain;
-using Core.Models;
+using Domain;
 using static Core.Helpers;
 
 namespace Core.Context

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Domain;
 using Core.Models;
 
 namespace Core

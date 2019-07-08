@@ -1,10 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using Core.Domain;
+using Domain;
 
 namespace Core.Models
 {
+    public enum ErrorType
+    {
+        None,
+        UnknownId,
+        InvalidData,
+        SaveChangesFailed
+    }
+
     public class ListResult<T> where T : class
     {
         public IReadOnlyCollection<T> Items { get; set; }
@@ -15,6 +23,7 @@ namespace Core.Models
     {
         public bool Success => Error == ErrorType.None;
         public ErrorType Error { get; set; }
+        public IReadOnlyList<string> Errors { get; protected set; }
 
         public static Result AsSuccess()
         {
@@ -25,6 +34,16 @@ namespace Core.Models
         {
             return new Result { Error = errorType };
         }
+
+        public static Result AsDomainError(IReadOnlyList<string> errors)
+        {
+            return new Result
+            {
+                Error = ErrorType.InvalidData,
+                Errors = errors
+            };
+        }
+
 
         public override string ToString()
         {
@@ -54,6 +73,16 @@ namespace Core.Models
             return new Result<T> { Value = default, Error = errorType };
         }
 
+
+        public static new Result<T> AsDomainError(IReadOnlyList<string> errors)
+        {
+            return new Result<T>
+            {
+                Error = ErrorType.InvalidData,
+                Errors = errors
+            };
+        }
+
         public override string ToString()
         {
             if (Success)
@@ -67,24 +96,6 @@ namespace Core.Models
             }
 
             return $"Error of type: {Error}";
-        }
-    }
-
-    public class ValidationResult
-    {
-        public ValidationResult(string model) => Model = model;
-        public string Model { get; }
-        public bool IsValid => Errors.Count == 0;
-        public List<string> Errors { get; private set; } = new List<string>();
-        public void AddError(string error)
-        {
-            if (string.IsNullOrWhiteSpace(error)) return;
-            Errors.Add(error);
-        }
-        public void AddErrorRange(List<string> errors)
-        {
-            if (errors == null || errors.Count == 0) return;
-            Errors.AddRange(errors);
         }
     }
 
@@ -180,10 +191,17 @@ namespace Core.Models
         public List<BookmarkPinClient> BookmarkPins { get; set; }
     }
 
+    public class InstantCoachUpdateClient
+    {
+        public UpdateType UpdateType { get; set; }
+        public List<CommentClient> Comments { get; set; }
+        public List<BookmarkPinClient> BookmarkPins { get; set; }
+    }
+
     public class CommentClient
     {
         public CommentType CommentType { get; set; }
-        public string Text { get; }
+        public string Text { get; set; }
         public EvaluationCommentAuthor AuthorType { get; set; }
         public DateTime CreatedAt { get; set; }
         public int BookmarkPinId { get; set; }
@@ -202,13 +220,6 @@ namespace Core.Models
     {
         public int Start { get; set; }
         public int End { get; set; }
-    }
-
-    public class InstantCoachUpdateClient
-    {
-        public UpdateType UpdateType { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<BookmarkPin> BookmarkPins { get; set; }
     }
 
     // Db Models
