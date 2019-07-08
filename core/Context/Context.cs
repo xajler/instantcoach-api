@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Domain;
-using static Core.Helpers;
 
 namespace Core.Context
 {
@@ -91,60 +89,22 @@ namespace Core.Context
                    .HasMaxLength(128)
                    .IsRequired();
             // String as JSON
-            builder.Property(x => x.Comments)
-                   .HasConversion(
-                       x => ToJson(x),
-                       x => FromJson<List<Comment>>(x))
+            builder.Property(x => x.CommentsValue)
+                   .HasColumnName("Comments")
                    .HasColumnType("NVARCHAR(MAX)")
                    .IsRequired();
             // String as JSON
-            builder.Property(x => x.BookmarkPins)
-                   .HasConversion(
-                       x => ToJson(x),
-                       x => FromJson<List<BookmarkPin>>(x))
-                   .HasColumnType("NVARCHAR(MAX)");
+            builder.Property(x => x.BookmarkPinsValue)
+                   .HasColumnName("BookmarkPins")
+                   .HasColumnType("NVARCHAR(MAX)")
+                   .IsRequired(false);
+
+            builder.Ignore(x => x.Comments);
+            // HACK: Converter from JSON to Domain List<Comment>
+            builder.Ignore(x => x.CommentsConvert);
+            builder.Ignore(x => x.BookmarkPins);
+            // HACK: Converter from JSON to Domain List<BookmarkPin>
+            builder.Ignore(x => x.BookmarkPinsConvert);
         }
     }
-
-
-
-    // internal class BookmarkPinConfiguration
-    //     : IEntityTypeConfiguration<BookmarkPinDbEntity>
-    // {
-    //     public void Configure(
-    //         EntityTypeBuilder<BookmarkPinDbEntity> builder)
-    //     {
-    //         builder.HasKey(x => x.Id);
-    //         builder.Property(x => x.Id)
-    //                .ForSqlServerUseSequenceHiLo("ic_hilo");
-    //         builder.Property(x => x.Index)
-    //                .IsRequired();
-    //         builder.Property(x => x.Range)
-    //                .IsRequired();
-    //         builder.Property(x => x.MediaUrl)
-    //                .HasMaxLength(1000)
-    //                .IsRequired();
-    //         builder.Property(x => x.Comment)
-    //                .HasColumnType("NVARCHAR(MAX)");
-    //     }
-    // }
-
-    // internal class InstantCoachBookmarkPinConfiguration
-    //     : IEntityTypeConfiguration<InstantCoachBookmarkPinDbEntity>
-    // {
-    //     public void Configure(
-    //         EntityTypeBuilder<InstantCoachBookmarkPinDbEntity> builder)
-    //     {
-    //         builder.HasKey(x =>
-    //             new { x.InstantCoachId, x.BookmarkPinId });
-
-    //         builder.HasOne(x => x.InstantCoach)
-    //                .WithMany(x => x.InstantCoachBookmarkPins)
-    //                .HasForeignKey(x => x.InstantCoachId);
-
-    //         builder.HasOne(x => x.BookmarkPin)
-    //                .WithMany(x => x.InstantCoachBookmarkPins)
-    //                .HasForeignKey(x => x.BookmarkPinId);
-    //     }
-    // }
 }

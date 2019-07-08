@@ -24,9 +24,9 @@ namespace core.Migrations
                     AgentId = table.Column<int>(nullable: false),
                     EvaluatorName = table.Column<string>(maxLength: 128, nullable: false),
                     AgentName = table.Column<string>(maxLength: 128, nullable: false),
-                    Comments = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
-                    BookmarkPins = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
                     CommentsCount = table.Column<int>(nullable: false),
+                    Comments = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                    BookmarkPins = table.Column<string>(type: "NVARCHAR(MAX)", nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
                 },

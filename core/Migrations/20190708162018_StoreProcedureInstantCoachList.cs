@@ -31,6 +31,5 @@ AS
         {
             migrationBuilder.Sql("DROP PROCEDURE [dbo].[InstantCoach_List]");
         }
-
     }
 }

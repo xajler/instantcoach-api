@@ -9,16 +9,17 @@ namespace Core.Models
         public static InstantCoach ToNewInstantCoach(
             this InstantCoachCreateClient create)
         {
-            return new InstantCoach(
+            var result = new InstantCoach(
                 description: create.Description,
                 ticketId: create.TicketId,
                 evaluatorId: create.EvaluatorId,
                 agentId: create.AgentId,
                 evaluatorName: create.EvaluatorName,
-                agentName: create.AgentName,
-                comments: create.Comments.ToComments(),
-                bookmarkPins: create.BookmarkPins.ToBookmarkPins()
+                agentName: create.AgentName
             );
+            result.CreateComments(create.Comments.ToComments());
+            result.CreateBookmarkPins(create.BookmarkPins.ToBookmarkPins());
+            return result;
         }
 
         public static List<Comment> ToComments(this List<CommentClient> comments)
@@ -76,17 +77,20 @@ namespace Core.Models
             return result;
         }
 
-
-
         public static InstantCoachForId ToInstantCoachForId(this InstantCoachDb db)
         {
+            List<BookmarkPin> bookmarkPins = null;
+            if (!string.IsNullOrWhiteSpace(db.BookmarkPins))
+            {
+                bookmarkPins = FromJson<List<BookmarkPin>>(db.BookmarkPins);
+            }
             return new InstantCoachForId(
                 id: db.Id,
                 ticketId: db.TicketId,
                 description: db.Description,
                 evaluatorName: db.EvaluatorName,
                 comments: FromJson<List<Comment>>(db.Comments),
-                bookmarkPins: FromJson<List<BookmarkPin>>(db.BookmarkPins));
+                bookmarkPins);
         }
 
         // public static InstantCoachUpdate ToInstantCoachUpate(

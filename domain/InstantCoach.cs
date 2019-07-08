@@ -5,7 +5,7 @@ using static Domain.Helpers;
 
 namespace Domain
 {
-    public class InstantCoach : AggregateRoot, IAuditable
+    public partial class InstantCoach : AggregateRoot, IAuditable
     {
         private const string CommentsErrorMsg = "Comments are required to have at least one element.";
         private readonly ValidationResult _errors = new ValidationResult();
@@ -16,9 +16,7 @@ namespace Domain
             int evaluatorId,
             int agentId,
             string evaluatorName,
-            string agentName,
-            List<Comment> comments,
-            List<BookmarkPin> bookmarkPins)
+            string agentName)
         {
             Description = description;
             Status = InstantCoachStatus.New;
@@ -29,8 +27,6 @@ namespace Domain
             EvaluatorName = evaluatorName;
             AgentName = agentName;
             CommentsCount = 0;
-            CreateComments(comments);
-            CreateBookmarkPins(bookmarkPins);
         }
 
         public string Description { get; }
@@ -44,9 +40,6 @@ namespace Domain
         public List<Comment> Comments { get; private set; }
         public List<BookmarkPin> BookmarkPins { get; private set; }
         public int CommentsCount { get; private set; }
-
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
 
         public ValidationResult UpdateAndValidate(UpdateType updateType,
             List<Comment> comments, List<BookmarkPin> bookmarkPins, int id = 0)
@@ -71,7 +64,9 @@ namespace Domain
             return _errors;
         }
 
-        private void CreateComments(List<Comment> comments)
+        // TODO: Must be called when null.
+        //       Needs better solution or Factory.
+        public void CreateComments(List<Comment> comments)
         {
             if (comments != null && comments.Count > 0)
             {
@@ -106,11 +101,13 @@ namespace Domain
                 }
 
                 CommentsCount = Comments.Count;
+                // EF Hack
+                CommentsConvert = Comments;
             }
             else { _errors.AddError(CommentsErrorMsg); }
         }
 
-        private void CreateBookmarkPins(List<BookmarkPin> bookmarkPins)
+        public void CreateBookmarkPins(List<BookmarkPin> bookmarkPins)
         {
             if (bookmarkPins != null && bookmarkPins.Count > 0)
             {
@@ -129,6 +126,8 @@ namespace Domain
                     else { BookmarkPins.Add(pin); }
                 }
             }
+            // EF Hack
+            BookmarkPinsConvert = BookmarkPins;
         }
 
         private InstantCoachStatus SetStatus(UpdateType updateType)
@@ -163,5 +162,53 @@ namespace Domain
             string value = GetTicksExcludingFirst5Digits();
             return $"IC{value}";
         }
+    }
+
+    // For EF hacks
+    public partial class InstantCoach
+    {
+        // EF stuff and hacks
+        public string CommentsValue { get; private set; }
+        public string BookmarkPinsValue { get; private set; }
+        public List<Comment> CommentsConvert
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(BookmarkPinsValue))
+                    return null;
+                else
+                {
+                    var result = FromJson<List<Comment>>(CommentsValue);
+                    Comments = result;
+                    return result;
+                }
+            }
+            private set { CommentsValue = ToJson(value); }
+        }
+        public List<BookmarkPin> BookmarkPinsConvert
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(BookmarkPinsValue))
+                    return null;
+                else
+                {
+                    var result = FromJson<List<BookmarkPin>>(BookmarkPinsValue);
+                    BookmarkPins = result;
+                    return result;
+                }
+            }
+            private set
+            {
+                if (value == null)
+                    BookmarkPinsValue = null;
+                else
+                    BookmarkPinsValue = ToJson(value);
+            }
+        }
+
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        // End EF stuff and hacks
     }
 }

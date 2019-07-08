@@ -10,13 +10,13 @@ namespace Domain
 
         [JsonConstructor]
         private Comment(
-            CommentType type,
+            CommentType commentType,
             string text,
             EvaluationCommentAuthor authorType,
             DateTime createdAt,
             int bookmarkPinId)
         {
-            CommentType = type;
+            CommentType = commentType;
             AuthorType = authorType;
             CreatedAt = createdAt;
             Text = text;
