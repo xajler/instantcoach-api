@@ -17,8 +17,8 @@ namespace Core.Models
                 evaluatorName: create.EvaluatorName,
                 agentName: create.AgentName
             );
-            result.CreateComments(create.Comments.ToComments());
-            result.CreateBookmarkPins(create.BookmarkPins.ToBookmarkPins());
+            result.AddComments(create.Comments.ToComments());
+            result.AddBookmarkPins(create.BookmarkPins.ToBookmarkPins());
             return result;
         }
 

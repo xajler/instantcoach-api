@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Tests.Domain
+namespace Tests.Unit
 {
     public static class TestHelpers
     {

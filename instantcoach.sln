@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "api\api.csproj", "{4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A2E2DA53-F251-4B5A-AFF5-00AFDEA86949}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Api", "tests\tests-api\Tests.Api.csproj", "{24A9D104-0727-4938-953C-4C40F3C37BF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Integration", "tests\tests-integration\Tests.Integration.csproj", "{24A9D104-0727-4938-953C-4C40F3C37BF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Core", "tests\tests-domain\Tests.Domain.csproj", "{95DD7CBB-48F7-4A0D-BEA9-8781FF964973}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Unit", "tests\tests-unit\Tests.Unit.csproj", "{95DD7CBB-48F7-4A0D-BEA9-8781FF964973}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "domain", "domain\domain.csproj", "{A4B1A842-C9EC-4FBC-94D3-1D777D7314EC}"
 EndProject

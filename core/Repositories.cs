@@ -22,10 +22,11 @@ namespace Core.Repositories
             _context = context;
         }
 
-        public async Task<T> FindById(int id)
+        public async Task<Result<T>> FindById(int id)
         {
             T result = await _context.Set<T>().FindAsync(id);
-            return result;
+            if (result == null) { return Result<T>.AsError(ErrorType.UnknownId); }
+            return Result<T>.AsSuccess(result);
         }
 
         public async Task<Result<T>> Save(T entity)
@@ -33,7 +34,7 @@ namespace Core.Repositories
             if (entity.Id == default)
             {
                 _logger.LogInformation("Add Entity Model:\n{EntityModel}", ToLogJson(entity));
-                _context.Set<T>().Add(entity);
+               await _context.Set<T>().AddAsync(entity);
             }
             else
             {

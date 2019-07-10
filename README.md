@@ -48,7 +48,8 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Logging (including adding response time in ms in logs and response header as X-Response-Time through Middleware)~~
 * ~~Domain Models Validation~~ (Maybe refactor to FluentValidations?)
 * ~~Unit Testing (Only Domain, other projects will be Integration Tests)~~
-* ~~Refactoring (Domain to DDD and separate project)~~
+* ~~Refactoring (Domain to DDD and separate project)~~ TODO: Mock Services
+* Integration Testing (~~Repositories~~ TODO: WebAPI with InMemory EF)
 * Dockerfile MSSQL
 * Dockerfile nginx
 * Dockerfile Build/Publish/Run App
@@ -58,7 +59,6 @@ Unit Testing will come last, because there is possibility of major changes and r
 * GraphQL (? maybe separate project)
 * SSL (?)
 * CI/CD Bitbucket pipelines (?)
-* Integration Testing (?)
 * Message Queue (? maybe separate project)
 * CQRS (? maybe separate project)
 

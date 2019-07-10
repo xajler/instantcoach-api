@@ -46,8 +46,8 @@ namespace Domain
         {
             UpdateId(id);
             Status = SetStatus(updateType);
-            CreateComments(comments);
-            CreateBookmarkPins(bookmarkPins);
+            AddComments(comments);
+            AddBookmarkPins(bookmarkPins);
             return Validate();
         }
 
@@ -66,7 +66,7 @@ namespace Domain
 
         // TODO: Must be called when null.
         //       Needs better solution or Factory.
-        public void CreateComments(List<Comment> comments)
+        public void AddComments(List<Comment> comments)
         {
             if (comments != null && comments.Count > 0)
             {
@@ -107,7 +107,7 @@ namespace Domain
             else { _errors.AddError(CommentsErrorMsg); }
         }
 
-        public void CreateBookmarkPins(List<BookmarkPin> bookmarkPins)
+        public void AddBookmarkPins(List<BookmarkPin> bookmarkPins)
         {
             if (bookmarkPins != null && bookmarkPins.Count > 0)
             {
@@ -207,6 +207,7 @@ namespace Domain
             }
         }
 
+        // Not really hack, but set via EF, and not handled by Domain.
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         // End EF stuff and hacks

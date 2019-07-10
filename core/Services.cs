@@ -68,7 +68,7 @@ namespace Core.Services
         public async Task<Result> Update(int id, InstantCoachUpdateClient data)
         {
             // TODO: Guard those with status completed, they cannot be updated.
-            var entityResult = await GetExistingIdResult(id);
+            var entityResult = await _repository.FindById(id);
             if (!entityResult.Success) { return OnNotExistingId(id); }
             var entity = entityResult.Value;
             ValidationResult validationResult = entity.UpdateAndValidate(
@@ -80,7 +80,7 @@ namespace Core.Services
 
         public async Task<Result> MarkCompleted(int id)
         {
-            var entityResult = await GetExistingIdResult(id);
+            var entityResult = await _repository.FindById(id);
             if (!entityResult.Success) { return OnNotExistingId(id); }
             var entity = entityResult.Value;
             ValidationResult validationResult = entity.UpdateAsCompletedAndValidate();
@@ -89,7 +89,7 @@ namespace Core.Services
 
         public async Task<Result> Remove(int id)
         {
-            var entityResult = await GetExistingIdResult(id);
+            var entityResult = await _repository.FindById(id);
             if (!entityResult.Success) { return OnNotExistingId(id); }
             var result = await _repository.Delete(entity: entityResult.Value);
             return result;
@@ -116,13 +116,6 @@ namespace Core.Services
 
             _logger.LogInformation("Create Result:\n{Result}", ToLogJson(result));
             return result;
-        }
-
-        private async Task<Result<InstantCoach>> GetExistingIdResult(int id)
-        {
-            var result = await _repository.FindById(id);
-            if (result != null) { return Result<InstantCoach>.AsSuccess(result); }
-            return Result<InstantCoach>.AsError(ErrorType.UnknownId);
         }
 
         private Result<InstantCoach> OnNotExistingId(int id)

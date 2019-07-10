@@ -4,7 +4,7 @@ using Xunit;
 using Domain;
 using static Domain.Comment;
 
-namespace Tests.Domain
+namespace Tests.Unit
 {
     public class CommentTests
     {

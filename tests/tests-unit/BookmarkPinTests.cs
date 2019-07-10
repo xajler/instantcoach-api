@@ -2,7 +2,7 @@ using FluentAssertions;
 using Xunit;
 using Domain;
 
-namespace Tests.Domain
+namespace Tests.Unit
 {
     public class BookmarkPinTests
     {

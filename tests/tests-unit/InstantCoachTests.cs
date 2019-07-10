@@ -5,10 +5,10 @@ using Xunit;
 using Domain;
 using static Domain.Helpers;
 using static Domain.Comment;
-using static Tests.Domain.TestHelpers;
+using static Tests.Unit.TestHelpers;
 using static System.Console;
 
-namespace Tests.Domain
+namespace Tests.Unit
 {
     public class InstantCoachTests
     {
@@ -59,7 +59,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
 
             actual.UpdateAndValidate(
                  UpdateType.Save,
@@ -74,7 +74,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
 
             expected.UpdateAndValidate(
                  UpdateType.Save,
@@ -98,7 +98,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
 
             actual.UpdateAndValidate(
                  UpdateType.Save,
@@ -113,7 +113,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
 
             expected.UpdateAndValidate(
                  UpdateType.Save,
@@ -138,7 +138,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             int expected = 0;
@@ -157,7 +157,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            ic.CreateComments(null);
+            ic.AddComments(null);
 
             var actual = ic.Validate();
             var expected = "Comments are required to have at least one element.";
@@ -177,7 +177,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.UpdateAndValidate(
                  UpdateType.Save,
@@ -200,7 +200,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
 
             var result = actual.UpdateAndValidate(
                  UpdateType.Review,
@@ -223,7 +223,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
 
             var result = actual.UpdateAsCompletedAndValidate(id: 1);
             InstantCoachStatus expected = InstantCoachStatus.Completed;
@@ -242,7 +242,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.UpdateAndValidate(
                  UpdateType.Save,
@@ -266,7 +266,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.UpdateAndValidate(
                  UpdateType.Save,
@@ -290,7 +290,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
             int expected = 16;
 
             actual.Reference.Should().StartWith("IC");
@@ -307,7 +307,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
             InstantCoachStatus expected = InstantCoachStatus.New;
 
 
@@ -324,7 +324,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
             int expected = 2;
 
             actual.CommentsCount.Should().Be(expected);
@@ -340,7 +340,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
 
             var update = actual.UpdateAndValidate(
                  UpdateType.Save,
@@ -363,7 +363,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
 
             var update = actual.UpdateAndValidate(
                  UpdateType.Save,
@@ -386,7 +386,7 @@ namespace Tests.Domain
                 AgentIdValue,
                 EvaluatorNameValue,
                 AgentNameValue);
-            actual.CreateComments(GetComments());
+            actual.AddComments(GetComments());
 
             var reference = actual.Reference;
             var description = actual.Description;
@@ -422,7 +422,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  EvaluatorNameValue,
                  AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "Description is required.";
@@ -443,7 +443,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  EvaluatorNameValue,
                  AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "Description should not exceed 1000 characters.";
@@ -463,7 +463,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  EvaluatorNameValue,
                  AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "TicketId is required.";
@@ -484,7 +484,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  EvaluatorNameValue,
                  AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "TicketId should not exceed 64 characters.";
@@ -504,7 +504,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  EvaluatorNameValue,
                  AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "EvaluatorId should be greater than 0.";
@@ -528,7 +528,7 @@ namespace Tests.Domain
                  0,
                  EvaluatorNameValue,
                  AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "AgentId should be greater than 0.";
@@ -552,7 +552,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  evaluatorName: "",
                  AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "EvaluatorName is required.";
@@ -572,7 +572,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  evaluatorName: GenerateStringOfLength(129),
                  AgentNameValue);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "EvaluatorName should not exceed 128 characters.";
@@ -592,7 +592,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  EvaluatorNameValue,
                  agentName: null);
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "AgentName is required.";
@@ -612,7 +612,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  EvaluatorNameValue,
                  agentName: GenerateStringOfLength(129));
-            ic.CreateComments(GetComments());
+            ic.AddComments(GetComments());
 
             var actual = ic.Validate();
             var expected = "AgentName should not exceed 128 characters.";
@@ -636,7 +636,7 @@ namespace Tests.Domain
                  AgentIdValue,
                  EvaluatorNameValue,
                  AgentNameValue);
-            ic.CreateComments(GetCommentsWithError());
+            ic.AddComments(GetCommentsWithError());
 
             var actual = ic.Validate();
             var expected = 2;
@@ -655,8 +655,8 @@ namespace Tests.Domain
                  AgentIdValue,
                  EvaluatorNameValue,
                  AgentNameValue);
-            ic.CreateComments(GetComments());
-            ic.CreateBookmarkPins(GetBookmarkPinsWithError());
+            ic.AddComments(GetComments());
+            ic.AddBookmarkPins(GetBookmarkPinsWithError());
 
             var actual = ic.Validate();
             var expected = 1;
