@@ -40,4 +40,5 @@ test/**
 
 # Code Coverage
 
-lcov.info
+coverage.xml
+coveragereport/

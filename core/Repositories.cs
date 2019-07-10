@@ -31,6 +31,7 @@ namespace Core.Repositories
 
         public async Task<Result<T>> Save(T entity)
         {
+            if (entity == null) { return Result<T>.AsError(ErrorType.InvalidData); }
             if (entity.Id == default)
             {
                 _logger.LogInformation("Add Entity Model:\n{EntityModel}", ToLogJson(entity));
@@ -48,6 +49,7 @@ namespace Core.Repositories
 
         public async Task<Result> Delete(T entity)
         {
+            if (entity == null) { return Result<T>.AsError(ErrorType.InvalidData); }
             _context.Set<T>().Remove(entity);
             var result = await _context.SaveChangesAsync();
             return GetResult(result);
