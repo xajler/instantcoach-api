@@ -35,25 +35,6 @@ namespace Core.Models
         {
             return new Result { Error = errorType };
         }
-
-        public static Result AsDomainError(IReadOnlyList<string> errors)
-        {
-            return new Result
-            {
-                Error = ErrorType.InvalidData,
-                Errors = errors
-            };
-        }
-
-
-        public override string ToString()
-        {
-            if (Success)
-            {
-                return $"No errors. Error Type is: {Error}";
-            }
-            return $"Error of type: {Error}";
-        }
     }
 
     public class Result<T> : Result
@@ -72,31 +53,6 @@ namespace Core.Models
         public static new Result<T> AsError(ErrorType errorType)
         {
             return new Result<T> { Value = default, Error = errorType };
-        }
-
-
-        public static new Result<T> AsDomainError(IReadOnlyList<string> errors)
-        {
-            return new Result<T>
-            {
-                Error = ErrorType.InvalidData,
-                Errors = errors
-            };
-        }
-
-        public override string ToString()
-        {
-            if (Success)
-            {
-                string result = $"No errors. Error Type is: {Error}\n";
-                if (EqualityComparer<T>.Default.Equals(Value, default))
-                {
-                    result += "Value has default value and probably shouldn't have";
-                }
-                return result;
-            }
-
-            return $"Error of type: {Error}";
         }
     }
 
@@ -218,12 +174,6 @@ namespace Core.Models
         public Range Range { get; set; }
         public string Comment { get; set; }
         public string MediaUrl { get; set; }
-    }
-
-    public class RangeClient
-    {
-        public int Start { get; set; }
-        public int End { get; set; }
     }
 
     // Db Models
