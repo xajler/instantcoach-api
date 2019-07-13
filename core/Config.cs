@@ -50,5 +50,9 @@ namespace Core
         {
             return "Data Source=localhost;Initial Catalog=test_db_sut;User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
         }
+        public static string GetSUTGuidConnectionString()
+        {
+            return $"Data Source=localhost;Initial Catalog=test_db_sut_{Guid.NewGuid()};User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
+        }
     }
 }

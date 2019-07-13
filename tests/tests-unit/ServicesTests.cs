@@ -23,9 +23,7 @@ namespace Tests.Unit
 
         public ServicesTests()
         {
-            // var options = new DbContextOptionsBuilder<ICContext>()
-            //                 .UseInMemoryDatabase(databaseName: "Add_writes_to_database")
-            //                 .Options;
+
         }
         public void Dispose()
         {

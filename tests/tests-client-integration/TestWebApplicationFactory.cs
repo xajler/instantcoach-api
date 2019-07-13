@@ -6,7 +6,7 @@ using Api;
 using Core;
 using Core.Context;
 
-namespace Tests.Integration
+namespace Tests.Integration.Client
 {
     public class TestWebApplicationFactory<TStartup>
     : WebApplicationFactory<TStartup> where TStartup : class

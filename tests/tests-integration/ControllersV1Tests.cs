@@ -1,262 +1,81 @@
 using System;
-using System.Dynamic;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Net.Http;
-using Xunit;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Logging;
+using Xunit;
 using FluentAssertions;
-using GST.Fake.Authentication.JwtBearer;
 using Domain;
 using Core;
+using Core.Repositories;
+using Core.Services;
 using Core.Context;
 using Core.Models;
-using Api;
+using Api.Controllers.Version1;
 using static System.Console;
 using static Domain.Comment;
 using static Tests.Integration.TestHelpers;
 
 namespace Tests.Integration
 {
-    public class ControllersV1Tests : IClassFixture<TestWebApplicationFactory<Startup>>, IDisposable
+    public class ControllersV1Tests : IDisposable
     {
-        private readonly HttpClient _client;
-        private readonly dynamic _bearer = new ExpandoObject();
-        private const string UserName = "SUTUser";
-        private readonly string[] Roles = new[] { "Role1" };
-        private readonly List<InstantCoachList> _items = new List<InstantCoachList>();
         private readonly ICContext _context;
+        private List<InstantCoachList> _items = new List<InstantCoachList>();
+        private readonly ApiV1Controller _controller;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public ControllersV1Tests(TestWebApplicationFactory<Startup> factory)
+        public ControllersV1Tests()
         {
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = false
-            });
-
-            // TODO: Don't know how to get Init Services it from Fixture or Startup
-            var serviceProvider = new ServiceCollection()
-                .AddEntityFrameworkSqlServer()
-                .BuildServiceProvider();
-            var builder = new DbContextOptionsBuilder<ICContext>();
-            builder.UseSqlServer(Config.GetSUTConnectionString()).UseInternalServiceProvider(serviceProvider);
+            var builder = new DbContextOptionsBuilder<ICContext>().UseSqlServer(Config.GetSUTGuidConnectionString());
             _context = new ICContext(builder.Options);
             _context.Database.Migrate();
             _context.Database.EnsureCreated();
+
+            _loggerFactory = new LoggerFactory();
+            var repository = new InstantCoachRepository(_loggerFactory, _context);
+            var service = new InstantCoachService(
+                _loggerFactory.CreateLogger<InstantCoachService>(), repository);
+            _controller = new ApiV1Controller(
+                _loggerFactory.CreateLogger<ApiV1Controller>(), service);
         }
 
         [Fact]
-        public async Task Should_return_ok_with_empty_list_when_no_data()
+        public async Task Should_be_ok_result_with_empty_list_when_no_data_on_GET()
         {
-            await _context.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE[InstantCoaches]");
-            var request = "/api/instantcoaches";
-            SetFakeBearerToken();
-            var response = await _client.GetAsync(request);
-
-
-            Action result = () => response.EnsureSuccessStatusCode();
+            var response = await _controller.GetAsync();
+            var result = response as ObjectResult;
+            var actual = result.Value as ListResult<InstantCoachList>;
             var expected = new ListResult<InstantCoachList>
             {
                 Items = new List<InstantCoachList>().AsReadOnly()
             };
-
-            result.Should().NotThrow();
-            var content =  await response.Content.ReadAsStringAsync();
-            content.Should().Be(ToJson(expected));
-            response.Content.Headers.ContentType.ToString().Should().Be("application/json; charset=utf-8");
-
-            response.Dispose();
+            response.Should().BeOfType(typeof(OkObjectResult));
+            actual.Items.Should().HaveCount(expected.Items.Count);
+            //WriteLine($"Total count: {actual.TotalCount}");
+            actual.TotalCount.Should().Be(expected.TotalCount);
         }
 
         [Fact]
-        public async Task Should_return_ok_with_list_without_completed()
+        public async Task Should_be_ok_result_with_second_page_completed_list_when_data_on_GET()
         {
             await Insert4ItemsWith1Completed();
-            var request = "/api/instantcoaches";
-            SetFakeBearerToken();
-            var response = await _client.GetAsync(request);
-
-
-            Action result = () => response.EnsureSuccessStatusCode();
-            var expected = ExpectedCount(_items.Where(x => x.Status != InstantCoachStatus.Completed).Count());
-
-            result.Should().NotThrow();
-            var content = await response.Content.ReadAsStringAsync();
-            //WriteLine($"Default content: {content}");
-            content.Should().Contain(expected);
-
-            response.Dispose();
-        }
-
-        [Fact]
-        public async Task Should_return_ok_with_list_first_page_list_completed()
-        {
-            await Insert4ItemsWith1Completed();
-            var request = $"/api/instantcoaches?skip=0&take=2&showCompleted=true";
-            SetFakeBearerToken();
-            var response = await _client.GetAsync(request);
-
-
-            Action result = () => response.EnsureSuccessStatusCode();
-            var expected = ExpectedCount(_items.Count());
-
-            result.Should().NotThrow();
-            var content = await response.Content.ReadAsStringAsync();
-            //WriteLine($"Completed content: {content}");
-            content.Should().Contain(expected);
-
-            response.Dispose();
-        }
-
-        [Fact]
-        public async Task Should_return_ok_with_model_by_id()
-        {
-            await Insert4ItemsWith1Completed();
-            int id = 1;
-            var request = $"/api/instantcoaches/{id}";
-            SetFakeBearerToken();
-            var response = await _client.GetAsync(request);
-
-
-            Action result = () => response.EnsureSuccessStatusCode();
-            var expected = "\"id\":1,\"ticketId\":\"41\",\"description\":\"Some description 1\"";
-
-            result.Should().NotThrow();
-            var content = await response.Content.ReadAsStringAsync();
-            //WriteLine($"Completed content: {content}");
-            content.Should().Contain(expected);
-
-            response.Dispose();
-        }
-
-        [Fact]
-        public async Task Should_return_success_when_created_from_model()
-        {
-            var model = new InstantCoachCreateClient
-            {
-                Description = "New description",
-                TicketId = "50",
-                EvaluatorId = 1,
-                AgentId = 2,
-                EvaluatorName = "John Evaluator",
-                AgentName = "Jane Agent",
-                Comments = new List<CommentClient>
-                {
-                    new CommentClient
-                    {
-                        CommentType = CommentType.Bookmark,
-                        BookmarkPinId = 1,
-                        AuthorType = EvaluationCommentAuthor.Agent,
-                        CreatedAt = DateTime.UtcNow
-                    }
-                },
-                BookmarkPins = new List<BookmarkPinClient>
-                {
-                    new BookmarkPinClient
-                    {
-                        Id = 1,
-                        Index = 1,
-                        Range = new Range(1, 2),
-                        MediaUrl = "https://example.com/test.png"
-                    }
-                }
-            };
-
-            var request = "/api/instantcoaches";
-            SetFakeBearerToken();
-            var response = await _client.PostAsJsonAsync(request, model);
-
-
-            Action result = () => response.EnsureSuccessStatusCode();
-            result.Should().NotThrow();
-
-            response.Dispose();
-        }
-
-        [Fact]
-        public async Task Should_return_success_when_updated_from_model_and_id()
-        {
-            await Insert4ItemsWith1Completed();
-            int id = 1;
-            var model = new InstantCoachUpdateClient
-            {
-                UpdateType = UpdateType.Save,
-                Comments = new List<CommentClient>
-                {
-                    new CommentClient
-                    {
-                        CommentType = CommentType.Bookmark,
-                        BookmarkPinId = 1,
-                        AuthorType = EvaluationCommentAuthor.Agent,
-                        CreatedAt = DateTime.UtcNow
-                    }
-                },
-                BookmarkPins = new List<BookmarkPinClient>
-                {
-                    new BookmarkPinClient
-                    {
-                        Id = 1,
-                        Index = 1,
-                        Range = new Range(1, 2),
-                        MediaUrl = "https://example.com/test.png"
-                    }
-                }
-            };
-
-            var request = $"/api/instantcoaches/{id}";
-            SetFakeBearerToken();
-            var response = await _client.PutAsJsonAsync(request, model);
-
-
-            Action result = () => response.EnsureSuccessStatusCode();
-            result.Should().NotThrow();
-
-            response.Dispose();
-        }
-
-        [Fact]
-        public async Task Should_return_success_when_patched_as_completed_by_id()
-        {
-            await Insert4ItemsWith1Completed();
-            int id = 1;
-            //var content = new StringContent("{}", Encoding.UTF8, "application/json-patch+json");
-            var request = $"/api/instantcoaches/{id}/completed";
-            SetFakeBearerToken();
-            var response = await _client.PatchAsync(request, null); //, content);
-
-
-            Action result = () => response.EnsureSuccessStatusCode();
-            result.Should().NotThrow();
-
-            //content.Dispose();
-            response.Dispose();
-        }
-
-        [Fact]
-        public async Task Should_return_success_when_deleted_by_id()
-        {
-            await Insert4ItemsWith1Completed();
-            int id = 1;
-            var request = $"/api/instantcoaches/{id}";
-            SetFakeBearerToken();
-            var response = await _client.DeleteAsync(request);
-
-
-            Action result = () => response.EnsureSuccessStatusCode();
-            result.Should().NotThrow();
-
-            response.Dispose();
+            var response = await _controller.GetAsync(skip: 1, take: 3, showCompleted: true);
+            var result = response as ObjectResult;
+            var actual = result.Value as ListResult<InstantCoachList>;
+            var expected = 1;
+            response.Should().BeOfType(typeof(OkObjectResult));
+            actual.Items.Should().HaveCount(expected);
+            actual.TotalCount.Should().Be(_items.Count);
         }
 
         public void Dispose()
         {
-            _client.Dispose();
             _context.Database.EnsureDeleted();
             _context.Dispose();
+            _loggerFactory.Dispose();
         }
 
         private async Task Insert4ItemsWith1Completed()
@@ -312,6 +131,9 @@ namespace Tests.Integration
             _items.Add(EntityToModelList(item2));
             _items.Add(EntityToModelList(item3));
             _items.Add(EntityToModelList(item4));
+            _items = _items.OrderByDescending(x => x.CreatedAt)
+                           .OrderBy(x => x.Status)
+                           .ToList();
             WriteLine($"Db IC count: {_context.InstantCoaches.Count()}");
             WriteLine($"Db IC count2: {_context.Set<InstantCoach>().Count()}");
         }
@@ -325,14 +147,6 @@ namespace Tests.Integration
             };
         }
 
-        private List<Comment> GetUpdateComments()
-        {
-            var result = GetComments();
-            result.Add(
-                Attachment(text: "http://somecomment", authorType: EvaluationCommentAuthor.Agent, createdAt: DateTime.UtcNow));
-            return result;
-        }
-
         private List<BookmarkPin> GetBookmarkPins()
         {
             var result = new List<BookmarkPin>();
@@ -340,22 +154,6 @@ namespace Tests.Integration
                 mediaurl: "https://example.com/test.png", comment: "No comment");
             result.Add(bookmarkPin);
             return result;
-        }
-
-        private string GetConnectionString()
-        {
-            return $"Data Source=localhost;Initial Catalog=test_db_{Guid.NewGuid()};User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
-        }
-
-        private string ExpectedCount(int count)
-        {
-            return $"\"totalCount\":{count}";
-        }
-
-        private void SetFakeBearerToken()
-        {
-            _bearer.name = "SUT";
-            _client.SetFakeBearerToken(UserName, Roles, (object)_bearer);
         }
 
         private InstantCoachList EntityToModelList(InstantCoach entity)
