@@ -57,19 +57,12 @@ namespace Core.Repositories
 
         private Result<T> GetCreateResult(T entity, int rows)
         {
-            var result = GetResult(rows);
-            if (result.Success) { return Result<T>.AsSuccess(entity); }
-            return Result<T>.AsError(result.Error);
+            _logger.LogInformation("Saved Changes rows count: {RowCount}", rows);
+            return Result<T>.AsSuccess(entity);
         }
 
         private Result GetResult(int rows)
         {
-            if (rows == 0)
-            {
-                _logger.LogError("Failed to Save DB Changes");
-                return Result.AsError(ErrorType.SaveChangesFailed);
-            }
-
             _logger.LogInformation("Saved Changes rows count: {RowCount}", rows);
             return Result.AsSuccess();
         }

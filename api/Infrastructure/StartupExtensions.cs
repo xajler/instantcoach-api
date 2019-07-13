@@ -17,6 +17,7 @@ using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Swagger;
 using Core;
 using Core.Context;
+using GST.Fake.Authentication.JwtBearer;
 
 namespace Api
 {
@@ -50,6 +51,7 @@ namespace Api
                 {
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     options.SerializerSettings.Formatting = Formatting.None;
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -103,6 +105,17 @@ namespace Api
                 options.Authority = config.GetEnvVarByName(config.JwtAuthority);
                 options.Audience = config.GetEnvVarByName(config.JwtAudience);
             });
+        }
+
+        public static void AddFakeSUTJwtAuthenticationService(
+            this IServiceCollection services)
+        {
+            services.AddAuthentication(options =>
+            {
+                //options.DefaultScheme = FakeJwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = FakeJwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = FakeJwtBearerDefaults.AuthenticationScheme;
+            }).AddFakeJwtBearer();
         }
 
         public static void AddSwaggerService(this IServiceCollection services)

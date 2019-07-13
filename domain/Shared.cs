@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Domain
@@ -20,7 +19,7 @@ namespace Domain
 
     public enum CommentType
     {
-        Textual = 1,
+        Textual,
         Bookmark,
         Attachment
     }

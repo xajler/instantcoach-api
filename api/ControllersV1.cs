@@ -66,6 +66,8 @@ namespace Api.Controllers.Version1
         public async Task<ActionResult> PostAsync([FromBody] InstantCoachCreateClient data)
         {
             _logger.LogInformation("POST params:\ndata:\n{HttpBody}", ToLogJson(data));
+            // TODO: Send errors, can only happen when any Enum is not set, and sent 0.
+            if (!ModelState.IsValid) { return new BadRequestResult(); }
             var result = await _service.Create(data);
             int id = result.Value == null ? 0 : result.Value.Id;
             return CreateResult(result, successStatusCode: Status201Created, id: id);
@@ -80,6 +82,8 @@ namespace Api.Controllers.Version1
             [FromBody] InstantCoachUpdateClient data)
         {
             _logger.LogInformation("PUT params:\nid: {Id}\ndata:\n{HttpBody}", id, ToLogJson(data));
+            // TODO: Send errors, can only happen when any Enum is not set, and sent 0.
+            if (!ModelState.IsValid) { return new BadRequestResult(); }
             var result = await _service.Update(id, data);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }

@@ -45,5 +45,10 @@ namespace Core
             string password = GetEnvVarByName(DbPassword);
             return $"Data Source=localhost;Initial Catalog={name};User Id={user};Password={password};Integrated Security=false;MultipleActiveResultSets=True;";
         }
+
+        public static string GetSUTConnectionString()
+        {
+            return "Data Source=localhost;Initial Catalog=test_db_sut;User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
+        }
     }
 }

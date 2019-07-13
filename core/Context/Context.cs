@@ -9,7 +9,7 @@ using Domain;
 
 namespace Core.Context
 {
-    public sealed class ICContext : DbContext
+    public class ICContext : DbContext
     {
         public ICContext(DbContextOptions<ICContext> options)
             : base(options)

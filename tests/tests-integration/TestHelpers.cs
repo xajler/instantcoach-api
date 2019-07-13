@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Tests.Integration
 {
@@ -20,8 +21,10 @@ namespace Tests.Integration
         {
             var settings = new JsonSerializerSettings
             {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Formatting.Indented
+                Formatting = Formatting.None,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc
             };
             settings.Converters.Add(new StringEnumConverter());
             return settings;

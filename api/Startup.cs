@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ namespace Api
 {
     public class Startup
     {
+        //public Startup() { }
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             WriteLine($"Env is: {env.EnvironmentName}");
@@ -26,9 +28,11 @@ namespace Api
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             Configuration = configuration;
+            Env = env;
         }
 
         public IConfiguration Configuration { get; set; }
+        public IHostingEnvironment Env { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -36,14 +40,26 @@ namespace Api
             services.AddHeaderApiVersioning();
             services.AddVersionedApiExplorer();
             services.AddConfigOptionsService(Configuration);
-            Config config = Configuration.GetSection(Config.Name).Get<Config>();
-            services.AddDbcontextService(config.GetConnectionString());
-            services.AddJwtAuthenticationService(config);
+
+            if (Env.EnvironmentName == "SUT")
+            {
+                WriteLine("Setting SUT services...");
+                services.AddDbcontextService(Config.GetSUTConnectionString());
+                services.AddFakeSUTJwtAuthenticationService();
+            }
+            else
+            {
+                Config config = Configuration.GetSection(Config.Name).Get<Config>();
+                services.AddDbcontextService(config.GetConnectionString());
+                services.AddJwtAuthenticationService(config);
+            }
+
             services.AddSwaggerService();
             services.AddScoped(typeof(Repository<>));
             services.AddScoped<InstantCoachRepository>();
             services.AddScoped<IInstantCoachService, InstantCoachService>();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
         }
 
         public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
@@ -69,7 +85,7 @@ namespace Api
                 if (!context.AllMigrationsApplied())
                 {
                     context.Database.Migrate();
-                    context.EnsureSeeded();
+                    //context.EnsureSeeded();
                 }
             }
         }

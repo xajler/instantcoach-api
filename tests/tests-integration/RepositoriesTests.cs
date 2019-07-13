@@ -131,10 +131,10 @@ namespace Tests.Integration
             // Find by Id
             var findResult = await _repository.FindById(entity.Id);
             var entityForUpdate = findResult.Value;
-            // entityForUpdate.UpdateAndValidate(
-            //     updateType: UpdateType.Save,
-            //     comments: GetUpdateComments(),
-            //     bookmarkPins: entity.BookmarkPins);
+            entityForUpdate.UpdateAndValidate(
+                updateType: UpdateType.Save,
+                comments: GetUpdateComments(),
+                bookmarkPins: entity.BookmarkPins);
 
             // Update
             var updateResult = await _repository.Save(entityForUpdate);
@@ -142,8 +142,8 @@ namespace Tests.Integration
             var actual = updateResult.Value;
 
             actual.Id.Should().Be(1);
-            actual.Comments.Should().HaveCount(2);
-            actual.CommentsCount.Should().Be(2);
+            actual.Comments.Should().HaveCount(3);
+            actual.CommentsCount.Should().Be(3);
             actual.BookmarkPins.Should().HaveCount(1);
         }
 

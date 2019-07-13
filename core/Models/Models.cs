@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using Domain;
 
@@ -193,6 +194,7 @@ namespace Core.Models
 
     public class InstantCoachUpdateClient
     {
+        [Required]
         public UpdateType UpdateType { get; set; }
         public List<CommentClient> Comments { get; set; }
         public List<BookmarkPinClient> BookmarkPins { get; set; }
@@ -200,8 +202,10 @@ namespace Core.Models
 
     public class CommentClient
     {
+        [Required]
         public CommentType CommentType { get; set; }
         public string Text { get; set; }
+        [Required]
         public EvaluationCommentAuthor AuthorType { get; set; }
         public DateTime CreatedAt { get; set; }
         public int BookmarkPinId { get; set; }
