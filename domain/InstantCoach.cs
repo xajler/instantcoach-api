@@ -75,7 +75,7 @@ namespace Domain
                 foreach (var item in comments)
                 {
                     Comment comment = null;
-                    Console.WriteLine($"[{index}] type: {item.CommentType}");
+                    //Console.WriteLine($"[{index}] type: {item.CommentType}");
                     switch (item.CommentType)
                     {
                         case CommentType.Textual:

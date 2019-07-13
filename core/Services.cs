@@ -21,16 +21,17 @@ namespace Core.Services
     public class InstantCoachService : IInstantCoachService
     {
         private readonly ILogger _logger;
-        private readonly Config _config;
+        // TODO: think of example to get something from Config
+        //private readonly Config _config;
         private readonly InstantCoachRepository _repository;
 
         public InstantCoachService(
             ILogger<InstantCoachService> logger,
-            IOptions<Config> configOptions,
+            //IOptions<Config> configOptions,
             InstantCoachRepository repository)
         {
             _logger = logger;
-            _config = configOptions.Value;
+            //_config = configOptions.Value;
             _repository = repository;
 
         }
