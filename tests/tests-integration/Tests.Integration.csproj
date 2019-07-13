@@ -10,7 +10,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="dotnet-reportgenerator-cli" Version="4.2.5" />
+    <PackageReference Include="dotnet-reportgenerator-cli" Version="4.*" />
     <PackageReference Include="FluentAssertions" Version="5.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2.0" />
@@ -25,7 +25,7 @@
   </ItemGroup>
 
 <ItemGroup>
-  <DotNetCliToolReference Include="dotnet-reportgenerator-cli" Version="4.2.5" />
+  <DotNetCliToolReference Include="dotnet-reportgenerator-cli" Version="4.*" />
 </ItemGroup>
 
   <ItemGroup>
