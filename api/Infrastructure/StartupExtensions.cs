@@ -80,7 +80,7 @@ namespace Api
         public static void AddDbcontextService(this IServiceCollection services,
             string connectionString)
         {
-            // WriteLine($"conn string: {connectionString}");
+            Console.WriteLine($"conn string: {connectionString}");
             services.AddDbContext<ICContext>(options =>
                   options.UseSqlServer(connectionString, providerOptions =>
                           {

@@ -1,0 +1,12 @@
+# directories
+**/bin/
+**/obj/
+**/out/
+_postman/
+_assets/
+
+# files
+Dockerfile*
+**/*.md
+**/*.cmd
+**/*.sh

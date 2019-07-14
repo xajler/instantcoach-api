@@ -14,6 +14,8 @@ namespace Core
         public const string ProducesJsonContent = "application/json";
 
         [Required]
+        public string DbHost { get; set; }
+        [Required]
         public string DbName { get; set; }
         [Required]
         public string DbUser { get; set; }
@@ -40,10 +42,11 @@ namespace Core
 
         public string GetConnectionString()
         {
+            string host = GetEnvVarByName(DbHost);
             string name = GetEnvVarByName(DbName);
             string user = GetEnvVarByName(DbUser);
             string password = GetEnvVarByName(DbPassword);
-            return $"Data Source=localhost;Initial Catalog={name};User Id={user};Password={password};Integrated Security=false;MultipleActiveResultSets=True;";
+            return $"{host};Initial Catalog={name};User Id={user};Password={password};Integrated Security=false;MultipleActiveResultSets=True;";
         }
 
         public static string GetSUTConnectionString()

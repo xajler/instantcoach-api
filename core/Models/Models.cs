@@ -35,6 +35,15 @@ namespace Core.Models
         {
             return new Result { Error = errorType };
         }
+
+        public static Result AsDomainError(IReadOnlyList<string> errors)
+        {
+            return new Result
+            {
+                Error = ErrorType.InvalidData,
+                Errors = errors
+            };
+        }
     }
 
     public class Result<T> : Result
@@ -53,6 +62,15 @@ namespace Core.Models
         public static new Result<T> AsError(ErrorType errorType)
         {
             return new Result<T> { Value = default, Error = errorType };
+        }
+
+        public static new Result<T> AsDomainError(IReadOnlyList<string> errors)
+        {
+            return new Result<T>
+            {
+                Error = ErrorType.InvalidData,
+                Errors = errors
+            };
         }
     }
 

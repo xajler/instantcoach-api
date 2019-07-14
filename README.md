@@ -3,15 +3,15 @@
 Using ASP.NET Core API for sample microservices REST API.
 
 
-![Swagger](https://git.430n.com/x430n/instantcoach/raw/branch/master/screenshots/swagger.png)
+![Swagger](https://git.430n.com/x430n/instantcoach/raw/branch/master/_assets/swagger.png)
 
 Unit testing with code coverage in VS Code
 
-![unit_testing](https://git.430n.com/x430n/instantcoach/raw/branch/master/screenshots/unit_testing_code_coverage.png)
+![unit_testing](https://git.430n.com/x430n/instantcoach/raw/branch/master/_assets/unit_testing_code_coverage.png)
 
 Domain Errors and Endpoint Request Logging
 
-![domain_errors](https://git.430n.com/x430n/instantcoach/raw/branch/master/screenshots/domain_errors_logging.png)
+![domain_errors](https://git.430n.com/x430n/instantcoach/raw/branch/master/_assets/domain_errors_logging.png)
 
 
 > Note:
@@ -92,7 +92,7 @@ For local run without docker for app, but for `mssql` (make sure docker service 
     cd <src-root>
     docker start sql1
     # Set env vars for local dev (or add to bashrc, zsrhc, etc, then this is not necessary)
-    source ./EnvVar.sh
+    source ./env-var.sh
     cd api
     dotnet build
     # On run will run migrations if DB not existing or not updated to latest migration
@@ -113,14 +113,14 @@ To properly run, click in each action at right end lock, and add this token:
 > Note:
 >
 > I will try to change this token when is expired, currently set to be valid for a week.
-> If not either comment in Api.BaseController Autorize attribute, or create you own [auth0 account](https://auth0.com) create API and change Env var `JWT_AUTHORITY` in EnvVar.sh.
+> If not either comment in Api.BaseController Autorize attribute, or create you own [auth0 account](https://auth0.com) create API and change Env var `JWT_AUTHORITY` in env-var.sh.
 
 
 ### Postman
 
 Run all API calls through Postman.
 
-Import postman collection `InstantCoach API.postman_collection.json` from `postman` folder.
+Import postman collection `InstantCoach API.postman_collection.json` from `_postman` folder.
 
 >Note:
 >
@@ -196,7 +196,7 @@ Make sure that is `DotNetCliToolReference` and remove it as `PackageReference` i
 Before running EF CLI locally make sure on each opening terminal instance to run (or add to bashrc, zsrhc, etc, then this is not necessary):
 
     cd <src-root>
-    source ./EnvVar.sh
+    source ./env-var.sh
 
 Change dir to directory having EF DbContext, either api project or class lib, in this case it is class lib folder and project `core` and going via webapi project that is startup project `api`:
 

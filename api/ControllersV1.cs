@@ -91,7 +91,6 @@ namespace Api.Controllers.Version1
         /// <summary>Marks InstantCoach as Completed for Id.</summary>
         [HttpPatch("{id:int}/completed")]
         [ProducesResponseType(Status204NoContent)]
-        [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> PatchAsync(int id)
         {
