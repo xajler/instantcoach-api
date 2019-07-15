@@ -11,22 +11,29 @@ services:
   api.dev:
     image: mcr.microsoft.com/dotnet/core/sdk:2.2
     volumes:
-      - ~/src/instantcoach:/app
+      - ~/src/instantcoach:/app/
+      - ~/.aspnet/https:/https/
     working_dir: /app/api
     entrypoint:
       - dotnet
       - watch
       - run
+    # Make sure to run this locally for SSL cert
+    # dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
-      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - ASPNETCORE_URLS=http://0.0.0.0:5000;https://0.0.0.0:5001
+      - ASPNETCORE_HTTPS_PORT=5001
       - DB_HOST=db.dev
       - DB_NAME=test-development
       - DB_USER=sa
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
       - JWT_AUDIENCE=http://localhost:5000
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=bm8kpv@=n2y4Nz@#
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/instant-coach-api.pfx
     ports:
         - "5000:5000"
+        - "5001:5001"
     depends_on:
       - db.dev
