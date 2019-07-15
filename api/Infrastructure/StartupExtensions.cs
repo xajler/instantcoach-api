@@ -84,7 +84,7 @@ namespace Api
             services.AddDbContext<ICContext>(options =>
                   options.UseSqlServer(connectionString, providerOptions =>
                           {
-                              providerOptions.CommandTimeout(180);
+                              //providerOptions.CommandTimeout(180);
                               providerOptions.EnableRetryOnFailure(
                               maxRetryCount: 10,
                               maxRetryDelay: TimeSpan.FromSeconds(30),

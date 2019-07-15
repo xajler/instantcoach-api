@@ -17,8 +17,6 @@ Domain Errors and Endpoint Request Logging
 > Note:
 >
 > Most of C# files contain multiple classes, because of microservices nature, if this wouldn't be microservice, those would go to folders and separate files.
->
-> README state at this point is very chaotic, it will change when Dockerfile's are created for all. Then most of this README will go to separate file NOTES, since it will represent local notes, and most of it will be part of Dockerfile.
 
 Created using:
 
@@ -50,10 +48,9 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Unit Testing (Only Domain, other projects will be Integration Tests)~~
 * ~~Refactoring (Domain to DDD and separate project)~~ TODO: Mock Services
 * Integration Testing (~~Repositories~~ TODO: WebAPI with InMemory EF)
-* Dockerfile MSSQL
 * Dockerfile nginx
-* Dockerfile Build/Publish/Run App
-* Docker Compose
+* ~~Dockerfile Build/Publish/Run App~~
+* ~~Docker Compose (Development with watch, Test)~~
 * Health checks
 * Nginx web server
 * GraphQL (? maybe separate project)
@@ -131,91 +128,3 @@ Import postman collection `InstantCoach API.postman_collection.json` from `_post
 Reason why is not used Username/Password in this implementation of JWT Authentication is because Frontend should not have direct access to REST API. It should have access to MVC Web App that would have User Identity through JWT token. Through that web app as Proxy Frontend would call REST API, sending User Identity JWT Token.
 
 If in future MVC Web App would be created, proper JWT Authentication would be implemented and already created JWT token would be pass to REST API and created User Identity as Middleware.
-
-
-## .NET Core
-
-Best to install specific version via `dotnet-install` scripts, for unix/linux:
-
-    wget https://dot.net/v1/dotnet-install.sh
-    chmod +x dotnet-install
-    # or 2.1, also -Version can be applied if particular version needed
-    ./dotnet-install.sh -Channel 2.2
-
-.NET Core will be installed in `~/.dotnet` add this to your `$PATH` in .bashrc, .zshrc, etc
-
-    export PATH=$HOME/.dotnet:$PATH
-
-
-## Docker
-
-### MSSQL (linux)
-
-Make sure on linux to create `docker` group and add dev user to this group.
-
-
-    docker pull microsoft/mssql-server-linux
-    # Use docker-run.sh or copy this command
-    docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Abc$12345' \
-               -p 1433:1433 --name sql1 \
-               -d microsoft/mssql-server-linux
-    # make sure running
-    docker ps -a
-
-    # stop mssql instance
-    docker stop sql1
-    # start mssql instance
-    docker start sql1
-
-
-## Entity Framework
-
-
-Make sure that WebApi or class library project have this packages installed:
-
-    dotnet add package Microsoft.EntityFrameworkCore.Design
-
-
-### .NET SDK 2.0
-
-Note: package `Microsoft.EntityFrameworkCore.Tools.DotNet` is part of .NET SDK 2.1 and above, so it only refers to .NET SDK 2.0.
-
-    dotnet add package Microsoft.EntityFrameworkCore.Tools.DotNet
-
-If class lib is created make sure to change `TargetFramework` from `netstandard2.0` to `netcoreapp2.0`, because EF CLI cannot work with .NET Standard.
-
-Make sure that is `DotNetCliToolReference` and remove it as `PackageReference` if it is set, this is how it should only be:
-
-    <ItemGroup>
-        <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
-    </ItemGroup>
-
-
-### Migrations
-
-Before running EF CLI locally make sure on each opening terminal instance to run (or add to bashrc, zsrhc, etc, then this is not necessary):
-
-    cd <src-root>
-    source ./env-var.sh
-
-Change dir to directory having EF DbContext, either api project or class lib, in this case it is class lib folder and project `core` and going via webapi project that is startup project `api`:
-
-    cd core
-    # -s means startup project 'api' dir in this case
-    dotnet ef migrations add Initial -s ../api
-
-    # If there any errors remove migrations, fix errors then run add again
-    dotnet ef migrations remove
-
-    # Make sure no errors on creating initial migration
-    # Make sure you're running docker mssql instance!!!
-    # Then run this command to create database
-    dotnet ef database update -s ../api
-
-    # To drop database and start from scratch
-    dotnet ef database drop -s ../api
-
-    # To get DB script
-    dotnet ef migrations script -s ../api
-
-Connection string using `sa` user and password for docker, good for dev and testing, but for production there is `db-create.sh` good MSSQL template for creating in production environment.

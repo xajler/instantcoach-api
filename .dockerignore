@@ -4,9 +4,16 @@
 **/out/
 _postman/
 _assets/
+_coveragereport
+.git/
+.vscode
+.ionide
+
 
 # files
 Dockerfile*
 **/*.md
 **/*.cmd
 **/*.sh
+**/coverage.xml
+.gitignore

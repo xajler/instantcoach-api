@@ -1,33 +1,41 @@
 version: "3.7"
 services:
-  db:
+  db.dev:
     image: mcr.microsoft.com/mssql/server:2017-GDR-ubuntu
     environment:
       SA_PASSWORD: "Abc$$12345"
       ACCEPT_EULA: "Y"
     ports:
-      - "5433:1433"
+      - "5434:1433"
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.2
-  api:
-    build: .
+        ipv4_address: 10.5.0.9
+
+  api.dev:
+    image: mcr.microsoft.com/dotnet/core/sdk:2.2
+    volumes:
+      - ~/src/instantcoach:/app
+    working_dir: /app/api
+    entrypoint:
+      - dotnet
+      - watch
+      - run
     environment:
-      - ASPNETCORE_ENVIRONMENT=Test
+      - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - DB_HOST=10.5.0.2
-      - DB_NAME=test
+      - DB_HOST=10.5.0.9
+      - DB_NAME=test-development
       - DB_USER=sa
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
-      - JWT_AUDIENCE=http://10.5.0.3
+      - JWT_AUDIENCE=http://10.5.0.10
     ports:
         - "5000:80"
     depends_on:
-      - db
+      - db.dev
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.3
+        ipv4_address: 10.5.0.10
 
 networks:
   vpcbr:

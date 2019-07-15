@@ -46,7 +46,7 @@ namespace Core
             string name = GetEnvVarByName(DbName);
             string user = GetEnvVarByName(DbUser);
             string password = GetEnvVarByName(DbPassword);
-            return $"{host};Initial Catalog={name};User Id={user};Password={password};Integrated Security=false;MultipleActiveResultSets=True;";
+            return $"Server={host};Initial Catalog={name};User Id={user};Password={password};Integrated Security=false;MultipleActiveResultSets=True;";
         }
 
         public static string GetSUTConnectionString()

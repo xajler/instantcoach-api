@@ -1,7 +1,8 @@
 #!/bin/sh
 
 export ASPNETCORE_ENVIRONMENT=Local
-export DB_HOST="Data Source=localhost"
+export ASPNETCORE_URLS=http://0.0.0.0:5000
+export DB_HOST=localhost
 export DB_NAME=test-local-new
 export DB_USER=sa
 export DB_PASSWORD='Abc$12345'
