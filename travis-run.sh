@@ -9,8 +9,8 @@ echo $REPO_COMMIT_MESSAGE
 
 if [ "$TRAVIS_BRANCH" =  "master" ]
 then
-    docker-compose build
-         -f docker-compose-testing.yml \
+    docker-compose build \
+          -f docker-compose-testing.yml \
           --build-arg TRAVIS_COMMIT=$TRAVIS_COMMIT \
           --build-arg TRAVIS_BRANCH=$TRAVIS_BRANCH \
           --build-arg TRAVIS_JOB_ID=$TRAVIS_JOB_ID \
