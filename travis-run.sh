@@ -9,18 +9,16 @@ echo $REPO_COMMIT_MESSAGE
 
 if [ "$TRAVIS_BRANCH" =  "master" ]
 then
-    docker-compose build \
-          -f docker-compose-testing.yml \
+    docker-compose -f docker-compose-testing.yml build \
           --build-arg TRAVIS_COMMIT=$TRAVIS_COMMIT \
           --build-arg TRAVIS_BRANCH=$TRAVIS_BRANCH \
           --build-arg TRAVIS_JOB_ID=$TRAVIS_JOB_ID \
           --build-arg REPO_COMMIT_AUTHOR=$REPO_COMMIT_AUTHOR \
           --build-arg REPO_COMMIT_AUTHOR_EMAIL=$REPO_COMMIT_AUTHOR_EMAIL \
-          --build-arg TRAVIS_COMMIT_MESSAGE="$TRAVIS_COMMIT_MESSAGE"
+          --build-arg REPO_COMMIT_MESSAGE="$REPO_COMMIT_MESSAGE" \
+          api.sut
 
-    docker-compose up \
-          -f docker-compose-testing.yml \
-          --exit-code-from api.sut
+    docker-compose -f docker-compose-testing.yml up --exit-code-from api.sut
 else
 
     docker build \

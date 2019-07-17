@@ -11,9 +11,7 @@ _coveragereport
 
 
 # files
-Dockerfile*
 **/*.md
 **/*.cmd
-**/*.sh
 **/coverage.xml
 .gitignore

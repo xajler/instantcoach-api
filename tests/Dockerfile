@@ -10,17 +10,4 @@ COPY instantcoach.sln ./
 RUN dotnet restore
 RUN dotnet build
 
-RUN echo "branch: $TRAVIS_BRANCH"
-RUN echo "commit: $TRAVIS_COMMIT"
-RUN echo "job id: $TRAVIS_JOB_ID"
-RUN echo "author: $REPO_COMMIT_AUTHOR"
-RUN echo "email: $REPO_COMMIT_AUTHOR_EMAIL"
-RUN echo "message: $REPO_COMMIT_MESSAGE"
-
-ENTRYPOINT ["/bin/sh", "/app/tests/run-all-tests.sh"]
-
-# docker-compose -f docker-compose-testing.yml up  --exit-code-from api.sut
-
- #  docker-compose -f docker-compose-testing.yml up --build --exit-code-from api.sut
-
-#  docker-compose -f docker-compose-testing.yml run dotnet test
+ENTRYPOINT ["/bin/sh", "./tests/run-all-tests.sh"]
