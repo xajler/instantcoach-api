@@ -11,24 +11,37 @@ services:
       vpcbr:
         ipv4_address: 10.5.0.2
   api:
+    #image: x430n/ic-api:latest
     build: .
     environment:
       - ASPNETCORE_ENVIRONMENT=Test
-      - ASPNETCORE_URLS=http://0.0.0.0:80;https://0.0.0.0:443
-      - ASPNETCORE_HTTPS_PORT=5001
-      - DB_HOST=10.5.0.2
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - DB_HOST=db
       - DB_NAME=test
       - DB_USER=sa
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
-      - JWT_AUDIENCE=https://10.5.0.3
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=bm8kpv@=n2y4Nz@#
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/https/instant-coach-api.pfx
+      - JWT_AUDIENCE=http://10.5.0.3
     ports:
-        - "5000:80"
-        - "5001:443"
+        - "5000:5000"
     depends_on:
       - db
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.4
+
+  proxy:
+    #image: x430n/ic-nginx:latest
+    build:
+      context:  ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "453:453"
+    links:
+      - api
+    depends_on:
+      - api
     networks:
       vpcbr:
         ipv4_address: 10.5.0.3

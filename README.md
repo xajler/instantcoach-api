@@ -47,7 +47,7 @@ Unit Testing will come last, because there is possibility of major changes and r
 * ~~Domain Models Validation~~ (Maybe refactor to FluentValidations?)
 * ~~Unit Testing (Only Domain, other projects will be Integration Tests)~~
 * ~~Refactoring (Domain to DDD and separate project)~~ TODO: Mock Services
-* Integration Testing (~~Repositories~~ TODO: WebAPI with InMemory EF)
+* Integration Testing (~~Repositories and Controllers V1~~)
 * Dockerfile nginx
 * ~~Dockerfile Build/Publish/Run App~~
 * ~~Docker Compose (Development with watch, Test)~~
