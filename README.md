@@ -2,6 +2,7 @@
 
 
 [![Travis Build Status](https://travis-ci.org/xajler/instantcoach-api.svg)](https://travis-ci.org/xajler/instantcoach-api)
+[![Coverage Status](https://coveralls.io/repos/github/xajler/instantcoach-api/badge.svg?branch=master)](https://coveralls.io/github/xajler/instantcoach-api?branch=master)
 
 Using ASP.NET Core API for sample microservices REST API.
 
