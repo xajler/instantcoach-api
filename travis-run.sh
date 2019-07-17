@@ -16,7 +16,7 @@ then
           --build-arg TRAVIS_JOB_ID=$TRAVIS_JOB_ID \
           --build-arg REPO_COMMIT_AUTHOR=$REPO_COMMIT_AUTHOR \
           --build-arg REPO_COMMIT_AUTHOR_EMAIL=$REPO_COMMIT_AUTHOR_EMAIL \
-          --build-arg REPO_COMMIT_MESSAGE="$REPO_COMMIT_MESSAGE"
+          --build-arg TRAVIS_COMMIT_MESSAGE="$TRAVIS_COMMIT_MESSAGE"
 
     docker-compose up \
           -f docker-compose-testing.yml \
