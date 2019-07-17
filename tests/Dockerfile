@@ -9,9 +9,9 @@ COPY instantcoach.sln ./
 RUN dotnet restore
 RUN dotnet build
 
-RUN dotnet test ./tests/tests-unit
+RUN dotnet test ./tests/tests-unit -c Release
 
-ENTRYPOINT ["dotnet", "test", "/app/tests/tests-integration"]
+ENTRYPOINT ["dotnet", "test", "-c", "Release", "/app/tests/tests-integration"]
 
 # docker-compose -f docker-compose-testing.yml up  --exit-code-from api.sut
 

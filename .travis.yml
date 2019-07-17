@@ -12,7 +12,8 @@ before_install:
  - sudo mv docker-compose /usr/local/bin
 
 script:
-  - docker-compose -f docker-compose-testing.yml up --build --exit-code-from api.sut
+  - if [ "$TRAVIS_BRANCH" = "dev" ]; then docker build -f tests/tests-unit/Dockerfile .; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then docker-compose -f docker-compose-testing.yml up --build --exit-code-from api.sut; fi
 
 notifications:
   email: vvzuuzqg@sharklasers.com
