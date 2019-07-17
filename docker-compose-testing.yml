@@ -24,6 +24,13 @@ services:
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
       - JWT_AUDIENCE=http://10.5.0.3
+    args:
+      - TRAVIS_BRANCH
+      - TRAVIS_COMMIT
+      - TRAVIS_JOB_ID
+      - REPO_COMMIT_AUTHOR
+      - REPO_COMMIT_AUTHOR_EMAIL
+      - REPO_COMMIT_MESSAGE
     ports:
         - "5000:5000"
     depends_on:
