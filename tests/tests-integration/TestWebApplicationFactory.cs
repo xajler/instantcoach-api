@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Api;
 using Core.Context;
-using static Tests.Integration.Client.TestHelpers;
+using static Tests.Integration.TestHelpers;
 
-namespace Tests.Integration.Client
+namespace Tests.Integration
 {
     public class TestWebApplicationFactory<TStartup>
     : WebApplicationFactory<TStartup> where TStartup : class

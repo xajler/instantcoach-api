@@ -1,0 +1,18 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  COMPOSE_VERSION: 1.24.1
+
+before_install:
+ - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+ - chmod +x docker-compose
+ - sudo mv docker-compose /usr/local/bin
+
+script:
+  - docker-compose -f docker-compose-testing.yml up --build --exit-code-from api.sut
+
+notifications:
+  email: vvzuuzqg@sharklasers.com

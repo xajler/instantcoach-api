@@ -4,6 +4,11 @@ WORKDIR /app
 COPY api/. ./api/
 COPY core/. ./core/
 COPY domain/. ./domain/
+COPY tests ./tests
+
+WORKDIR /app/tests/tests-unit
+RUN dotnet restore
+RUN dotnet test
 
 WORKDIR /app/api
 RUN dotnet restore

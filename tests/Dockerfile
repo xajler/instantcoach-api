@@ -4,13 +4,14 @@ WORKDIR /app
 COPY api/. ./api/
 COPY core/. ./core/
 COPY domain/. ./domain/
-COPY tests/.  ./tests/
+COPY tests  ./tests/
 COPY instantcoach.sln ./
-COPY docker-compose-testing.yml ./
+RUN dotnet restore
 
 WORKDIR ./tests/tests-unit
-RUN dotnet restore
-RUN dotnet build
+RUN dotnet test
+
+WORKDIR ./tests/tests-integration
 ENTRYPOINT ["dotnet", "test"]
 
 # docker-compose -f docker-compose-testing.yml up  --exit-code-from api.sut

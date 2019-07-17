@@ -16,11 +16,11 @@ using Core.Models;
 using Api;
 using static System.Console;
 using static Domain.Comment;
-using static Tests.Integration.Client.TestHelpers;
+using static Tests.Integration.TestHelpers;
 
-namespace Tests.Integration.Client
+namespace Tests.Integration
 {
-    public class ControllersV1Tests : IClassFixture<TestWebApplicationFactory<Startup>>, IDisposable
+    public class ClientControllersV1Tests : IClassFixture<TestWebApplicationFactory<Startup>>, IDisposable
     {
         private readonly HttpClient _client;
         private readonly dynamic _bearer = new ExpandoObject();
@@ -29,7 +29,7 @@ namespace Tests.Integration.Client
         private readonly List<InstantCoachList> _items = new List<InstantCoachList>();
         private readonly ICContext _context;
 
-        public ControllersV1Tests(TestWebApplicationFactory<Startup> factory)
+        public ClientControllersV1Tests(TestWebApplicationFactory<Startup> factory)
         {
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions
             {
