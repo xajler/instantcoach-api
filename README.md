@@ -54,11 +54,14 @@ Created using:
 * Dockerfile Nginx web server with SSL nginx.conf
 * Docker Compose (Development with watch, Test)
 * SSL (development: dotnet dev-certs https, test: nginx self-signed certificate)
+* Github badges for Code Coverage (coveralls.id) and CI (Travis CI) (master branch)
 
 ## TODO
 
 * Unit Testing - Mock Services, problem Repository is not interface?
+* Redis cache Docker
 * Health checks
+* CD (not sure where)
 * GraphQL (? maybe separate project)
 * CI/CD Bitbucket pipelines (?)
 * Message Queue (? maybe separate project)
