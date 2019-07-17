@@ -41,4 +41,5 @@ test/**
 # Code Coverage
 
 coverage.xml
+opencoverCoverage.xml
 _coveragereport/

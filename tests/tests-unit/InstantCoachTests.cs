@@ -35,7 +35,7 @@ namespace Tests.Unit
         public void Should_be_of_aggregate_root_type()
         {
             var actual = typeof(InstantCoach);
-            var expected = typeof(ValueObject);
+            var expected = typeof(AggregateRoot);
 
             actual.Should().BeDerivedFrom(expected);
         }
