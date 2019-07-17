@@ -12,9 +12,9 @@ before_install:
  - sudo mv docker-compose /usr/local/bin
 
 script:
-  - REPO_COMMIT_AUTHOR=$(git show -s --pretty=format:"%cn")
-  - REPO_COMMIT_AUTHOR_EMAIL=$(git show -s --pretty=format:"%ce")
-  - REPO_COMMIT_MESSAGE=$(git show -s --pretty=format:"%s")
+  - export REPO_COMMIT_AUTHOR=$(git show -s --pretty=format:"%cn")
+  - export REPO_COMMIT_AUTHOR_EMAIL=$(git show -s --pretty=format:"%ce")
+  - export REPO_COMMIT_MESSAGE=$(git show -s --pretty=format:"%s")
   - echo $TRAVIS_COMMIT
   - echo $TRAVIS_BRANCH
   - echo $REPO_COMMIT_AUTHOR
