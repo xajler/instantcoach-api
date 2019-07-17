@@ -102,8 +102,8 @@ namespace Api
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                options.Authority = config.GetEnvVarByName(config.JwtAuthority);
-                options.Audience = config.GetEnvVarByName(config.JwtAudience);
+                options.Authority = Config.GetEnvVarByName(config.JwtAuthority);
+                options.Audience = Config.GetEnvVarByName(config.JwtAudience);
             });
         }
 

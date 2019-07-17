@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Api;
-using Core;
 using Core.Context;
+using static Tests.Integration.Client.TestHelpers;
 
 namespace Tests.Integration.Client
 {
@@ -20,7 +20,8 @@ namespace Tests.Integration.Client
                         .AddEntityFrameworkInMemoryDatabase()
                         .BuildServiceProvider();
 
-                services.AddDbcontextService(Config.GetSUTConnectionString());
+                var config = CreateConfigForTest();
+                services.AddDbcontextService(config.GetSUTConnectionString());
 
                 var sp = services.BuildServiceProvider();
 

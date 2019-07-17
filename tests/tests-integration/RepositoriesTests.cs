@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using FluentAssertions;
 using Domain;
+using Core;
 using Core.Repositories;
 using Core.Context;
 using Core.Models;
@@ -27,7 +28,7 @@ namespace Tests.Integration
                 .AddEntityFrameworkSqlServer()
                 .BuildServiceProvider();
             var builder = new DbContextOptionsBuilder<ICContext>();
-            builder.UseSqlServer(GetConnectionString()).UseInternalServiceProvider(serviceProvider);
+            builder.UseSqlServer(Config.GetSUTGuidConnectionString()).UseInternalServiceProvider(serviceProvider);
             _context = new ICContext(builder.Options);
             _context.Database.Migrate();
             _repository = new InstantCoachRepository(new LoggerFactory(), _context);
@@ -436,11 +437,6 @@ namespace Tests.Integration
                 mediaurl: "https://example.com/test.png", comment: "No comment");
             result.Add(bookmarkPin);
             return result;
-        }
-
-        private string GetConnectionString()
-        {
-            return $"Data Source=localhost;Initial Catalog=test_db_{Guid.NewGuid()};User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
         }
     }
 }

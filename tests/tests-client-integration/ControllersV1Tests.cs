@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using FluentAssertions;
 using GST.Fake.Authentication.JwtBearer;
 using Domain;
-using Core;
 using Core.Context;
 using Core.Models;
 using Api;
@@ -42,7 +41,7 @@ namespace Tests.Integration.Client
                 .AddEntityFrameworkSqlServer()
                 .BuildServiceProvider();
             var builder = new DbContextOptionsBuilder<ICContext>();
-            builder.UseSqlServer(Config.GetSUTConnectionString())
+            builder.UseSqlServer(CreateConfigForTest().GetSUTConnectionString())
                    .UseInternalServiceProvider(serviceProvider);
             _context = new ICContext(builder.Options);
             _context.Database.Migrate();

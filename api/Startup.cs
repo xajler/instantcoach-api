@@ -40,16 +40,17 @@ namespace Api
             services.AddHeaderApiVersioning();
             services.AddVersionedApiExplorer();
             services.AddConfigOptionsService(Configuration);
+            Config config = Configuration.GetSection(Config.Name).Get<Config>();
 
             if (Env.EnvironmentName == "SUT")
             {
                 WriteLine("Setting SUT services...");
-                services.AddDbcontextService(Config.GetSUTConnectionString());
+                services.AddDbcontextService(config.GetSUTConnectionString());
                 services.AddFakeSUTJwtAuthenticationService();
             }
             else
             {
-                Config config = Configuration.GetSection(Config.Name).Get<Config>();
+
                 services.AddDbcontextService(config.GetConnectionString());
                 services.AddJwtAuthenticationService(config);
             }

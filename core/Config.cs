@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Domain;
-using Core.Models;
 
 namespace Core
 {
@@ -30,7 +29,7 @@ namespace Core
         public string JwtAudience { get; set; }
 
 
-        public string GetEnvVarByName(string envVar)
+        public static string GetEnvVarByName(string envVar)
         {
             string result = Environment.GetEnvironmentVariable(envVar);
             if (string.IsNullOrEmpty(result))
@@ -49,13 +48,16 @@ namespace Core
             return $"Server={host};Initial Catalog={name};User Id={user};Password={password};Integrated Security=false;MultipleActiveResultSets=True;";
         }
 
-        public static string GetSUTConnectionString()
+        public string GetSUTConnectionString()
         {
-            return "Data Source=localhost;Initial Catalog=test_db_sut;User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
+            string host = GetEnvVarByName(DbHost);
+            return $"Server={host};Initial Catalog=test_db_sut;User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
         }
+
         public static string GetSUTGuidConnectionString()
         {
-            return $"Data Source=localhost;Initial Catalog=test_db_sut_{Guid.NewGuid()};User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
+            string host = GetEnvVarByName("DB_HOST");
+            return $"Server={host};Initial Catalog=test_db_sut_{Guid.NewGuid()};User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
         }
     }
 }

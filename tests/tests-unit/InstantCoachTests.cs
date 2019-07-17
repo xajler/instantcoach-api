@@ -36,6 +36,7 @@ namespace Tests.Unit
         {
             var actual = typeof(InstantCoach);
             var expected = typeof(AggregateRoot);
+            //var expected = typeof(ValueObject);
 
             actual.Should().BeDerivedFrom(expected);
         }

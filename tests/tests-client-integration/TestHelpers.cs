@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Core;
 
 namespace Tests.Integration.Client
 {
@@ -28,6 +29,20 @@ namespace Tests.Integration.Client
             };
             settings.Converters.Add(new StringEnumConverter());
             return settings;
+        }
+
+        public static Config CreateConfigForTest()
+        {
+            return new Config
+            {
+                DbHost = "DB_HOST",
+                DbName = "DB_NAME",
+                DbUser = "DB_USER",
+                DbPassword = "DB_PASSWORD",
+                InstantCoachStatusDefault = Domain.InstantCoachStatus.New,
+                JwtAuthority = "JWT_AUTHORITY",
+                JwtAudience = "JWT_AUDIENCE"
+            };
         }
     }
 }
