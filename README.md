@@ -1,5 +1,8 @@
 # InstantCoach app
 
+
+[![Travis Build Status](https://travis-ci.org/xajler/instantcoach-api.svg?branch=master)](https://travis-ci.org/xajler/instantcoach-api)
+
 Using ASP.NET Core API for sample microservices REST API.
 
 
@@ -30,31 +33,32 @@ Created using:
 * Azure Data Studio (Local GUI for SQL Server)
 * Unit Testing (xUnit, FluentAssertions, Coverlet, Moq)
 
-Unit Testing will come last, because there is possibility of major changes and refactoring throughout creating this microservices API architecture.
+## Features
 
-## TODO Features
+* EF Migrations
+* Config through IOptions&lt;T&gt;
+* Docker MSSQL
+* API Versioning
+* REST API Endpoint (multiple versions, JWT Auth)
+* Swagger (multiple versions, JWT Auth)
+* Db CRUD / Service
+* JWT Auth
+* Error Handling (Known Errors Result and Result&lt;T&gt;, Global Exception through Middleware)
+* Logging (including adding response time in ms in logs and response header as X-Response-Time through Middleware)
+* Domain Models Validation
+* Unit Testing (Domain)
+* Refactoring (Domain to DDD and separate project)
+* Integration Testing (Repositories and Controllers V1)
+* Dockerfile Build/Publish/Run App
+* Dockerfile Nginx web server with SSL nginx.conf
+* Docker Compose (Development with watch, Test)
+* SSL (development: dotnet dev-certs https, test: nginx self-signed certificate)
 
-* ~~EF Migrations~~
-* ~~Config through IOptions&lt;T&gt;~~
-* ~~Docker MSSQL~~
-* ~~API Versioning~~
-* ~~REST API Endpoint (multiple versions, JWT Auth)~~
-* ~~Swagger (multiple versions, JWT Auth)~~
-* ~~Db CRUD / Service~~
-* ~~JWT Auth~~
-* ~~Error Handling (Known Errors Result and Result&lt;T&gt;, Global Exception through Middleware)~~
-* ~~Logging (including adding response time in ms in logs and response header as X-Response-Time through Middleware)~~
-* ~~Domain Models Validation~~ (Maybe refactor to FluentValidations?)
-* ~~Unit Testing (Only Domain, other projects will be Integration Tests)~~
-* ~~Refactoring (Domain to DDD and separate project)~~ TODO: Mock Services
-* Integration Testing (~~Repositories and Controllers V1~~)
-* Dockerfile nginx
-* ~~Dockerfile Build/Publish/Run App~~
-* ~~Docker Compose (Development with watch, Test)~~
+## TODO
+
+* Unit Testing - Mock Services, problem Repository is not interface?
 * Health checks
-* Nginx web server
 * GraphQL (? maybe separate project)
-* SSL (?)
 * CI/CD Bitbucket pipelines (?)
 * Message Queue (? maybe separate project)
 * CQRS (? maybe separate project)

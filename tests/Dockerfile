@@ -7,12 +7,11 @@ COPY domain/. ./domain/
 COPY tests  ./tests/
 COPY instantcoach.sln ./
 RUN dotnet restore
+RUN dotnet build
 
-WORKDIR ./tests/tests-unit
-RUN dotnet test
+RUN dotnet test ./tests/tests-unit
 
-WORKDIR ./tests/tests-integration
-ENTRYPOINT ["dotnet", "test"]
+ENTRYPOINT ["dotnet", "test", "/app/tests/tests-integration"]
 
 # docker-compose -f docker-compose-testing.yml up  --exit-code-from api.sut
 

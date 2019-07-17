@@ -56,7 +56,7 @@ namespace Tests.Integration
             WriteLine($"Id: {actual.Id}");
 
             entity.Id.Should().Be(1);
-            result.Success.Should().BeTrue();
+            result.Success.Should().BeFalse();
         }
 
         [Fact]
