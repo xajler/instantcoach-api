@@ -1,7 +1,7 @@
 # InstantCoach app
 
 
-[![Travis Build Status](https://travis-ci.org/xajler/instantcoach-api.svg?branch=master)](https://travis-ci.org/xajler/instantcoach-api)
+[![Travis Build Status](https://travis-ci.org/xajler/instantcoach-api.svg)](https://travis-ci.org/xajler/instantcoach-api)
 
 Using ASP.NET Core API for sample microservices REST API.
 
