@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using static Core.Constants;
 
 namespace Api
 {
     public class ResponseTimeMiddleware
     {
-        private const string ResonseTimeHeaderName = "X-Response-Time";
         private readonly RequestDelegate _next;
         private readonly ILogger<ResponseTimeMiddleware> _logger;
         private readonly IHostingEnvironment _env;
@@ -38,7 +38,7 @@ namespace Api
                 {
                     watch.Stop();
                     var responseTime = watch.ElapsedMilliseconds;
-                    context.Response.Headers[ResonseTimeHeaderName] = $"{responseTime}ms";
+                    context.Response.Headers[ResonseTimeHeader] = $"{responseTime}ms";
                     _logger.LogInformation("Response time: {ResponseTime}ms", responseTime);
                     _logger.LogInformation("\n\n----- END {HttpMethod} {HttpPath} ---------------\n\n",
                         method, path);

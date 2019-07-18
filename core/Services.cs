@@ -1,10 +1,15 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Schema.Generation;
+using Newtonsoft.Json.Schema;
 using Core.Repositories;
 using Domain;
 using Core.Models;
+using ErrorType = Core.Models.ErrorType;
 using static Core.Helpers;
+using static Core.Constants.Controller;
 
 namespace Core.Services
 {
@@ -12,6 +17,7 @@ namespace Core.Services
     {
         Task<ListResult<InstantCoachList>> GetList(int skip, int take, bool showCompleted);
         Task<Result<InstantCoachForId>> GetById(int id);
+        Result<JSchema> GetJsonSchema(string schemaType);
         Task<Result<InstantCoach>> Create(InstantCoachCreateClient data);
         Task<Result> Update(int id, InstantCoachUpdateClient data);
         Task<Result> MarkCompleted(int id);
@@ -54,6 +60,29 @@ namespace Core.Services
             _logger.LogInformation("Get List Result:\n{Result}", ToLogJson(result));
             if (!result.Success) { return Result<InstantCoachForId>.AsError(result.Error); }
             return Result<InstantCoachForId>.AsSuccess(result.Value.ToInstantCoachForId());
+        }
+
+        public Result<JSchema> GetJsonSchema(string schemaType)
+        {
+            if (schemaType == SchemaCreate || schemaType == SchemaUpdate)
+            {
+                _logger.LogInformation("GET schema by type: {SchemaType}", schemaType);
+                var generator = new JSchemaGenerator
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                };
+                generator.GenerationProviders.Add(new StringEnumGenerationProvider());
+
+
+                if (schemaType == SchemaCreate)
+                    return Result<JSchema>.AsSuccess(
+                        generator.Generate(typeof(InstantCoachCreateClient)));
+                else
+                    return Result<JSchema>.AsSuccess(
+                        generator.Generate(typeof(InstantCoachUpdateClient)));
+            }
+
+            return Result<JSchema>.AsError(ErrorType.InvalidData);
         }
 
         public async Task<Result<InstantCoach>> Create(InstantCoachCreateClient data)

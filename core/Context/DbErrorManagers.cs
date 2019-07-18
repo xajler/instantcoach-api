@@ -10,6 +10,7 @@ namespace Core
         NumericOverflow,
         Unhandled
     }
+
     public class SqlServerErrorManager
     {
         private const int CannotInsertNull = 515;

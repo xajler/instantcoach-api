@@ -79,14 +79,17 @@ namespace Domain
                     switch (item.CommentType)
                     {
                         case CommentType.Textual:
-                            comment = Comment.Textual(item.Text, item.AuthorType, item.CreatedAt);
+                            comment = Comment.Textual(
+                                item.Text, item.AuthorType, item.CreatedAt);
                             break;
                         case CommentType.Attachment:
-                            comment = Comment.Attachment(item.Text, item.AuthorType, item.CreatedAt);
+                            comment = Comment.Attachment(
+                                item.Text, item.AuthorType, item.CreatedAt);
                             break;
                         case CommentType.Bookmark:
                             //Console.WriteLine($"[{index}] BKMID: {item.BookmarkPinId}");
-                            comment = Comment.Bookmark(item.BookmarkPinId, item.AuthorType, item.CreatedAt);
+                            comment = Comment.Bookmark(
+                                item.BookmarkPinId, item.AuthorType, item.CreatedAt);
                             break;
                     }
 

@@ -121,7 +121,7 @@ namespace Tests.Integration
                     {
                         Id = 1,
                         Index = 1,
-                        Range = new Range(1, 2),
+                        Range = new RangeClient { Start = 1, End = 2 },
                         MediaUrl = "https://example.com/test.png"
                     }
                 }
@@ -160,7 +160,7 @@ namespace Tests.Integration
                     {
                         Id = 1,
                         Index = 1,
-                        Range = new Range(1, 2),
+                        Range = new RangeClient { Start = 1, End = 2 },
                         MediaUrl = "https://example.com/test.png"
                     }
                 }
@@ -197,7 +197,7 @@ namespace Tests.Integration
                     {
                         Id = 0,
                         Index = 0,
-                        Range = new Range(1, 2),
+                        Range = new RangeClient { Start = 1, End = 2 },
                         MediaUrl = "https://example.com/test.png"
                     }
                 }
@@ -231,7 +231,7 @@ namespace Tests.Integration
                     {
                         Id = 1,
                         Index = 1,
-                        Range = new Range(1, 2),
+                        Range = new RangeClient { Start = 1, End = 2 },
                         MediaUrl = "https://example.com/test.png"
                     }
                 }
@@ -264,7 +264,7 @@ namespace Tests.Integration
                     {
                         Id = 1,
                         Index = 1,
-                        Range = new Range(1, 2),
+                        Range = new RangeClient { Start = 1, End = 2 },
                         MediaUrl = "https://example.com/test.png"
                     }
                 }
@@ -296,7 +296,7 @@ namespace Tests.Integration
                     {
                         Id = 1,
                         Index = 1,
-                        Range = new Range(1, 2),
+                        Range = new RangeClient { Start = 1, End = 2 },
                         MediaUrl = "https://example.com/test.png"
                     }
                 }
@@ -330,7 +330,7 @@ namespace Tests.Integration
                     {
                         Id = 0,
                         Index = 0,
-                        Range = new Range(2, 1),
+                        Range = new RangeClient { Start = 1, End = 2 },
                         MediaUrl = "https://example.com/test.png"
                     }
                 }

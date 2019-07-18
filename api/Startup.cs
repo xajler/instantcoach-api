@@ -12,6 +12,7 @@ using Core;
 using Core.Repositories;
 using Core.Services;
 using static System.Console;
+using static Core.Constants;
 
 namespace Api
 {
@@ -42,7 +43,7 @@ namespace Api
             services.AddConfigOptionsService(Configuration);
             Config config = Configuration.GetSection(Config.Name).Get<Config>();
 
-            if (Env.EnvironmentName == "SUT")
+            if (Env.EnvironmentName == SUTEnv)
             {
                 WriteLine("Setting SUT services...");
                 services.AddDbcontextService(config.GetSUTConnectionString());

@@ -67,7 +67,7 @@ namespace Core.Models
                     var pin = new BookmarkPin(
                         item.Id,
                         item.Index,
-                        item.Range,
+                        new Range(item.Range.Start, item.Range.End),
                         item.MediaUrl,
                         item.Comment);
 
@@ -92,16 +92,5 @@ namespace Core.Models
                 comments: FromJson<List<Comment>>(db.Comments),
                 bookmarkPins);
         }
-
-        // public static InstantCoachUpdate ToInstantCoachUpate(
-        //     this InstantCoachUpdateClient clientData,
-        //     InstantCoachStatus status)
-        // {
-        //     return new InstantCoachUpdate(
-        //         status: status,
-        //         comments: clientData.Comments,
-        //         bookmarkPins: clientData.BookmarkPins
-        //     );
-        // }
     }
 }

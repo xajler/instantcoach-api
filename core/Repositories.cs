@@ -8,6 +8,7 @@ using Domain;
 using Core.Context;
 using Core.Models;
 using static Core.Helpers;
+using static Core.Constants.Db;
 
 namespace Core.Repositories
 {
@@ -70,11 +71,6 @@ namespace Core.Repositories
 
     public class InstantCoachRepository : Repository<InstantCoach>
     {
-        private const string GetAllStoreProcedure = "InstantCoach_List";
-        private const string GetByIdQuery = @"SELECT Id, TicketId, Description, EvaluatorName, Comments, BookmarkPins
-FROM InstantCoaches WHERE Id = @Id";
-        private const string GetExistingIdQuery = "SELECT Id FROM InstantCoaches WHERE Id = @Id";
-
         private readonly ILogger<InstantCoachRepository> _logger;
         private readonly ICContext _context;
 
@@ -90,9 +86,9 @@ FROM InstantCoaches WHERE Id = @Id";
         {
             SqlParameter[] dbParams = new []
             {
-                new SqlParameter("@Skip", skip),
-                new SqlParameter("@Take", take),
-                new SqlParameter("@ShowCompleted", showCompleted),
+                new SqlParameter(SkipParam, skip),
+                new SqlParameter(TakeParam, take),
+                new SqlParameter(ShowCompletedParam, showCompleted),
             };
             _logger.LogInformation("Repository Get All DB Parameters:\n{DbParams}", ToLogJson(dbParams));
 
@@ -157,7 +153,7 @@ FROM InstantCoaches WHERE Id = @Id";
 
         private SqlParameter GetAndLogIdParam(int id)
         {
-            var result = new SqlParameter("@Id", id);
+            var result = new SqlParameter(IdParam, id);
             _logger.LogInformation("Get By Id DB Parameters:\n{DbParams}", ToLogJson(result));
             return result;
         }

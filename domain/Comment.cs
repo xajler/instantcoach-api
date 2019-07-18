@@ -14,7 +14,7 @@ namespace Domain
             string text,
             EvaluationCommentAuthor authorType,
             DateTime createdAt,
-            int bookmarkPinId)
+            int? bookmarkPinId)
         {
             CommentType = commentType;
             AuthorType = authorType;
@@ -35,7 +35,7 @@ namespace Domain
             Text = text;
         }
 
-        private Comment(int bookmarkPinId,
+        private Comment(int? bookmarkPinId,
             EvaluationCommentAuthor authorType,
             DateTime createdAt)
         {
@@ -49,7 +49,7 @@ namespace Domain
         public string Text { get; }
         public EvaluationCommentAuthor AuthorType { get; }
         public DateTime CreatedAt { get; }
-        public int BookmarkPinId { get; }
+        public int? BookmarkPinId { get; }
 
         public IReadOnlyList<string> Validate()
         {
@@ -87,7 +87,7 @@ namespace Domain
             return new Comment(CommentType.Attachment, text, authorType, createdAt);
         }
 
-        public static Comment Bookmark(int bookmarkPinId,
+        public static Comment Bookmark(int? bookmarkPinId,
              EvaluationCommentAuthor authorType,
              DateTime createdAt)
         {

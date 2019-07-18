@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
-using Core;
 using Core.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
+using static Core.Constants.Controller;
 
 namespace Api.Controllers
 {
@@ -37,7 +37,7 @@ namespace Api.Controllers
             switch (successStatusCode)
             {
                 case Status201Created:
-                    var uri = Config.ApiRoute.Replace("{version:apiVersion}", Config.ApiVersion1);
+                    var uri = ApiRoute.Replace("{version:apiVersion}", ApiVersion1);
                     _logger.LogInformation("Status Code: {StatusCode} Creted\nCreated Id:{Id}\nURI: {Uri}",
                     successStatusCode, id, uri);
                     return Created($"{uri}/{id}", new CreatedId(id));
@@ -61,7 +61,6 @@ namespace Api.Controllers
                 default:
                     _logger.LogInformation("Status Code: {StatusCode} BadRequest", Status400BadRequest);
                     return BadRequest("Invalid data or unable to store changes.");
-
             }
         }
     }

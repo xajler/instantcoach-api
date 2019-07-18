@@ -18,6 +18,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Core;
 using Core.Context;
 using GST.Fake.Authentication.JwtBearer;
+using static Core.Constants;
 
 namespace Api
 {
@@ -72,7 +73,7 @@ namespace Api
                 v.AssumeDefaultVersionWhenUnspecified = true;
                 v.ReportApiVersions = true;
                 v.ErrorResponses = new ApiVersioningErrorResponseProvider();
-                v.ApiVersionReader = new HeaderApiVersionReader("X-Api-Version");
+                v.ApiVersionReader = new HeaderApiVersionReader(VersionHeader);
                 v.DefaultApiVersion = new ApiVersion(2, 0);
             });
         }

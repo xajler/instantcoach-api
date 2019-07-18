@@ -1,17 +1,18 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Core;
+using Newtonsoft.Json.Schema;
 using Core.Models;
 using Core.Services;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static Core.Helpers;
+using static Core.Constants.Controller;
 
 namespace Api.Controllers.Version1
 {
-    [Route(Config.ApiRoute)]
-    [ApiVersion(Config.ApiVersion1)]
-    [Produces(Config.ProducesJsonContent)]
+    [Route(ApiRoute)]
+    [ApiVersion(ApiVersion1)]
+    [Produces(ProducesJsonContent)]
     public class ApiV1Controller : BaseController
     {
         private readonly ILogger _logger;
@@ -49,7 +50,7 @@ namespace Api.Controllers.Version1
         }
 
         /// <summary>Gets InstantCoach by Id.</summary>
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int:min(1)}")]
         [ProducesResponseType(typeof(InstantCoachForId), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> GetAsync(int id)
@@ -57,6 +58,17 @@ namespace Api.Controllers.Version1
             _logger.LogInformation("GET by Id params:\nid: {Id}", id);
             var result = await _service.GetById(id);
             return CreateResult(result, successStatusCode: Status200OK, id);
+        }
+
+        /// <summary>Gets JSON schema for Create or Update.</summary>
+        [HttpGet("schema/{schemaType}")]
+        [ProducesResponseType(typeof(JSchema), Status200OK)]
+        [ProducesResponseType(Status400BadRequest)]
+        public ActionResult GetAsync(string schemaType)
+        {
+            var result = _service.GetJsonSchema(schemaType);
+            if (result.Success) return Ok(result.Value);
+            return BadRequest($"Valid schema types are: '{SchemaCreate}' or '{SchemaUpdate}'!");
         }
 
         /// <summary>Creates InstantCoach with Status from Config.InstantCoachStatusDefault.</summary>
@@ -74,7 +86,7 @@ namespace Api.Controllers.Version1
         }
 
         // /// <summary>Updates InstantCoach for Id.</summary>
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int:min(1)}")]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
@@ -89,7 +101,7 @@ namespace Api.Controllers.Version1
         }
 
         /// <summary>Marks InstantCoach as Completed for Id.</summary>
-        [HttpPatch("{id:int}/completed")]
+        [HttpPatch("{id:int:min(1)}/completed")]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> PatchAsync(int id)
@@ -100,7 +112,7 @@ namespace Api.Controllers.Version1
         }
 
         /// <summary>Deletes InstantCoach for Id.</summary>
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int:min(1)}")]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]

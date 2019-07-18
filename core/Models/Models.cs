@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using Domain;
+using static Core.Constants.Model;
 
 namespace Core.Models
 {
@@ -154,44 +156,99 @@ namespace Core.Models
 
     // Client (Body) Models
 
+    [DisplayName(CreateDisplayName)]
+    [Description(CreateDesc)]
     public class InstantCoachCreateClient
     {
+        [Required, MaxLength(1000)]
+        [Description(DescriptionDesc)]
         public string Description { get; set; }
+        [Required, MaxLength(64)]
+        [Description(TicketIdDesc)]
         public string TicketId { get; set; }
+        [Required, Range(1, int.MaxValue)]
+        [Description(EvaluatorIdDesc)]
         public int EvaluatorId { get; set; }
+        [Required, Range(1, int.MaxValue)]
+        [Description(AgentIdDesc)]
         public int AgentId { get; set; }
+        [Required, MaxLength(128)]
+        [Description(EvaluatorNameDesc)]
         public string EvaluatorName { get; set; }
+        [Required, MaxLength(128)]
+        [Description(AgentNameDesc)]
         public string AgentName { get; set; }
+        [Required]
+        [Description(CommentsDesc)]
         public List<CommentClient> Comments { get; set; }
+        [Description(BookmarkPinsDesc)]
         public List<BookmarkPinClient> BookmarkPins { get; set; }
     }
 
+    [DisplayName(UpdateDisplayName)]
+    [Description(UpdateDesc)]
     public class InstantCoachUpdateClient
     {
         [Required]
+        [Description(UpdateTypeDesc)]
         public UpdateType UpdateType { get; set; }
+        [Required]
+        [Description(CommentsDesc)]
         public List<CommentClient> Comments { get; set; }
+        [Description(BookmarkPinsDesc)]
         public List<BookmarkPinClient> BookmarkPins { get; set; }
     }
 
+    [DisplayName(CommentDisplayName)]
+    [Description(CommentDesc)]
     public class CommentClient
     {
         [Required]
+        [Description(CommentTypeDesc)]
         public CommentType CommentType { get; set; }
+        [MaxLength(1000)]
+        [Description(TextDesc)]
         public string Text { get; set; }
         [Required]
+        [Description(AuthorTypeDesc)]
         public EvaluationCommentAuthor AuthorType { get; set; }
+        [Required]
+        [Description(CreatedAtDesc)]
         public DateTime CreatedAt { get; set; }
-        public int BookmarkPinId { get; set; }
+        [Description(BookmarkPinIdDesc)]
+        public int? BookmarkPinId { get; set; }
     }
 
+    [DisplayName(BookmarkPinDisplayName)]
+    [Description(BookmarkPinDesc)]
     public class BookmarkPinClient
     {
+        [Required, Range(1, int.MaxValue)]
+        [Description(BPIdDesc)]
         public int Id { get; set; }
+        [Required, Range(1, int.MaxValue)]
+        [Description(IndexDesc)]
         public int Index { get; set; }
-        public Range Range { get; set; }
+        [Description(BPRangeDesc)]
+        public RangeClient Range { get; set; }
+        [Required, MaxLength(1000)]
+        [Description(BPCommentDesc)]
         public string Comment { get; set; }
+        [Required, MaxLength(1000)]
+        [Description(MediaUrlDesc)]
         public string MediaUrl { get; set; }
+    }
+
+    [DisplayName(RangeDisplayName)]
+    [Description(RangeDesc)]
+    public class RangeClient
+    {
+        [Required, Range(1, int.MaxValue)]
+        [Description(RangeStartDesc)]
+        public int Start { get; set; }
+        [Required, Range(1, int.MaxValue)]
+        [Description(RangeEndDesc)]
+        public int End { get; set; }
     }
 
     // Db Models

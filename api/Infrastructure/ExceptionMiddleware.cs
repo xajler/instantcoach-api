@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Core;
+using static Core.Constants;
 
 namespace Api
 {
     public class ExceptionMiddleware
     {
-        private const string PossibleBugText = "****POSSIBLE BUG******.";
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
