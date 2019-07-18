@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Exceptionless;
 using Core;
 using static Core.Constants;
 
@@ -34,11 +35,13 @@ namespace Api
             }
             catch (SqlException ex)
             {
+                //ex.ToExceptionless().Submit();
                 OnDbException(ex);
                 await HandleExceptionAsync(httpContext);
             }
             catch (Exception ex) when (IsUsualExceptionsFilter(ex))
             {
+                //ex.ToExceptionless().SetMessage(PossibleBugText).Submit();
                 _logger.LogError(
                     "{BugText} Exception of Type: {ExceptionType} and Message: {Message}\nStack Trace:\n{StackTrace}",
                     PossibleBugText, ex.GetType().Name, ex.Message, ex.ToInnerMessagesDump());

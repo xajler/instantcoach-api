@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Exceptionless;
 using Core.Context;
 using Core;
 using Core.Repositories;
@@ -64,7 +65,7 @@ namespace Api
 
         }
 
-        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, ILoggerFactory loggerFactory)
         {
             RunDbMigrationsAndSeedDataIfNeeded(app);
             app.UseMiddleware<ExceptionMiddleware>();
@@ -73,7 +74,11 @@ namespace Api
             // More info: https://github.com/microsoft/aspnet-api-versioning/tree/master/samples/aspnetcore/SwaggerSample
             app.UseSwaggerUIWAsHomeRoute(provider);
             app.UseAuthentication();
-            // app.UseHttpsRedirection();
+            // app.UseExceptionless(Configuration);
+            // ExceptionlessClient.Default.Configuration.ApiKey = "hnV4YzzhJIVNCr6tSDRv6iF6OCOYdRfBemRKf3cA";
+            // ExceptionlessClient.Default.Configuration.Enabled = true;
+            // ExceptionlessClient.Default.Configuration.ServerUrl = "http://ex-api.localtest.me:5000";
+            // loggerFactory.AddExceptionless();
             app.UseMvc();
         }
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 export ASPNETCORE_ENVIRONMENT=Local
-export ASPNETCORE_URLS='http://0.0.0.0:5000;https://0.0.0.0:5001'
+export ASPNETCORE_URLS='http://0.0.0.0:5002;https://0.0.0.0:5003'
 export DB_HOST=localhost
 export DB_NAME=test-local-new
 export DB_USER=sa

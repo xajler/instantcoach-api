@@ -164,23 +164,29 @@ namespace Core.Models
         [Description(DescriptionDesc)]
         public string Description { get; set; }
         [Required, MaxLength(64)]
+        [DisplayName("Ticket Id")]
         [Description(TicketIdDesc)]
         public string TicketId { get; set; }
         [Required, Range(1, int.MaxValue)]
+        [DisplayName("Evaluator Id")]
         [Description(EvaluatorIdDesc)]
         public int EvaluatorId { get; set; }
         [Required, Range(1, int.MaxValue)]
+        [DisplayName("Agent Id")]
         [Description(AgentIdDesc)]
         public int AgentId { get; set; }
         [Required, MaxLength(128)]
+        [DisplayName("Evaluator Name")]
         [Description(EvaluatorNameDesc)]
         public string EvaluatorName { get; set; }
         [Required, MaxLength(128)]
+        [DisplayName("Agent Name")]
         [Description(AgentNameDesc)]
         public string AgentName { get; set; }
         [Required]
         [Description(CommentsDesc)]
         public List<CommentClient> Comments { get; set; }
+        [DisplayName("Bookmark Pins")]
         [Description(BookmarkPinsDesc)]
         public List<BookmarkPinClient> BookmarkPins { get; set; }
     }
@@ -190,11 +196,13 @@ namespace Core.Models
     public class InstantCoachUpdateClient
     {
         [Required]
+        [DisplayName("Update Type")]
         [Description(UpdateTypeDesc)]
         public UpdateType UpdateType { get; set; }
         [Required]
         [Description(CommentsDesc)]
         public List<CommentClient> Comments { get; set; }
+        [DisplayName("Bookmark Pins")]
         [Description(BookmarkPinsDesc)]
         public List<BookmarkPinClient> BookmarkPins { get; set; }
     }
@@ -204,17 +212,21 @@ namespace Core.Models
     public class CommentClient
     {
         [Required]
+        [DisplayName("Comment Type")]
         [Description(CommentTypeDesc)]
         public CommentType CommentType { get; set; }
         [MaxLength(1000)]
         [Description(TextDesc)]
         public string Text { get; set; }
         [Required]
+        [DisplayName("Author Type")]
         [Description(AuthorTypeDesc)]
         public EvaluationCommentAuthor AuthorType { get; set; }
         [Required]
+        [DisplayName("Created At")]
         [Description(CreatedAtDesc)]
         public DateTime CreatedAt { get; set; }
+        [DisplayName("Bookmark Pin Id")]
         [Description(BookmarkPinIdDesc)]
         public int? BookmarkPinId { get; set; }
     }
