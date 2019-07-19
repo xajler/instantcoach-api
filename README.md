@@ -59,11 +59,12 @@ Created using:
 ## TODO
 
 * Unit Testing - Mock Services, problem Repository is not interface?
-* Redis cache Docker
+* Redis cache Docker or Nginx
 * Health checks
-* CD (not sure where)
+* Apiary
+* Storyteller tests (?)
 * GraphQL (? maybe separate project)
-* CI/CD Bitbucket pipelines (?)
+* CD Azure (? only one I have access to deploy)
 * Message Queue (? maybe separate project)
 * CQRS (? maybe separate project)
 
@@ -96,7 +97,7 @@ For local run without docker for app, but for `mssql` (make sure docker service 
 
     cd <src-root>
     docker start sql1
-    # Set env vars for local dev (or add to bashrc, zsrhc, etc, then this is not necessary)
+    # Set env variables for local dev (or add to bashrc, zshrc, etc, then this is not necessary)
     source ./env-var.sh
     cd api
     dotnet build
@@ -118,7 +119,7 @@ To properly run, click in each action at right end lock, and add this token:
 > Note:
 >
 > I will try to change this token when is expired, currently set to be valid for a week.
-> If not either comment in Api.BaseController Autorize attribute, or create you own [auth0 account](https://auth0.com) create API and change Env var `JWT_AUTHORITY` in env-var.sh.
+> If not either comment in Api.BaseController Authorize attribute, or create you own [auth0 account](https://auth0.com) create API and change Env var `JWT_AUTHORITY` in env-var.sh.
 
 
 ### Postman

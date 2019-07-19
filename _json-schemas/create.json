@@ -1,0 +1,203 @@
+{
+    "title": "Create InstantCoach",
+    "description": "The client model for creating InstantCoach.",
+    "type": "object",
+    "properties": {
+        "description": {
+            "description": "The Description of InstantCoach. Required. Max length is 1000 characters.",
+            "type": "string",
+            "maxLength": 1000
+        },
+        "ticketId": {
+            "title": "Ticket Id",
+            "description": "The Id of Ticket for InstantCoach. Required. Should be representation of id int, long, GUID. Max length is 64 characters.",
+            "type": "string",
+            "maxLength": 64
+        },
+        "evaluatorId": {
+            "title": "Evaluator Id",
+            "description": "The Evaluator Id of InstantCoach. Required. Should be valid integer and greater than 1.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+        },
+        "agentId": {
+            "title": "Agent Id",
+            "description": "The Agent Id of InstantCoach. Required. Should be valid integer and greater than 1.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+        },
+        "evaluatorName": {
+            "title": "Evaluator Name",
+            "description": "The Evaluator name at time of creating InstantCoach. Required. Max length is 128 characters.",
+            "type": "string",
+            "maxLength": 128
+        },
+        "agentName": {
+            "title": "Agent Name",
+            "description": "The Agent name at time of creating InstantCoach. Required. Max length is 128 characters.",
+            "type": "string",
+            "maxLength": 128
+        },
+        "comments": {
+            "description": "The InstantCoach Comments. Required. Must be at least one comment.",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/CommentClient"
+            }
+        },
+        "bookmarkPins": {
+            "title": "Bookmark Pins",
+            "description": "The Bookmark Pins used in Comments. Only if comment of type bookmark.",
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "$ref": "#/definitions/BookmarkPinClient"
+            }
+        }
+    },
+    "definitions": {
+        "BookmarkPinClient": {
+            "title": "InstantCoach Bookmark Pins",
+            "description": "The client model for InstantCoach bookmark pins.",
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "id": {
+                    "description": "The Id for Bookmark Pin. Used as reference in Comment of type 'Bookmark'. Required. Should be valid integer and greater than 1.",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                },
+                "index": {
+                    "description": "The index of bookmark pin, used to show pins in order. Required. Should be valid integer and greater than 1.",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                },
+                "range": {
+                    "$ref": "#/definitions/RangeClient"
+                },
+                "comment": {
+                    "description": "The comment about Bookmark Pin. Max length is 1000 characters.",
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "maxLength": 1000
+                },
+                "mediaUrl": {
+                    "description": "The Bookmark pin media url.",
+                    "type": "string",
+                    "maxLength": 1000
+                }
+            },
+            "required": [
+                "id",
+                "index",
+                "range",
+                "comment",
+                "mediaUrl"
+            ]
+        },
+        "CommentClient": {
+            "title": "InstantCoach Comments",
+            "description": "The client model for InstantCoach comments.",
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "commentType": {
+                    "title": "Comment Type",
+                    "description": "The type of Comment, can be 'Textual', 'Attachment' and 'Bookmark'. Required.",
+                    "type": "string",
+                    "enum": [
+                        "Textual",
+                        "Bookmark",
+                        "Attachment"
+                    ]
+                },
+                "text": {
+                    "description": "The Comment text, required for 'Textual' and 'Attachment' type. Max length is 1000 characters.",
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "maxLength": 1000
+                },
+                "authorType": {
+                    "title": "Author Type",
+                    "description": "The comment author, can be either 'Evaluator' or 'Agent'. Required.",
+                    "type": "string",
+                    "enum": [
+                        "Evaluator",
+                        "Agent"
+                    ]
+                },
+                "createdAt": {
+                    "title": "Created At",
+                    "description": "The date and time when Comment is created. Used for chronological view of comments. Required.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "bookmarkPinId": {
+                    "title": "Bookmark Pin Id",
+                    "description": "The bookmark pin id for Comment. Null by default, but required when comment type is 'Bookmark'.",
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "commentType",
+                "text",
+                "authorType",
+                "createdAt",
+                "bookmarkPinId"
+            ]
+        },
+        "RangeClient": {
+            "title": "Bookmark Pin Range",
+            "description": "The range of pin with starting and ending point in seconds. Required.",
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "start": {
+                    "description": "Pin starting point in seconds. Required. Must be greater than 1.",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                },
+                "end": {
+                    "description": "Pin ending point in seconds. Required. Must be greater than 1 and greater than starting point.",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                }
+            },
+            "required": [
+                "start",
+                "end"
+            ]
+        }
+    },
+    "required": [
+        "description",
+        "ticketId",
+        "evaluatorId",
+        "agentId",
+        "evaluatorName",
+        "agentName",
+        "comments",
+        "bookmarkPins"
+    ]
+}

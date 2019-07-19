@@ -78,7 +78,7 @@ namespace Api
             });
         }
 
-        public static void AddDbcontextService(this IServiceCollection services,
+        public static void AddDbContextService(this IServiceCollection services,
             string connectionString)
         {
             Console.WriteLine($"conn string: {connectionString}");

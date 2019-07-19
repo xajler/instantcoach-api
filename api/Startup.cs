@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Exceptionless;
 using Core.Context;
 using Core;
 using Core.Repositories;
@@ -39,6 +38,7 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddWebApiService();
+            services.AddHttpContextAccessor();
             services.AddHeaderApiVersioning();
             services.AddVersionedApiExplorer();
             services.AddConfigOptionsService(Configuration);
@@ -47,13 +47,13 @@ namespace Api
             if (Env.EnvironmentName == SUTEnv)
             {
                 WriteLine("Setting SUT services...");
-                services.AddDbcontextService(config.GetSUTConnectionString());
+                services.AddDbContextService(config.GetSUTConnectionString());
                 services.AddFakeSUTJwtAuthenticationService();
             }
             else
             {
 
-                services.AddDbcontextService(config.GetConnectionString());
+                services.AddDbContextService(config.GetConnectionString());
                 services.AddJwtAuthenticationService(config);
             }
 
@@ -62,7 +62,6 @@ namespace Api
             services.AddScoped<InstantCoachRepository>();
             services.AddScoped<IInstantCoachService, InstantCoachService>();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-
         }
 
         public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, ILoggerFactory loggerFactory)
@@ -74,11 +73,6 @@ namespace Api
             // More info: https://github.com/microsoft/aspnet-api-versioning/tree/master/samples/aspnetcore/SwaggerSample
             app.UseSwaggerUIWAsHomeRoute(provider);
             app.UseAuthentication();
-            // app.UseExceptionless(Configuration);
-            // ExceptionlessClient.Default.Configuration.ApiKey = "hnV4YzzhJIVNCr6tSDRv6iF6OCOYdRfBemRKf3cA";
-            // ExceptionlessClient.Default.Configuration.Enabled = true;
-            // ExceptionlessClient.Default.Configuration.ServerUrl = "http://ex-api.localtest.me:5000";
-            // loggerFactory.AddExceptionless();
             app.UseMvc();
         }
 

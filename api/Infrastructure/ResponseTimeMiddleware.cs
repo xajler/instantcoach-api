@@ -38,7 +38,7 @@ namespace Api
                 {
                     watch.Stop();
                     var responseTime = watch.ElapsedMilliseconds;
-                    context.Response.Headers[ResonseTimeHeader] = $"{responseTime}ms";
+                    context.Response.Headers[ResponseTimeHeader] = $"{responseTime}ms";
                     _logger.LogInformation("Response time: {ResponseTime}ms", responseTime);
                     _logger.LogInformation("\n\n----- END {HttpMethod} {HttpPath} ---------------\n\n",
                         method, path);
