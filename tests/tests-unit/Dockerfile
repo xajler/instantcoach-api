@@ -7,7 +7,6 @@ ARG REPO_COMMIT_AUTHOR
 ARG REPO_COMMIT_AUTHOR_EMAIL
 ARG REPO_COMMIT_MESSAGE
 
-WORKDIR /app
 COPY api/. ./api/
 COPY core/. ./core/
 COPY domain/. ./domain/

@@ -1,6 +1,5 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS test
 
-WORKDIR /app
 COPY api/. ./api/
 COPY core/. ./core/
 COPY domain/. ./domain/
