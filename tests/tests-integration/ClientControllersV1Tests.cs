@@ -17,6 +17,7 @@ using Api;
 using static System.Console;
 using static Domain.Comment;
 using static Tests.Integration.TestHelpers;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tests.Integration
 {
@@ -212,6 +213,8 @@ namespace Tests.Integration
 
 
             Action result = () => response.EnsureSuccessStatusCode();
+            // WriteLine($"response: {await response.Content.ReadAsStringAsync()}");
+            // WriteLine($"response status code: {response.StatusCode}");
             result.Should().NotThrow();
 
             response.Dispose();
@@ -311,8 +314,9 @@ namespace Tests.Integration
             _items.Add(EntityToModelList(item2));
             _items.Add(EntityToModelList(item3));
             _items.Add(EntityToModelList(item4));
-            WriteLine($"Db IC count: {_context.InstantCoaches.Count()}");
-            WriteLine($"Db IC count2: {_context.Set<InstantCoach>().Count()}");
+            // WriteLine($"Db IC count: {_context.InstantCoaches.Count()}");
+            // WriteLine($"Db IC count2: {_context.Set<InstantCoach>().Count()}");
+            WriteLine($"Inserted Ids: {item1.Id}, {item2.Id}, {item3.Id}, {item4.Id}");
         }
 
         private List<Comment> GetComments()

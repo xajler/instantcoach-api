@@ -243,7 +243,7 @@ namespace Core.Models
         public int Index { get; set; }
         [Description(BPRangeDesc)]
         public RangeClient Range { get; set; }
-        [Required, MaxLength(1000)]
+        [MaxLength(1000)]
         [Description(BPCommentDesc)]
         public string Comment { get; set; }
         [Required, MaxLength(1000)]

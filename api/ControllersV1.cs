@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -82,7 +83,14 @@ namespace Api.Controllers.Version1
         {
             _logger.LogInformation("POST params:\ndata:\n{HttpBody}", ToLogJson(data));
             // TODO: Send errors, can only happen when any Enum is not set, and sent 0.
-            if (!ModelState.IsValid) { return new BadRequestResult(); }
+            if (!ModelState.IsValid)
+            {
+                string errors = string.Join("; ", ModelState.Values
+                                      .SelectMany(x => x.Errors)
+                                      .Select(x => x.ErrorMessage));
+                _logger.LogError("Validaton errors: {ValidationErrors}", errors);
+                return new BadRequestResult();
+            }
             var result = await _service.Create(data);
             int id = result.Value == null ? 0 : result.Value.Id;
             return CreateResult(result, successStatusCode: Status201Created, id: id);
@@ -98,7 +106,15 @@ namespace Api.Controllers.Version1
         {
             _logger.LogInformation("PUT params:\nid: {Id}\ndata:\n{HttpBody}", id, ToLogJson(data));
             // TODO: Send errors, can only happen when any Enum is not set, and sent 0.
-            if (!ModelState.IsValid) { return new BadRequestResult(); }
+            // TODO: Send errors, can only happen when any Enum is not set, and sent 0.
+            if (!ModelState.IsValid)
+            {
+                string errors = string.Join("; ", ModelState.Values
+                                      .SelectMany(x => x.Errors)
+                                      .Select(x => x.ErrorMessage));
+                _logger.LogError("Validaton errors: {ValidationErrors}", errors);
+                return new BadRequestResult();
+            }
             var result = await _service.Update(id, data);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }
