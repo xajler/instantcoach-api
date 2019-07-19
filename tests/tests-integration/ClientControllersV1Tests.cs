@@ -17,7 +17,7 @@ using Api;
 using static System.Console;
 using static Domain.Comment;
 using static Tests.Integration.TestHelpers;
-using System.ComponentModel.DataAnnotations;
+using static Core.Constants;
 
 namespace Tests.Integration
 {
@@ -344,7 +344,7 @@ namespace Tests.Integration
 
         private void SetFakeBearerToken()
         {
-            _bearer.name = "SUT";
+            _bearer.name = SUTEnv;
             _client.SetFakeBearerToken(UserName, Roles, (object)_bearer);
         }
 

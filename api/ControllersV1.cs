@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Schema;
-using Exceptionless;
 using Core.Models;
 using Core.Services;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -35,7 +34,7 @@ namespace Api.Controllers.Version1
         /// </param>
         /// <param name="showCompleted">
         /// When false shows all except 'Completed, when true, shows all.
-        /// Shold be renamed to 'showAll', because by default (false) it shows all InstantCoachStatuses except 'Completed'.
+        /// Should be renamed to 'showAll', because by default (false) it shows all InstantCoachStatuses except 'Completed'.
         /// </param>
         [HttpGet]
         [ProducesResponseType(typeof(ListResult<InstantCoachList>), Status200OK)]
@@ -57,9 +56,7 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> GetAsync(int id)
         {
-            // throw new System.ArgumentException($"Id sholud be greater than zero but it is: {id}");
             _logger.LogInformation("GET by Id params:\nid: {Id}", id);
-            //ExceptionlessClient.Default.CreateLog(typeof(ApiV1Controller).FullName, $"GET by Id params: id: {id}", "Info").AddTags("Controller").Submit();
             var result = await _service.GetById(id);
             return CreateResult(result, successStatusCode: Status200OK, id);
         }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Api;
 using Core.Context;
 using static Tests.Integration.TestHelpers;
+using static Core.Constants;
 
 namespace Tests.Integration
 {
@@ -13,7 +14,7 @@ namespace Tests.Integration
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.UseEnvironment("SUT");
+            builder.UseEnvironment(SUTEnv);
             builder.ConfigureServices(services =>
             {
                 var serviceProvider = new ServiceCollection()
@@ -21,7 +22,7 @@ namespace Tests.Integration
                         .BuildServiceProvider();
 
                 var config = CreateConfigForTest();
-                services.AddDbcontextService(config.GetSUTConnectionString());
+                services.AddDbContextService(config.GetSUTConnectionString());
 
                 var sp = services.BuildServiceProvider();
 

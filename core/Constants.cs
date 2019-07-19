@@ -4,7 +4,7 @@ namespace Core
     {
         public static string SUTEnv = "SUT";
         public static string VersionHeader = "X-Api-Version";
-        public const string ResonseTimeHeader = "X-Response-Time";
+        public const string ResponseTimeHeader = "X-Response-Time";
         public const string PossibleBugText = "****POSSIBLE BUG******.";
 
         public static class Controller
@@ -44,11 +44,11 @@ FROM InstantCoaches WHERE Id = @Id";
             public const string RangeDesc = "The client model for bookmark pin ranging start and end of pin in seconds.";
 
             public const string DescriptionDesc = "The Description of InstantCoach. Required. Max length is 1000 characters.";
-            public const string TicketIdDesc = "The Id of Tickect for InstantCoach. Required. Should be representation of id int, long, GUID. Max length is 64 characters.";
+            public const string TicketIdDesc = "The Id of Ticket for InstantCoach. Required. Should be representation of id int, long, GUID. Max length is 64 characters.";
             public const string EvaluatorIdDesc = "The Evaluator Id of InstantCoach. Required. Should be valid integer and greater than 1.";
             public const string AgentIdDesc = "The Agent Id of InstantCoach. Required. Should be valid integer and greater than 1.";
-            public const string EvaluatorNameDesc = "The Evaluator name at time of creting InstantCoach. Required. Max length is 128 characters.";
-            public const string AgentNameDesc = "The Agent name at time of creting InstantCoach. Required. Max length is 128 characters.";
+            public const string EvaluatorNameDesc = "The Evaluator name at time of creating InstantCoach. Required. Max length is 128 characters.";
+            public const string AgentNameDesc = "The Agent name at time of creating InstantCoach. Required. Max length is 128 characters.";
             public const string CommentsDesc = "The InstantCoach Comments. Required. Must be at least one comment.";
             public const string BookmarkPinsDesc = "The Bookmark Pins used in Comments. Only if comment of type bookmark.";
 
