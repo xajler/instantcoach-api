@@ -44,7 +44,9 @@ namespace Api.Controllers.Version1
             _logger.LogInformation(
                 "GET List params:\nskip: {Skip}\ntake: {Take}\nshowCompleted: {ShowCompleted}",
                 skip, take, showCompleted);
-            var result = await _service.GetList(skip, take, showCompleted);
+            if (skip < 0) { return BadRequest("The 'skip' value must be greater or equal 0."); }
+            if (take <= 0) { return BadRequest("The 'take' value must be greater than 0."); }
+             var result = await _service.GetList(skip, take, showCompleted);
             return CreateResult(
                 Result<ListResult<InstantCoachList>>.AsSuccess(result),
                 successStatusCode: Status200OK);

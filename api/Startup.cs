@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Elastic.Apm.All;
 using Core.Context;
 using Core;
 using Core.Repositories;
@@ -64,7 +65,7 @@ namespace Api
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
         }
 
-        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
         {
             RunDbMigrationsAndSeedDataIfNeeded(app);
             app.UseMiddleware<ExceptionMiddleware>();
@@ -72,6 +73,7 @@ namespace Api
             app.UseSwagger();
             // More info: https://github.com/microsoft/aspnet-api-versioning/tree/master/samples/aspnetcore/SwaggerSample
             app.UseSwaggerUIWAsHomeRoute(provider);
+            app.UseElasticApm(Configuration);
             app.UseAuthentication();
             app.UseMvc();
         }

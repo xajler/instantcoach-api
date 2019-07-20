@@ -7,15 +7,15 @@
 Using ASP.NET Core API for sample microservices REST API.
 
 
-![Swagger](https://git.430n.com/x430n/instantcoach/raw/branch/master/_assets/swagger.png)
+![Swagger](_assets/swagger.png)
 
 Unit testing with code coverage in VS Code
 
-![unit_testing](https://git.430n.com/x430n/instantcoach/raw/branch/master/_assets/unit_testing_code_coverage.png)
+![unit_testing](_assets/unit_testing_code_coverage.png)
 
 Domain Errors and Endpoint Request Logging
 
-![domain_errors](https://git.430n.com/x430n/instantcoach/raw/branch/master/_assets/domain_errors_logging.png)
+![domain_errors](_assets/domain_errors_logging.png)
 
 
 > Note:
@@ -70,70 +70,25 @@ Created using:
 
 ## Run
 
-### Local Env
+### Local Dev
 
-> Note:
->
-> `docker-run.sh` might fail first time running in new terminal, because it starts docker mssql instance and sometimes it will compile and run quicker than starting mssql docker instance, in that case, run same command again.
+Runs with locally installed _.NET Core SDK_. Uses only _MSSQL_ as a _Docker_ container.
 
-#### First time docker
+Find out more how to run [Local Dev](docs/local-dev-env.md).
 
-    cd <src-root>
-    docker pull microsoft/mssql-server-linux
-    ./docker-run.sh
+### Local Docker Dev
 
-### Quick usage
+Runs all services as _docker_ containers, but with mounted _docker volumes_ to code repository and _https certificate_. Uses
 
-Run _VS Code_ with _Debug (F5)_ or run _Task_ named `run`.
-
-Or in terminal run:
-
-    cd <src-root>
-    ./run-local.sh
-
-#### Usual usage
-
-For local run without docker for app, but for `mssql` (make sure docker service is running) use this commands:
-
-    cd <src-root>
-    docker start sql1
-    # Set env variables for local dev (or add to bashrc, zshrc, etc, then this is not necessary)
-    source ./env-var.sh
-    cd api
-    dotnet build
-    # On run will run migrations if DB not existing or not updated to latest migration
-    dotnet run
-
-### Swagger
-
-Make sure having app running (currently only locally see more in `Usual usage` section).
-
-Navigate to home url, and choose version of API to try:
-
-    http://localhost:5000
-
-To properly run, click in each action at right end lock, and add this token:
-
-    eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EaEVPRFE1TmtJM09VSkJNRGd3TkVJMk1qTTRPREE1TVRWRk0wTXpNekEzUkRVM1JrVkNSZyJ9.eyJpc3MiOiJodHRwczovL2Rldi1hamozOHJtOS5hdXRoMC5jb20vIiwic3ViIjoiNEJXaU4zNlNXR1RMOWR4a295MkRwQkpDVG1LT2ZPcUFAY2xpZW50cyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCIsImlhdCI6MTU2MjUwNDg2MSwiZXhwIjoxNTYzMTA5NjYxLCJhenAiOiI0QldpTjM2U1dHVEw5ZHhrb3kyRHBCSkNUbUtPZk9xQSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.AAXbTINarIDCqQU0lrkfCm5LogyZ95rQrW-2S8vdgXf52qXSXZnSfs5ECXPQksED_Pf5bM1zdstf2on6x-55fB8kbOIVEOSJ6hpOrEn5crwjNVb4PlE8k1Il08UX5SIqWWJHG_Q-aIqEyeJrxb8QmujcoRP5PeLnt-l4Pd_CSY5xN9eCxIwf_7w_xr4IGgdBE-Hi74X-9loACBArVVZ-GN6krfgOLPC0VePnoZQ0YxTr3NHR28IF2CPzOfVUByqX0L8W_fcdE0x_FqB4FTOanwBXK3Lu98Y37DXifpb8TzEUZm9lmkN1DF8Ryz6xmD1s0PP76NgVe_ZCNU_LGjCOww
-
-> Note:
->
-> I will try to change this token when is expired, currently set to be valid for a week.
-> If not either comment in Api.BaseController Authorize attribute, or create you own [auth0 account](https://auth0.com) create API and change Env var `JWT_AUTHORITY` in env-var.sh.
+Find out more how to run [Local Docker Dev](docs/local-docker-dev-env.md).
 
 
-### Postman
+### Docker Testing/Production
 
-Run all API calls through Postman.
+Similar to [Local Docker Dev](docs/local-docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes.
 
-Import postman collection `InstantCoach API.postman_collection.json` from `_postman` folder.
+TODO
 
->Note:
->
->JWT Authentication is applied, but if there is problem, pleas read note in previous Swagger section.
+## APM Server
 
-## JWT Authentication
-
-Reason why is not used Username/Password in this implementation of JWT Authentication is because Frontend should not have direct access to REST API. It should have access to MVC Web App that would have User Identity through JWT token. Through that web app as Proxy Frontend would call REST API, sending User Identity JWT Token.
-
-If in future MVC Web App would be created, proper JWT Authentication would be implemented and already created JWT token would be pass to REST API and created User Identity as Middleware.
+[Local Docker Dev](docs/local-docker-dev-env.md) and Testing can use _Elasticsearch APM Server_ for monitoring errors and requests.

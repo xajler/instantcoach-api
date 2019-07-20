@@ -7,9 +7,7 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "5433:1433"
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.2
+
   api:
     #image: x430n/ic-api:latest
     build: .
@@ -21,7 +19,10 @@ services:
       - DB_USER=sa
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
-      - JWT_AUDIENCE=http://10.5.0.3
+      - JWT_AUDIENCE=https://ic.x430n.com
+      - ELASTIC_APM_SERVER_URLS=http://apm:8200
+      - ELASTIC_APM_SERVICE_NAME=InstantCoach API
+      - ELASTIC_APM_METRICS_INTERVAL="30s"
     ports:
         - "5000:5000"
     depends_on:
@@ -33,7 +34,7 @@ services:
   proxy:
     #image: x430n/ic-nginx:latest
     build:
-      context:  ./nginx
+      context:  ./_nginx
       dockerfile: Dockerfile
     ports:
       - "80:80"
@@ -42,13 +43,43 @@ services:
       - api
     depends_on:
       - api
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.3
 
-networks:
-  vpcbr:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 10.5.0.0/16
+  # APM stack
+  elasticsearch:
+    build:
+      context: ./_apm/elasticsearch
+      dockerfile: Dockerfile
+    environment:
+      - cluster.name=apm-ic
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+
+  kibana:
+    image: kibana:6.8.1
+    environment:
+      - "LOGGING_QUIET=true"
+    links:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
+  apm:
+    build:
+      context: ./_apm/apm-server
+      dockerfile: Dockerfile
+      args:
+        - APM_ENV=Test
+    ports:
+      - 8200:8200
+    links:
+      - elasticsearch
+      - kibana
+    depends_on:
+      - elasticsearch
+      - kibana

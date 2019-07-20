@@ -29,11 +29,55 @@ services:
       - DB_USER=sa
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
-      - JWT_AUDIENCE=http://localhost:5000
+      - JWT_AUDIENCE=https://ic.x430n.com
       - ASPNETCORE_Kestrel__Certificates__Default__Password=bm8kpv@=n2y4Nz@#
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/instant-coach-api.pfx
+      - ELASTIC_APM_SERVER_URLS=http://apm.dev:8200
+      - ELASTIC_APM_SERVICE_NAME=InstantCoach API dev
+      - ELASTIC_APM_METRICS_INTERVAL="1s"
     ports:
         - "5000:5000"
         - "5001:5001"
     depends_on:
       - db.dev
+
+  # APM stack
+  elasticsearch.dev:
+    build:
+      context: ./_apm/elasticsearch
+      dockerfile: Dockerfile
+    environment:
+      - cluster.name=apm-ic
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+
+  kibana.dev:
+    image: kibana:6.8.1
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch.dev:9200
+      - LOGGING_QUIET=true
+    links:
+      - elasticsearch.dev
+    ports:
+      - 5601:5601
+
+  apm.dev:
+    build:
+      context: ./_apm/apm-server
+      dockerfile: Dockerfile
+      args:
+        - APM_ENV=Local
+    ports:
+      - 8200:8200
+    links:
+      - elasticsearch.dev
+      - kibana.dev
+    depends_on:
+      - elasticsearch.dev
+      - kibana.dev

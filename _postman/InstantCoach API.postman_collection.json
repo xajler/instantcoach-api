@@ -8,16 +8,6 @@
 		{
 			"name": "List",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EaEVPRFE1TmtJM09VSkJNRGd3TkVJMk1qTTRPREE1TVRWRk0wTXpNekEzUkRVM1JrVkNSZyJ9.eyJpc3MiOiJodHRwczovL2Rldi1hamozOHJtOS5hdXRoMC5jb20vIiwic3ViIjoiNEJXaU4zNlNXR1RMOWR4a295MkRwQkpDVG1LT2ZPcUFAY2xpZW50cyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCIsImlhdCI6MTU2MjMyMzU5NiwiZXhwIjoxNTYyNDA5OTk2LCJhenAiOiI0QldpTjM2U1dHVEw5ZHhrb3kyRHBCSkNUbUtPZk9xQSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.WqTLbjVEVGN-WW3dKTcUYdN_AUDHdOKtjZtFqt1WKt22yEm1_GfZNWItlVfUf6ScTklp0AsVozfUmFcfRtiGcz9KH46NfgjwX6G7Fa2hDZfThAya4BYJFz8gtAJoPgZiSThY-ZjUbvfVXSPH8Db87zBde1y0gtxK7bBqX_rX9_dvQZYgSgu9WYC2GZ4gRVyuNcjpEgzlWvYeCt9cfoQ0HHlEo_N0yDfOTanFvuQPG48mmBY7UGiP7N6uZumKnKD0qmCUFoSzkBwnfB5-MOGH4YvdRqme07zv1tGw7kkFoN2XjsFbuW7UFxdbiRhKTmVdi2EfrdgMt5s2AzhLkhPMbA",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
 				"header": [
 					{
@@ -65,16 +55,6 @@
 		{
 			"name": "By Id",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EaEVPRFE1TmtJM09VSkJNRGd3TkVJMk1qTTRPREE1TVRWRk0wTXpNekEzUkRVM1JrVkNSZyJ9.eyJpc3MiOiJodHRwczovL2Rldi1hamozOHJtOS5hdXRoMC5jb20vIiwic3ViIjoiNEJXaU4zNlNXR1RMOWR4a295MkRwQkpDVG1LT2ZPcUFAY2xpZW50cyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCIsImlhdCI6MTU2MjMyMzU5NiwiZXhwIjoxNTYyNDA5OTk2LCJhenAiOiI0QldpTjM2U1dHVEw5ZHhrb3kyRHBCSkNUbUtPZk9xQSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.WqTLbjVEVGN-WW3dKTcUYdN_AUDHdOKtjZtFqt1WKt22yEm1_GfZNWItlVfUf6ScTklp0AsVozfUmFcfRtiGcz9KH46NfgjwX6G7Fa2hDZfThAya4BYJFz8gtAJoPgZiSThY-ZjUbvfVXSPH8Db87zBde1y0gtxK7bBqX_rX9_dvQZYgSgu9WYC2GZ4gRVyuNcjpEgzlWvYeCt9cfoQ0HHlEo_N0yDfOTanFvuQPG48mmBY7UGiP7N6uZumKnKD0qmCUFoSzkBwnfB5-MOGH4YvdRqme07zv1tGw7kkFoN2XjsFbuW7UFxdbiRhKTmVdi2EfrdgMt5s2AzhLkhPMbA",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
 				"header": [
 					{
@@ -108,16 +88,6 @@
 		{
 			"name": "Create",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EaEVPRFE1TmtJM09VSkJNRGd3TkVJMk1qTTRPREE1TVRWRk0wTXpNekEzUkRVM1JrVkNSZyJ9.eyJpc3MiOiJodHRwczovL2Rldi1hamozOHJtOS5hdXRoMC5jb20vIiwic3ViIjoiNEJXaU4zNlNXR1RMOWR4a295MkRwQkpDVG1LT2ZPcUFAY2xpZW50cyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCIsImlhdCI6MTU2MjMyMzU5NiwiZXhwIjoxNTYyNDA5OTk2LCJhenAiOiI0QldpTjM2U1dHVEw5ZHhrb3kyRHBCSkNUbUtPZk9xQSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.WqTLbjVEVGN-WW3dKTcUYdN_AUDHdOKtjZtFqt1WKt22yEm1_GfZNWItlVfUf6ScTklp0AsVozfUmFcfRtiGcz9KH46NfgjwX6G7Fa2hDZfThAya4BYJFz8gtAJoPgZiSThY-ZjUbvfVXSPH8Db87zBde1y0gtxK7bBqX_rX9_dvQZYgSgu9WYC2GZ4gRVyuNcjpEgzlWvYeCt9cfoQ0HHlEo_N0yDfOTanFvuQPG48mmBY7UGiP7N6uZumKnKD0qmCUFoSzkBwnfB5-MOGH4YvdRqme07zv1tGw7kkFoN2XjsFbuW7UFxdbiRhKTmVdi2EfrdgMt5s2AzhLkhPMbA",
-							"type": "string"
-						}
-					]
-				},
 				"method": "POST",
 				"header": [
 					{
@@ -134,7 +104,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"description\": \"string\",\n  \"ticketId\": \"string\",\n  \"evaluatorId\": 0,\n  \"agentId\": 0,\n  \"evaluatorName\": \"string\",\n  \"agentName\": \"string\",\n  \"comments\": [\n    {\n      \"commentType\": \"Text\",\n      \"text\": \"string\",\n      \"authorType\": \"Evaluator\",\n      \"createdAt\": \"2019-07-03T21:55:54.001Z\",\n      \"pinId\": 0\n    }\n  ],\n  \"bookmarkPins\": [\n    {\n      \"id\": 0,\n      \"index\": 0,\n      \"range\": 0,\n      \"comment\": \"string\",\n      \"mediaUrl\": \"string\"\n    }\n  ]\n}\n\n"
+					"raw": "{\n  \"description\": \"string\",\n  \"ticketId\": \"string\",\n  \"evaluatorId\": 1,\n  \"agentId\": 1,\n  \"evaluatorName\": \"string\",\n  \"agentName\": \"string\",\n  \"comments\": [\n    {\n      \"commentType\": \"Bookmark\",\n      \"text\": \"string\",\n      \"authorType\": \"Evaluator\",\n      \"createdAt\": \"2019-07-03T21:55:54.001Z\",\n      \"bookmarkPinId\": 1\n    }\n  ],\n  \"bookmarkPins\": [\n    {\n      \"id\": 1,\n      \"index\": 1,\n      \"range\": {\n        \"start\": 1,\n        \"end\": 2\n      },\n      \"comment\": \"string\",\n      \"mediaUrl\": \"string\"\n    }\n  ]\n}\n\n"
 				},
 				"url": {
 					"raw": "http://localhost:5000/api/instantcoaches",
@@ -154,16 +124,6 @@
 		{
 			"name": "Update by Id",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EaEVPRFE1TmtJM09VSkJNRGd3TkVJMk1qTTRPREE1TVRWRk0wTXpNekEzUkRVM1JrVkNSZyJ9.eyJpc3MiOiJodHRwczovL2Rldi1hamozOHJtOS5hdXRoMC5jb20vIiwic3ViIjoiNEJXaU4zNlNXR1RMOWR4a295MkRwQkpDVG1LT2ZPcUFAY2xpZW50cyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCIsImlhdCI6MTU2MjMyMzU5NiwiZXhwIjoxNTYyNDA5OTk2LCJhenAiOiI0QldpTjM2U1dHVEw5ZHhrb3kyRHBCSkNUbUtPZk9xQSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.WqTLbjVEVGN-WW3dKTcUYdN_AUDHdOKtjZtFqt1WKt22yEm1_GfZNWItlVfUf6ScTklp0AsVozfUmFcfRtiGcz9KH46NfgjwX6G7Fa2hDZfThAya4BYJFz8gtAJoPgZiSThY-ZjUbvfVXSPH8Db87zBde1y0gtxK7bBqX_rX9_dvQZYgSgu9WYC2GZ4gRVyuNcjpEgzlWvYeCt9cfoQ0HHlEo_N0yDfOTanFvuQPG48mmBY7UGiP7N6uZumKnKD0qmCUFoSzkBwnfB5-MOGH4YvdRqme07zv1tGw7kkFoN2XjsFbuW7UFxdbiRhKTmVdi2EfrdgMt5s2AzhLkhPMbA",
-							"type": "string"
-						}
-					]
-				},
 				"method": "PUT",
 				"header": [
 					{
@@ -180,7 +140,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"updateType\": \"Save\",\n  \"comments\": [\n    {\n      \"commentType\": \"Text\",\n      \"text\": \"string\",\n      \"authorType\": \"Evaluator\",\n      \"createdAt\": \"2019-07-03T21:56:52.948Z\",\n      \"pinId\": 0\n    }\n  ],\n  \"bookmarkPins\": [\n    {\n      \"id\": 0,\n      \"index\": 0,\n      \"range\": 0,\n      \"comment\": \"string\",\n      \"mediaUrl\": \"string\"\n    }\n  ]\n}"
+					"raw": "{\n  \"updateType\": \"Save\",\n  \"comments\": [\n    {\n      \"commentType\": \"Bookmark\",\n      \"text\": \"string\",\n      \"authorType\": \"Evaluator\",\n      \"createdAt\": \"2019-07-03T21:55:54.001Z\",\n      \"bookmarkPinId\": 1\n    }\n  ],\n  \"bookmarkPins\": [\n    {\n      \"id\": 1,\n      \"index\": 1,\n      \"range\": {\n        \"start\": 1,\n        \"end\": 2\n      },\n      \"comment\": \"string\",\n      \"mediaUrl\": \"string\"\n    }\n  ]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:5000/api/instantcoaches/1",
@@ -201,16 +161,6 @@
 		{
 			"name": "Completed by Id",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EaEVPRFE1TmtJM09VSkJNRGd3TkVJMk1qTTRPREE1TVRWRk0wTXpNekEzUkRVM1JrVkNSZyJ9.eyJpc3MiOiJodHRwczovL2Rldi1hamozOHJtOS5hdXRoMC5jb20vIiwic3ViIjoiNEJXaU4zNlNXR1RMOWR4a295MkRwQkpDVG1LT2ZPcUFAY2xpZW50cyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCIsImlhdCI6MTU2MjMyMzU5NiwiZXhwIjoxNTYyNDA5OTk2LCJhenAiOiI0QldpTjM2U1dHVEw5ZHhrb3kyRHBCSkNUbUtPZk9xQSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.WqTLbjVEVGN-WW3dKTcUYdN_AUDHdOKtjZtFqt1WKt22yEm1_GfZNWItlVfUf6ScTklp0AsVozfUmFcfRtiGcz9KH46NfgjwX6G7Fa2hDZfThAya4BYJFz8gtAJoPgZiSThY-ZjUbvfVXSPH8Db87zBde1y0gtxK7bBqX_rX9_dvQZYgSgu9WYC2GZ4gRVyuNcjpEgzlWvYeCt9cfoQ0HHlEo_N0yDfOTanFvuQPG48mmBY7UGiP7N6uZumKnKD0qmCUFoSzkBwnfB5-MOGH4YvdRqme07zv1tGw7kkFoN2XjsFbuW7UFxdbiRhKTmVdi2EfrdgMt5s2AzhLkhPMbA",
-							"type": "string"
-						}
-					]
-				},
 				"method": "PATCH",
 				"header": [
 					{
@@ -239,17 +189,19 @@
 		},
 		{
 			"name": "Deleted by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "accd4c5d-04fc-45bc-a8c4-84a383458655",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EaEVPRFE1TmtJM09VSkJNRGd3TkVJMk1qTTRPREE1TVRWRk0wTXpNekEzUkRVM1JrVkNSZyJ9.eyJpc3MiOiJodHRwczovL2Rldi1hamozOHJtOS5hdXRoMC5jb20vIiwic3ViIjoiNEJXaU4zNlNXR1RMOWR4a295MkRwQkpDVG1LT2ZPcUFAY2xpZW50cyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCIsImlhdCI6MTU2MjMyMzU5NiwiZXhwIjoxNTYyNDA5OTk2LCJhenAiOiI0QldpTjM2U1dHVEw5ZHhrb3kyRHBCSkNUbUtPZk9xQSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.WqTLbjVEVGN-WW3dKTcUYdN_AUDHdOKtjZtFqt1WKt22yEm1_GfZNWItlVfUf6ScTklp0AsVozfUmFcfRtiGcz9KH46NfgjwX6G7Fa2hDZfThAya4BYJFz8gtAJoPgZiSThY-ZjUbvfVXSPH8Db87zBde1y0gtxK7bBqX_rX9_dvQZYgSgu9WYC2GZ4gRVyuNcjpEgzlWvYeCt9cfoQ0HHlEo_N0yDfOTanFvuQPG48mmBY7UGiP7N6uZumKnKD0qmCUFoSzkBwnfB5-MOGH4YvdRqme07zv1tGw7kkFoN2XjsFbuW7UFxdbiRhKTmVdi2EfrdgMt5s2AzhLkhPMbA",
-							"type": "string"
-						}
-					]
-				},
 				"method": "DELETE",
 				"header": [
 					{
@@ -274,6 +226,108 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Create JSON Schema",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Api-Version",
+						"value": "2",
+						"description": "Not needed for default (latest) version.",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/instantcoaches/schema/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"instantcoaches",
+						"schema",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update JSON Schema",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Api-Version",
+						"value": "2",
+						"description": "Not needed for default (latest) version.",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/instantcoaches/schema/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"instantcoaches",
+						"schema",
+						"update"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EaEVPRFE1TmtJM09VSkJNRGd3TkVJMk1qTTRPREE1TVRWRk0wTXpNekEzUkRVM1JrVkNSZyJ9.eyJpc3MiOiJodHRwczovL2Rldi1hamozOHJtOS5hdXRoMC5jb20vIiwic3ViIjoiRDFkTW9uckFYejlVcEx6Y2RsM3JQSDNKNm1mZGszVkVAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vaWMueDQzMG4uY29tIiwiaWF0IjoxNTYzNTc1NjgzLCJleHAiOjE1NjM2NjIwODMsImF6cCI6IkQxZE1vbnJBWHo5VXBMemNkbDNyUEgzSjZtZmRrM1ZFIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.SLruY4o0janK927f4Rxx7vfGmr0cBzIHzx783ai0R8yIYLW1pLNuAkTGLWOCpZZDZ9eJcE7OZDCE19p3qHMSiXKF1HpVJwlD4KY8Vb8jDJHjr4vxLJnfuMYViRuPC0RlSZ0Pr6fHxFp2J1zLljUUTVBQz-sIQx9YyJgodn4re1ZNb1UU5QHPkeZGlD_63tawDuh0Hody_YCVIN_HrM4TzEHVS6lHJGO1K_IO5lDZBJIO3gFlgOJrgNyvQFWpDxDpeEIpkZqX7SPBSrUSW-OhmlalYOzz7Bx35G39vLmJZBwP5ZcrbKnbXp2Emj2Tc9rsp9AazqHTFuF3M2Yv-elGYA",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "4f31d512-01ad-4e9a-9e5e-dab68734521e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ae1cd4f3-ccf9-4386-87b4-72ea0f867d02",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
