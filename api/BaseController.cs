@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -32,13 +33,21 @@ namespace Api.Controllers
             }
         }
 
+        protected void LogModelValidationErrors()
+        {
+            string errors = string.Join("; ", ModelState.Values
+                                      .SelectMany(x => x.Errors)
+                                      .Select(x => x.ErrorMessage));
+            _logger.LogError("Validaton errors: {ValidationErrors}", errors);
+        }
+
         private ActionResult OnSuccess(int successStatusCode, int id, object data)
         {
             switch (successStatusCode)
             {
                 case Status201Created:
                     var uri = ApiRoute.Replace("{version:apiVersion}", ApiVersion1);
-                    _logger.LogInformation("Status Code: {StatusCode} Creted\nCreated Id:{Id}\nURI: {Uri}",
+                    _logger.LogInformation("Status Code: {StatusCode} Created\nCreated Id:{Id}\nURI: {Uri}",
                     successStatusCode, id, uri);
                     return Created($"{uri}/{id}", new CreatedId(id));
                 case Status204NoContent:

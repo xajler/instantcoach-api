@@ -39,14 +39,14 @@ namespace Api
             }
             catch (Exception ex) when (IsUsualExceptionsFilter(ex))
             {
-                _logger.LogError(
+                _logger.LogError(ex,
                     "{BugText} Exception of Type: {ExceptionType} and Message: {Message}\nStack Trace:\n{StackTrace}",
                     PossibleBugText, ex.GetType().Name, ex.Message, ex.ToInnerMessagesDump());
                 await HandleExceptionAsync(httpContext);
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(
+                _logger.LogCritical(ex,
                     "Unknown exception on server of Type: {ExceptionType} and Message: {Message}\nStack Trace:\n{StackTrace}",
                     ex.GetType().Name, ex.Message, ex.ToInnerMessagesDump());
                 await HandleExceptionAsync(httpContext);
@@ -68,7 +68,7 @@ namespace Api
             }
             else
             {
-                _logger.LogCritical("Failed to Save DB Changes.\nStack Trace:\n{StackTrace}",
+                _logger.LogCritical(ex, "Failed to Save DB Changes.\nStack Trace:\n{StackTrace}",
                     ex.ToInnerMessagesDump());
             }
         }
@@ -78,13 +78,13 @@ namespace Api
             var dbError = SqlServerErrorManager.GetError(ex);
             if (dbError == DatabaseError.Unhandled)
             {
-                _logger.LogCritical(
+                _logger.LogCritical(ex,
                     "Unhandled DB exception. Possible connection error.\nStack Trace:\n{StackTrace}",
                         ex.ToInnerMessagesDump());
             }
             else
             {
-                _logger.LogError(
+                _logger.LogError(ex,
                     "{BugText} Database error: {DbError}.\nStack Trace:\n{StackTrace}",
                     PossibleBugText, dbError, ex.ToInnerMessagesDump());
             }

@@ -55,6 +55,7 @@ Created using:
 * Docker Compose (Development with watch, Test)
 * SSL (development: dotnet dev-certs https, test: nginx self-signed certificate)
 * Github badges for Code Coverage (coveralls.id) and CI (Travis CI) (master branch)
+* Integrated Elasticsearch APM (Application Performance Monitoring)
 
 ## TODO
 
@@ -74,18 +75,18 @@ Created using:
 
 Runs with locally installed _.NET Core SDK_. Uses only _MSSQL_ as a _Docker_ container.
 
-Find out more how to run [Local Dev](docs/local-dev-env.md).
+Find out more how to run [Local Dev](_docs/local-dev-env.md).
 
 ### Local Docker Dev
 
 Runs all services as _docker_ containers, but with mounted _docker volumes_ to code repository and _https certificate_. Uses
 
-Find out more how to run [Local Docker Dev](docs/local-docker-dev-env.md).
+Find out more how to run [Local Docker Dev](_docs/local-docker-dev-env.md).
 
 
 ### Docker Testing/Production
 
-Similar to [Local Docker Dev](docs/local-docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes.
+Similar to [Local Docker Dev](_docs/local-docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes. Everything runs inside of docker containers.
 
 TODO
 

@@ -22,14 +22,14 @@ using static Core.Constants;
 
 namespace Api
 {
-    public static class SatrtupExtensions
+    public static class StartupExtensions
     {
-        public static void UseSwaggerUIWAsHomeRoute(this IApplicationBuilder app,
+        public static void UseSwaggerUIAsHomeRoute(this IApplicationBuilder app,
             IApiVersionDescriptionProvider provider)
         {
             app.UseSwaggerUI(s =>
             {
-                // In descaeding order, first show newer (greater) major versions
+                // In descending order, first show newer (greater) major versions
                 // Add descending order minor version number, if needed!
                 foreach (var description in provider.ApiVersionDescriptions
                                                     .OrderByDescending(x => x.ApiVersion.MajorVersion))
@@ -129,7 +129,7 @@ namespace Api
                     new ApiKeyScheme
                     {
                         In = "header",
-                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                        Description = "Please enter into field the word 'Bearer' following by space then paste JWT token",
                         Name = "Authorization",
                         Type = "apiKey"
                     });

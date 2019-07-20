@@ -1,16 +1,7 @@
 version: '3'
 
-# If only APM needed to be started and hardcoded in api project apm server url
+# If only APM needed to be started and hard-coded in api project apm server url
 services:
-  kibana:
-    image: kibana:6.8.1
-    environment:
-      - "LOGGING_QUIET=true"
-    links:
-      - elasticsearch
-    ports:
-      - 5601:5601
-
   elasticsearch:
     build:
       context: elasticsearch
@@ -26,12 +17,27 @@ services:
     ports:
       - 9200:9200
 
+  kibana:
+    image: kibana:7.2.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - "LOGGING_QUIET=true"
+    links:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
   apm:
     build:
       context: apm-server
       dockerfile: Dockerfile
+      args:
+        - APM_ENV=Dev
     ports:
       - 8200:8200
     links:
+      - elasticsearch
+      - kibana
+    depends:
       - elasticsearch
       - kibana

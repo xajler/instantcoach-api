@@ -1,4 +1,4 @@
-FROM docker.elastic.co/apm/apm-server:6.8.1
+FROM docker.elastic.co/apm/apm-server:7.2.0
 ARG APM_ENV
 ENV APM_ENV=$APM_ENV
 COPY patch-apm-server-config.sh .

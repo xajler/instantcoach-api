@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Elastic.Apm.All;
+using Serilog;
 using Core.Context;
 using Core;
 using Core.Repositories;
@@ -29,7 +30,8 @@ namespace Api
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-            Configuration = configuration;
+            // Configuration = configuration;
+            Log.Logger = Logging.Logger();
             Env = env;
         }
 
@@ -65,14 +67,17 @@ namespace Api
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
         }
 
-        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app,
+            IApiVersionDescriptionProvider provider,
+            ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddSerilog();
             RunDbMigrationsAndSeedDataIfNeeded(app);
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseSwagger();
             // More info: https://github.com/microsoft/aspnet-api-versioning/tree/master/samples/aspnetcore/SwaggerSample
-            app.UseSwaggerUIWAsHomeRoute(provider);
+            app.UseSwaggerUIAsHomeRoute(provider);
             app.UseElasticApm(Configuration);
             app.UseAuthentication();
             app.UseMvc();

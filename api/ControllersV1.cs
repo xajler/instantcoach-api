@@ -80,14 +80,12 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status400BadRequest)]
         public async Task<ActionResult> PostAsync([FromBody] InstantCoachCreateClient data)
         {
-            _logger.LogInformation("POST params:\ndata:\n{HttpBody}", ToLogJson(data));
+            //_logger.LogInformation("POST params:\ndata:\n{HttpBody}", ToLogJson(data));
+            _logger.LogInformation("POST params:\ndata:\n{@HttpBody}", data);
             // TODO: Send errors, can only happen when any Enum is not set, and sent 0.
             if (!ModelState.IsValid)
             {
-                string errors = string.Join("; ", ModelState.Values
-                                      .SelectMany(x => x.Errors)
-                                      .Select(x => x.ErrorMessage));
-                _logger.LogError("Validaton errors: {ValidationErrors}", errors);
+                LogModelValidationErrors();
                 return new BadRequestResult();
             }
             var result = await _service.Create(data);
@@ -103,15 +101,10 @@ namespace Api.Controllers.Version1
         public async Task<ActionResult> PutAsync(int id,
             [FromBody] InstantCoachUpdateClient data)
         {
-            _logger.LogInformation("PUT params:\nid: {Id}\ndata:\n{HttpBody}", id, ToLogJson(data));
-            // TODO: Send errors, can only happen when any Enum is not set, and sent 0.
-            // TODO: Send errors, can only happen when any Enum is not set, and sent 0.
+            _logger.LogInformation("PUT params:\nid: {Id}\ndata:\n{@HttpBody}", id, data);
             if (!ModelState.IsValid)
             {
-                string errors = string.Join("; ", ModelState.Values
-                                      .SelectMany(x => x.Errors)
-                                      .Select(x => x.ErrorMessage));
-                _logger.LogError("Validaton errors: {ValidationErrors}", errors);
+                LogModelValidationErrors();
                 return new BadRequestResult();
             }
             var result = await _service.Update(id, data);
