@@ -7,15 +7,15 @@
 Using ASP.NET Core API for sample microservices REST API.
 
 
-![Swagger](_assets/swagger.png)
+![Swagger](_assets/swagger.jpg)
 
 Unit testing with code coverage in VS Code
 
-![unit_testing](_assets/unit_testing_code_coverage.png)
+![unit_testing](_assets/unit_testing_code_coverage.jpg)
 
 Domain Errors and Endpoint Request Logging
 
-![domain_errors](_assets/domain_errors_logging.png)
+![domain_errors](_assets/domain_errors_logging.jpg)
 
 
 > Note:
@@ -46,7 +46,7 @@ Created using:
 * [x] JWT Auth
 * [x] Error Handling (Known Errors as `Result` and `Result<T>`, Global Exception through Middleware)
 * [x] Logging (`Serilog` console and sink to ElasticSearch)
-* [x] Request response time Middleware (including adding response time in ms in logs and response header as `X-Response-Time`)
+* [x] Request response time Middleware (including response time in logs and HTTP header as `X-Response-Time`)
 * [x] Domain Models Validation
 * [x] Unit Testing (Domain)
 * [x] Refactoring (Domain to DDD and separate project)
@@ -59,20 +59,20 @@ Created using:
 * [x] Github badges for Code Coverage (coveralls.io) and CI (Travis CI) (master branch)
 * [x] Integrated Elasticsearch APM (Application Performance Monitoring)
 * [x] Integrated Elasticsearch LogStash through Kibana.
-* [] Unit Testing - Mock Services, problem Repository is not interface?
-* [] xUnit Categories for focused testing.
-* [] Redis cache Docker or Nginx
-* [] Health checks
-* [] Apiary
-* [] Domain validation: Maybe use `FluentValidation` and send errors (merge with DataAnnotations ones) in Controller.
-* [] CD Azure (? only one I have access to deploy)
+* [ ] Unit Testing - Mock Services, problem Repository is not interface?
+* [ ] xUnit Categories for focused testing.
+* [ ] Redis cache Docker or Nginx
+* [ ] Health checks
+* [ ] Apiary
+* [ ] Domain validation: Maybe use `FluentValidation` and send errors (merge with DataAnnotations ones) in Controller.
+* [ ] CD Azure (? only one I have access to deploy)
 
 ## TODO for separate projects
 
-* [] GraphQL (? maybe separate project)
-* [] Message Queue (? maybe separate project)
-* [] CQRS (? maybe separate project)
-* [] Storyteller tests (?)
+* GraphQL (? maybe separate project)
+* Message Queue (? maybe separate project)
+* CQRS (? maybe separate project)
+* Storyteller tests (?)
 
 ## Run
 
