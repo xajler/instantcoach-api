@@ -9,8 +9,10 @@ Using local folder `<src-root>` mapped to `/app` docker container volume. Even t
 
 ## First time docker
 
-    cd <src-root>
-    docker-compose -f docker-compose-dev.yml build
+```shell
+cd <src-root>
+docker-compose -f docker-compose-dev.yml build
+```
 
 ## SSL
 
@@ -19,31 +21,54 @@ Using local folder `<src-root>` mapped to `/app` docker container volume. Even t
 > If you created SSL certificate by running [Local Dev](local-dev-env.md), this step can be skipped.
 
 
-To run docker container with SSL on port (5001), make sure to run this command to create local dotnet core certificate:
+To run docker container with SSL on port (`5001`), make sure to run this command to create local dotnet core certificate:
 
-    dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
+```shell
+# -p is for password, for this app to work use this password
+dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
+```
 
-This a self-signed certificate and most browsers will complain. On `Windows` and `macOS` there is possibility to add this`*.pfx` key to keychain. On `linux` add exception to browser.
+This a self-signed certificate and most browsers will complain. On `Windows` and `macOS` there is possibility to add this`*.pfx` key to KeyChain. On `linux` add exception to browser.
 
 > Note:
 >
 > `${HOME}/.aspnet/https` is mapped to `/https` docker container volume.
 
-## Start Docker Dev Environment
+## Quick Way
+
+Run in terminal:
+
+```shell
+cd <src-root>
+./run-dev-docker.sh
+```
+
+## Elaborate way
 
 It would be better to start docker compose in detached mode `-d`, but it can be omitted, if there is need to look at all containers logs simultaneously.
 
-    cd <src-root>
-    docker-compose -f docker-compose-dev.yml up -d
-    # Check that all are running with
-    docker ps -a
-    # If any exited and stopped use logs to check for problems
-    docker logs <container> -f
+```shell
+cd <src-root>
+docker-compose -f docker-compose-dev.yml up -d
+# Check that all are running with
+docker ps -a
+# If any exited and stopped use logs to check for problems
+docker logs <container> -f
+```
 
 At this point API will be running with `watch`, meaning, with each save of code, it will re-run API app. Since each API request will produce console logs, run logs for API container while changing and testing code with this command:
 
-    docker logs <api-container> -f
+```shell
+docker logs <api-container> -f
+```
 
+## Docker Clean Up
+
+When there is need to stop and remove all containers and images created, run in terminal:
+
+```ssh
+./rm-dev-docker.sh
+```
 
 ## Using API
 
@@ -66,7 +91,7 @@ Authorize API for swagger with these steps:
 
 > Note:
 >
-> Need for JWT Token can be removed all together by removing `[Authorize]` in [BaseController](../api/BaseController.cs) attribute and re-running API.
+> Need for JWT Token can be removed all together by removing `[Authorize]` in [BaseController](../api/BaseController.cs) attribute and re-building API container.
 
 
 ### Postman
@@ -87,3 +112,15 @@ Import postman collection `InstantCoach API.postman_collection.json` from `_post
 > * With open _Edit Collection_ modal window, choose second tab _Authorization_.
 > * From type choose _Bearer Token_.
 > * In _Token_ textbox paste up-to-date [JWT Token](jwt-token.md).
+
+## APM and LogStash
+
+_Elasticsearch APM (Application Performance Monitor) Server_ for monitoring errors and requests and system metrics. At this point in time _.NET Core Agent for APM Server_ is not production ready, but it is of great value for developers. It can be great to for stress testing with _jMeter_ or _Postman_ runner.
+
+Logs are sent via `Serilog` sink to ElasticSearch LogStash and can be queried in _Kibana_.
+
+For more information read [APM and LogStash docs](apm-logstash.md).
+
+Short version open _Kibana_ and use _APM_ and _Discover_ modules:
+
+    http://localhost:5601

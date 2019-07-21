@@ -6,17 +6,22 @@
 
 ## First time docker
 
-    cd <src-root>
-    docker pull microsoft/mssql-server-linux
-    ./docker-mssql-run.sh
+```shell
+cd <src-root>
+docker pull microsoft/mssql-server-linux
+./docker-mssql-run.sh
+```
 
 ## SSL
 
-To run locally with SSL on port (5001), make sure to run this command to create local dotnet core certificate:
+To run docker container with SSL on port (`5001`), make sure to run this command to create local dotnet core certificate:
 
-    dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
+```shell
+# -p is for password, for this app to work use this password
+dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
+```
 
-This a self-signed certificate and most browsers will complain. On `Windows` and `macOS` there is possibility to add this`*.pfx` key to keychain. On `linux` add exception to browser.
+This a self-signed certificate and most browsers will complain. On `Windows` and `macOS` there is possibility to add this`*.pfx` key to KeyChain. On `linux` add exception to browser.
 
 ## Quick Run
 
@@ -24,21 +29,25 @@ Run _VS Code_ with _Debug (F5)_ or run _Task_ named `run`.
 
 Or in terminal run:
 
-    cd <src-root>
-    ./run-local.sh
+```shell
+cd <src-root>
+./run-local.sh
+```
 
 ### Step by Step Run
 
 For local run without docker for app, but for `mssql` (make sure docker service is running) use this commands:
 
-    cd <src-root>
-    docker start sql1
-    # Set env variables for local dev (or add to bashrc, zshrc, etc, then this is not necessary)
-    source ./env-var.sh
-    dotnet build
-    cd api
-    # On run will run migrations if DB not existing or not updated to latest migration
-    dotnet run
+```shell
+cd <src-root>
+docker start sql1
+# Set env variables for local dev (or add to bashrc, zshrc, etc, then this is not necessary)
+source ./env-var.sh
+dotnet build
+cd api
+# On run will run migrations if DB not existing or not updated to latest migration
+dotnet run
+```
 
 ## Using API
 
