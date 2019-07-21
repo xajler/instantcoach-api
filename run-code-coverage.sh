@@ -1,5 +1,7 @@
 #!/bin/sh
 
+docker start sql1
+
 dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./coverage.xml /p:ExcludeByFile=\"api/ICContextDesignTimeFactory.cs,api/Infrastructure/SwaggerDefaultValues.cs,api/Infrastructure/ApiVersioningErrorResponseProvider.cs,core/Migrations/ICContextModelSnapshot.cs,api/Infrastructure/OperationCancelledExceptionFilter.cs\"
 
 cd tests/tests-integration

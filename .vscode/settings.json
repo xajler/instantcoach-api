@@ -8,6 +8,7 @@
         "Versioning",
         "Xunit",
         "aspnet",
+        "kibana",
         "microservices"
     ]
 }

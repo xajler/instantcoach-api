@@ -7,10 +7,12 @@ Token is needed for testing REST API, can be used with swagger or Postman (or an
 
 Issue this request with `curl` or any HTTP Client to get up-to-data token
 
-    curl --request POST \
-         --url https://dev-ajj38rm9.auth0.com/oauth/token \
-         --header 'content-type: application/json' \
-         --data '{"client_id":"D1dMonrAXz9UpLzcdl3rPH3J6mfdk3VE", "client_secret":"lnSg98MN7NuLgC9N4qrrmTRqNUeje088nnSITDguot7N8a2MAxU8RDo8nyXIhLSx","audience":"https://ic.x430n.com","grant_type":"client_credentials"}'
+```shell
+curl --request POST \
+        --url https://dev-ajj38rm9.auth0.com/oauth/token \
+        --header 'content-type: application/json' \
+        --data '{"client_id":"D1dMonrAXz9UpLzcdl3rPH3J6mfdk3VE", "client_secret":"lnSg98MN7NuLgC9N4qrrmTRqNUeje088nnSITDguot7N8a2MAxU8RDo8nyXIhLSx","audience":"https://ic.x430n.com","grant_type":"client_credentials"}'
+```
 
 
 ## JWT Authentication
