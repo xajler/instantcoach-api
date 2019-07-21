@@ -1,0 +1,609 @@
+FORMAT: 1A
+HOST: http://ic.x430n.com
+
+# InstantCoach API
+
+InstantCoach is API making easy instant coaching between Evaluator and Agent through comments with attachments and bookmark pins to the recorded media.
+
+## InstantCoach Collection [/api/instantcoach]
+
+### List All InstantCoaches [GET /api/instantcoach{?skip,take,showCompleted}]
+
+List of all InstantCoaches paginated, by default page is containing 10 items. 
+By default returns InstantCoaches that are not `Completed`, to show all Instant Coaches use `showCompleted` and set it to `true`.
+
++ Request Success
+
+    + Parameters
+        + skip (number) -  Page number, starts with 0.
+            + default 0
+        + take (number) - Page row number, greater or equal 1.
+            + default 10  
+        + showCompleted (boolean) - When true show all InstantCoaches, when false (default), shows all except those with status Completed.
+            + default false             
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+    
+    + Body
+    
+            {
+              "items": [
+                {
+                  "id": 1,
+                  "status": "New",
+                  "reference": "IC91749518577437",
+                  "description": "IC no. 1",
+                  "createdAt": "2019-07-19T23:15:52.2598622Z",
+                  "updatedAt": "2019-07-19T23:15:52.2599463Z",
+                  "commentsCount": 1,
+                  "evaluatorName": "John Doe"
+                },
+                {
+                  "id": 12,
+                  "status": "InProgress",
+                  "reference": "IC91670319134481",
+                  "description": "IC no. 2",
+                  "createdAt": "2019-07-19T21:03:52.3120829Z",
+                  "updatedAt": "2019-07-21T19:58:26.126676Z",
+                  "commentsCount": 10,
+                  "evaluatorName": "John Doe"
+                }
+              ],
+              "totalCount": 22
+            }
+            
++ Request No Data
+
+    + Parameters
+        + skip (number) -  Page number, starts with 0.
+            + default 0
+        + take (number) - Page row number, greater or equal 1.
+            + default 10  
+        + showCompleted (boolean) - When true show all InstantCoaches, when false (default), shows all except those with status Completed.
+            + default false             
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+    
+    + Body
+    
+            {
+              "items": [],
+              "totalCount": 0
+            }
+ 
+
+### Create a New InstantCoach [POST]
+
+Create a new InstantCoach using this action. 
+It takes a JSON object containing a InstantCoach properties, 
+a collection of comments (at least one required) and bookmark pin(s) collection, 
+if referenced in comments collection.
+
++ Request Success (application/json)
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+
+    + Body
+
+            {
+              "description": "InstantCoach no.1 description",
+              "ticketId": "234567",
+              "evaluatorId": 1,
+              "agentId": 2,
+              "evaluatorName": "John Doe",
+              "agentName": "Jane Doe",
+              "comments": [
+                {
+                  "commentType": "Bookmark",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T20:01:00.546Z",
+                  "bookmarkPinId": 1
+                },
+                {
+                  "commentType": "Attachment",
+                  "text": "https://example.com/example.pdf",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T20:03:28.462Z"
+                },
+                {
+                  "commentType": "Textual",
+                  "text": "Some evaluator's comment",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T20:04:44.000Z"
+                }
+              ],
+              "bookmarkPins": [
+                {
+                  "id": 1,
+                  "index": 1,
+                  "range": {
+                    "start": 10,
+                    "end": 32
+                  },
+                  "comment": "Some comment for pin",
+                  "mediaUrl": "https://example.com/example.mp3"
+                }
+              ]
+            }
+        
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: api/instantcoaches/1
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+    + Body
+
+            {
+              "id": 1
+            }
+            
++ Request Bad Request (application/json)
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+
+    + Body
+
+            {
+              "description": "string",
+              "ticketId": "string",
+              "evaluatorId": 0,
+              "agentId": 0,
+              "evaluatorName": "string",
+              "agentName": "string",
+              "comments": [
+                {
+                  "commentType": "Textual",
+                  "text": "string",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T21:15:34.816Z",
+                  "bookmarkPinId": 0
+                }
+              ],
+              "bookmarkPins": [
+                {
+                  "id": 0,
+                  "index": 0,
+                  "range": {
+                    "start": 0,
+                    "end": 0
+                  },
+                  "comment": "string",
+                  "mediaUrl": "string"
+                }
+              ]
+            }
+        
+
++ Response 400 (application/json)
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+    + Body
+
+            {
+              "errors": {
+                "AgentId": [
+                  "The field Agent Id must be between 1 and 2147483647."
+                ],
+                "EvaluatorId": [
+                  "The field Evaluator Id must be between 1 and 2147483647."
+                ],
+                "BookmarkPins[0].Id": [
+                  "The field Id must be between 1 and 2147483647."
+                ],
+                "BookmarkPins[0].Index": [
+                  "The field Index must be between 1 and 2147483647."
+                ],
+                "BookmarkPins[0].Range.End": [
+                  "The field End must be between 1 and 2147483647."
+                ],
+                "BookmarkPins[0].Range.Start": [
+                  "The field Start must be between 1 and 2147483647."
+                ]
+              },
+              "title": "One or more validation errors occurred.",
+              "status": 400,
+              "traceId": "|bc21ea10-4a30f8be5c028e5b."
+            }
+
+
+### Get existing InstantCoach [GET /api/instantcoaches/{id}]
+
+Get existing data for wanted InstantCoach using this action.
+
++ Request Success
+
+    + Parameters
+        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+        
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+            
+    + Body
+
+            {
+              "id": 1032,
+              "ticketId": "234567",
+              "description": "InstantCoach no.1 description",
+              "evaluatorName": "John Doe",
+              "comments": [
+                {
+                  "commentType": "Bookmark",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T20:01:00.546Z",
+                  "bookmarkPinId": 1
+                },
+                {
+                  "commentType": "Attachment",
+                  "text": "https://example.com/example.pdf",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T20:03:28.462Z"
+                },
+                {
+                  "commentType": "Textual",
+                  "text": "Some evaluator's comment",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T20:04:44Z"
+                },
+                {
+                  "commentType": "Textual",
+                  "text": "Agent's reply to Evaluator's comment",
+                  "authorType": "Agent",
+                  "createdAt": "2019-07-22T20:04:44Z"
+                }
+              ],
+              "bookmarkPins": [
+                {
+                  "id": 1,
+                  "index": 1,
+                  "range": {
+                    "start": 10,
+                    "end": 32
+                  },
+                  "comment": "Some comment for pin",
+                  "mediaUrl": "https://example.com/example.mp3"
+                }
+              ]
+            }            
+
+
++ Request Not Found
+
+    + Parameters
+        + id: 12 (number, required) - Id of a InstantCoach, greater than zero.
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+        
+
++ Response 404 (application/json)  
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+    + Body
+
+            {
+              "message": "Not existing id: 12"
+            }
+            
+
+### Update existing InstantCoach [PUT /api/instantcoaches/{id}]
+
+Update existing InstantCoach using this action. 
+It takes a JSON object containing _Update Type_ (`Save` or `Review`), 
+a collection of comments (at least one required) and bookmark pin(s) collection, 
+if referenced in comments collection.
+
++ Request Success (application/json)
+
+    + Parameters
+        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+
+    + Body
+
+            {
+              "updateType": "Save",
+              "comments": [
+                {
+                  "commentType": "Bookmark",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T20:01:00.546Z",
+                  "bookmarkPinId": 1
+                },
+                {
+                  "commentType": "Attachment",
+                  "text": "https://example.com/example.pdf",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T20:03:28.462Z"
+                },
+                {
+                  "commentType": "Textual",
+                  "text": "Some evaluator's comment",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T20:04:44.000Z"
+                },
+                {
+                  "commentType": "Textual",
+                  "text": "Agent's reply to Evaluator's comment",
+                  "authorType": "Agent",
+                  "createdAt": "2019-07-22T20:04:44.000Z"
+                }                
+              ],
+              "bookmarkPins": [
+                {
+                  "id": 1,
+                  "index": 1,
+                  "range": {
+                    "start": 10,
+                    "end": 32
+                  },
+                  "comment": "Some comment for pin",
+                  "mediaUrl": "https://example.com/example.mp3"
+                }
+              ]
+            }
+        
+
++ Response 204
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+
++ Request Not Found (application/json)
+
+    + Parameters
+        + id: 12 (number, required) - Id of a InstantCoach, greater than zero.
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+
+    + Body
+
+            {
+              "updateType": "Save",
+              "comments": [
+                {
+                  "commentType": "Textual",
+                  "text": "string",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T21:23:51.117Z",
+                  "bookmarkPinId": 0
+                }
+              ]
+            }
+        
+
++ Response 404 (application/json)  
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+    + Body
+
+            {
+              "message": "Not existing id: 12"
+            }
+
+
+            
++ Request Bad Request (application/json)
+
+    + Parameters
+        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+
+    + Body
+
+            {
+              "updateType": "Save",
+              "comments": [
+                {
+                  "commentType": "Textual",
+                  "text": "string",
+                  "authorType": "Evaluator",
+                  "createdAt": "2019-07-21T21:23:51.117Z",
+                  "bookmarkPinId": 0
+                }
+              ],
+              "bookmarkPins": [
+                {
+                  "id": 0,
+                  "index": 0,
+                  "range": {
+                    "start": 0,
+                    "end": 0
+                  },
+                  "comment": "string",
+                  "mediaUrl": "string"
+                }
+              ]
+            }
+        
+
++ Response 400 (application/json)
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+    + Body
+
+            {
+              "errors": {
+                "BookmarkPins[0].Id": [
+                  "The field Id must be between 1 and 2147483647."
+                ],
+                "BookmarkPins[0].Index": [
+                  "The field Index must be between 1 and 2147483647."
+                ],
+                "BookmarkPins[0].Range.End": [
+                  "The field End must be between 1 and 2147483647."
+                ],
+                "BookmarkPins[0].Range.Start": [
+                  "The field Start must be between 1 and 2147483647."
+                ]
+              },
+              "title": "One or more validation errors occurred.",
+              "status": 400,
+              "traceId": "|bc21ea2e-4a30f8be5c028e5b."
+            }
+
+
+### Make InstantCoach Completed [PATCH /api/instantcoaches/{id}/completed]
+
+Make existing InstantCoach completed using this action.
+
++ Request Success
+
+    + Parameters
+        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+        
+
++ Response 204
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+
++ Request Not Found
+
+    + Parameters
+        + id: 12 (number, required) - Id of a InstantCoach, greater than zero.
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+        
+
++ Response 404 (application/json)  
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+    + Body
+
+            {
+              "message": "Not existing id: 12"
+            }
+            
+### Delete existing InstantCoach [DELETE /api/instantcoaches/{id}]
+
+Delete existing InstantCoach using this action.
+
++ Request Success
+
+    + Parameters
+        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+        
+
++ Response 204
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+
++ Request Not Found
+
+    + Parameters
+        + id: 12 (number, required) - Id of a InstantCoach, greater than zero.
+
+    + Headers
+    
+            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+        
+
++ Response 404 (application/json)  
+
+    + Headers
+
+            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
+            X-Response-Time: 24ms            ... For all environments except Production
+
+    + Body
+
+            {
+              "message": "Not existing id: 12"
+            }
