@@ -7,9 +7,7 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "5433:1433"
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.2
+
   api.sut:
     #image: x430n/ic-api:latest
     build:
@@ -25,7 +23,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=SUT
       - ASPNETCORE_URLS=http://0.0.0.0:5000
-      - DB_HOST=db
+      - DB_HOST=db.sut
       - DB_NAME=test
       - DB_USER=sa
       - DB_PASSWORD="Abc$$12345"
@@ -41,13 +39,3 @@ services:
         - "5000:5000"
     depends_on:
       - db.sut
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.3
-
-networks:
-  vpcbr:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 10.5.0.0/16
