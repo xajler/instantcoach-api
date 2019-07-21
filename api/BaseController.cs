@@ -47,14 +47,14 @@ namespace Api.Controllers
             {
                 case Status201Created:
                     var uri = ApiRoute.Replace("{version:apiVersion}", ApiVersion1);
-                    _logger.LogInformation("Status Code: {StatusCode} Created\nCreated Id:{Id}\nURI: {Uri}",
+                    _logger.LogInformation("[Status Code]: {StatusCode} Created | [Created Id]: {Id} | [URI]: {Uri}",
                     successStatusCode, id, uri);
                     return Created($"{uri}/{id}", new CreatedId(id));
                 case Status204NoContent:
-                    _logger.LogInformation("Status Code: {StatusCode} NoContent", successStatusCode);
+                    _logger.LogInformation("[Status Code]: {StatusCode} NoContent", successStatusCode);
                     return NoContent();
                 default:
-                    _logger.LogInformation("Status Code: {StatusCode} OK", successStatusCode);
+                    _logger.LogInformation("[Status Code]: {StatusCode} OK", successStatusCode);
                     if (data == null) { return Ok(); }
                     return Ok(data);
             }

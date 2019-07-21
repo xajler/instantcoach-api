@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Domain;
 
+
 namespace Core
 {
     public class Config

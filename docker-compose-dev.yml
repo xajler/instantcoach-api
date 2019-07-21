@@ -7,6 +7,8 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "5434:1433"
+    networks:
+      - docker-network
 
   api.dev:
     image: mcr.microsoft.com/dotnet/core/sdk:2.2
@@ -21,7 +23,7 @@ services:
     # Make sure to run this locally for SSL cert
     # dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
     environment:
-      - ASPNETCORE_ENVIRONMENT=Local
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:5000;https://0.0.0.0:5001
       - ASPNETCORE_HTTPS_PORT=5001
       - DB_HOST=db.dev
@@ -35,21 +37,29 @@ services:
       - ELASTIC_APM_SERVER_URLS=http://apm.dev:8200
       - ELASTIC_APM_SERVICE_NAME=InstantCoach API dev
       - ELASTIC_APM_METRICS_INTERVAL="1s"
+      - ELASTICSEARCH_URL=http://elasticsearch.dev:9200
     ports:
         - "5000:5000"
         - "5001:5001"
     depends_on:
       - db.dev
+    networks:
+      - docker-network
 
   # APM stack
   elasticsearch.dev:
-    build:
-      context: ./_apm/elasticsearch
-      dockerfile: Dockerfile
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    # build:
+    #   context: ./_apm/elasticsearch
+    #   dockerfile: Dockerfile
     environment:
-      - cluster.name=apm-ic
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    # - cluster.name=apm-ic
+    # - network.host=0.0.0.0
+    - discovery.type=single-node
+    - xpack.security.enabled=false
+    - xpack.monitoring.enabled=true
+    - xpack.watcher.enabled=false
+    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
@@ -57,16 +67,20 @@ services:
     ports:
       - 9200:9200
       #- 9300:9300
+    networks:
+      - docker-network
 
   kibana.dev:
     image: kibana:7.2.0
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch.dev:9200
-      - LOGGING_QUIET=true
-    links:
+    - ELASTICSEARCH_HOSTS=http://elasticsearch.dev:9200
+    - XPACK_MONITORING_ENABLED=true
+    depends_on:
       - elasticsearch.dev
     ports:
       - 5601:5601
+    networks:
+      - docker-network
 
   apm.dev:
     build:
@@ -82,3 +96,9 @@ services:
     depends_on:
       - elasticsearch.dev
       - kibana.dev
+    networks:
+      - docker-network
+
+networks:
+  docker-network:
+    driver: bridge

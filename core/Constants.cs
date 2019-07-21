@@ -3,9 +3,11 @@ namespace Core
     public static class Constants
     {
         public static string SUTEnv = "SUT";
+        public static string LocalEnv = "Local";
         public static string VersionHeader = "X-Api-Version";
         public const string ResponseTimeHeader = "X-Response-Time";
         public const string PossibleBugText = "****POSSIBLE BUG******.";
+        public const string EsUrlEnVar = "ELASTICSEARCH_URL";
 
         public static class Controller
         {

@@ -46,7 +46,7 @@ namespace Core.Services
             int skip, int take, bool showCompleted)
         {
             var result = await _repository.GetAll(skip, take, showCompleted);
-            _logger.LogInformation("Get List Result:\n{Result}", ToLogJson(result));
+            _logger.LogInformation("Get List [Result]: {@Result}", result);
             return result;
         }
 
@@ -57,7 +57,7 @@ namespace Core.Services
                 return Result<InstantCoachForId>.AsError(ErrorType.UnknownId);
             }
             Result<InstantCoachDb> result = await _repository.GetById(id);
-            _logger.LogInformation("Get List Result:\n{Result}", ToLogJson(result));
+            _logger.LogInformation("Get By Id [Result]: {@Result}", result);
             if (!result.Success) { return Result<InstantCoachForId>.AsError(result.Error); }
             return Result<InstantCoachForId>.AsSuccess(result.Value.ToInstantCoachForId());
         }
@@ -66,13 +66,12 @@ namespace Core.Services
         {
             if (schemaType == SchemaCreate || schemaType == SchemaUpdate)
             {
-                _logger.LogInformation("GET schema by type: {SchemaType}", schemaType);
+                _logger.LogInformation("GET schema by type: {@SchemaType}", schemaType);
                 var generator = new JSchemaGenerator
                 {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 };
                 generator.GenerationProviders.Add(new StringEnumGenerationProvider());
-
 
                 if (schemaType == SchemaCreate)
                     return Result<JSchema>.AsSuccess(
@@ -87,11 +86,11 @@ namespace Core.Services
 
         public async Task<Result<InstantCoach>> Create(InstantCoachCreateClient data)
         {
-            // TODO: Checking existence of Agentid or EvaluatorId depending which is loggedin
+            // TODO: Checking existence of AgentId or EvaluatorId depending which is LoggedIn
             //       validation of bookmarkId in comments
             InstantCoach entity = data.ToNewInstantCoach();
             var validationResult = entity.Validate();
-            _logger.LogInformation("Entity after validate:\n{EntityModel}", ToLogJson(entity));
+            _logger.LogInformation("Entity after validate: {@EntityModel}", entity);
             return await OnSave(entity, validationResult);
         }
 
@@ -138,19 +137,19 @@ namespace Core.Services
 
             if (vResult.Success)
             {
-                _logger.LogInformation("Entity on Save:\n{EntityModel}", ToLogJson(entity));
+                _logger.LogInformation("Entity on Save: {@EntityModel}", entity);
                 result = await _repository.Save(entity);
             }
             else
                 result = Result<InstantCoach>.AsDomainError(validationResult.Errors);
 
-            _logger.LogInformation("Create Result:\n{Result}", ToLogJson(result));
+            _logger.LogInformation("Create Result: {@Result}", result);
             return result;
         }
 
         private Result<InstantCoach> OnNotExistingId(int id)
         {
-            _logger.LogError("Service Error: Not existing Id: {Id}", id);
+            _logger.LogError("Service Error: Not existing [Id]: {Id}", id);
             return Result<InstantCoach>.AsError(ErrorType.UnknownId);
         }
     }

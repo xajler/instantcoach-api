@@ -43,3 +43,6 @@ test/**
 coverage.xml
 opencoverCoverage.xml
 _coveragereport/
+
+# Commit message
+msg.md

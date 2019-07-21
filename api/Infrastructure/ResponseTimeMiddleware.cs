@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using static System.Console;
 using static Core.Constants;
 
 namespace Api
@@ -30,7 +31,9 @@ namespace Api
             {
                 var path = context.Request.Path.Value;
                 var method = context.Request.Method;
-                _logger.LogInformation("\n\n----- START {HttpMethod} {HttpPath} ---------------\n\n",
+
+                if (_env.EnvironmentName == LocalEnv)
+                    _logger.LogInformation("\n\n----- START {HttpMethod} {HttpPath} ---------------\n\n",
                     method, path);
                 var watch = Stopwatch.StartNew();
 
@@ -39,9 +42,13 @@ namespace Api
                     watch.Stop();
                     var responseTime = watch.ElapsedMilliseconds;
                     context.Response.Headers[ResponseTimeHeader] = $"{responseTime}ms";
-                    _logger.LogInformation("Response time: {ResponseTime}ms", responseTime);
-                    _logger.LogInformation("\n\n----- END {HttpMethod} {HttpPath} ---------------\n\n",
+                    _logger.LogInformation("Request: {HttpMethod} {HttpPath} | Response time: {ResponseTime}ms",
+                        method, path, responseTime);
+
+                    if (_env.EnvironmentName == LocalEnv)
+                        _logger.LogInformation("\n\n----- END {HttpMethod} {HttpPath} ---------------\n\n",
                         method, path);
+
                     return Task.CompletedTask;
                 });
             }

@@ -1,6 +1,6 @@
-# Local Docker Dev
+# Docker Dev
 
-Using local folder `<src-root>` mapped to `/app` docker container volume.
+Using local folder `<src-root>` mapped to `/app` docker container volume. Even though is using local folders it has `ASPNETCORE_ENVIRONMENT` set to `Development`, and uses _APM Server_ with _ElasticSearch LogStash_ as main development driver for logging, error handling and performance metrics.
 
 > Note:
 >

@@ -42,7 +42,7 @@ namespace Api.Controllers.Version1
             int skip = 0, int take = 10, bool showCompleted = false)
         {
             _logger.LogInformation(
-                "GET List params:\nskip: {Skip}\ntake: {Take}\nshowCompleted: {ShowCompleted}",
+                "GET List params [skip]: {Skip} | [take]: {Take} | [showCompleted]: {ShowCompleted}",
                 skip, take, showCompleted);
             if (skip < 0) { return BadRequest("The 'skip' value must be greater or equal 0."); }
             if (take <= 0) { return BadRequest("The 'take' value must be greater than 0."); }
@@ -58,7 +58,7 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> GetAsync(int id)
         {
-            _logger.LogInformation("GET by Id params:\nid: {Id}", id);
+            _logger.LogInformation("GET by Id params [id]: {Id}", id);
             var result = await _service.GetById(id);
             return CreateResult(result, successStatusCode: Status200OK, id);
         }
@@ -80,9 +80,7 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status400BadRequest)]
         public async Task<ActionResult> PostAsync([FromBody] InstantCoachCreateClient data)
         {
-            //_logger.LogInformation("POST params:\ndata:\n{HttpBody}", ToLogJson(data));
-            _logger.LogInformation("POST params:\ndata:\n{@HttpBody}", data);
-            // TODO: Send errors, can only happen when any Enum is not set, and sent 0.
+            _logger.LogInformation("POST params [data]: {@HttpBody}", data);
             if (!ModelState.IsValid)
             {
                 LogModelValidationErrors();
@@ -101,7 +99,7 @@ namespace Api.Controllers.Version1
         public async Task<ActionResult> PutAsync(int id,
             [FromBody] InstantCoachUpdateClient data)
         {
-            _logger.LogInformation("PUT params:\nid: {Id}\ndata:\n{@HttpBody}", id, data);
+            _logger.LogInformation("PUT params [id]: {Id} | [data]: {@HttpBody}", id, data);
             if (!ModelState.IsValid)
             {
                 LogModelValidationErrors();
@@ -117,7 +115,7 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> PatchAsync(int id)
         {
-            _logger.LogInformation("PATCH params:\nid: {Id}", id);
+            _logger.LogInformation("PATCH params [id]: {Id}", id);
             var result = await _service.MarkCompleted(id);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }
@@ -129,7 +127,7 @@ namespace Api.Controllers.Version1
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult> DeleteAsync(int id)
         {
-            _logger.LogInformation("DELETE params:\nid: {Id}", id);
+            _logger.LogInformation("DELETE params [id]: {Id}", id);
             var result = await _service.Remove(id);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }

@@ -35,12 +35,12 @@ namespace Core.Repositories
             if (entity == null) { return Result<T>.AsError(ErrorType.InvalidData); }
             if (entity.Id == default)
             {
-                _logger.LogInformation("Add Entity Model:\n{EntityModel}", ToLogJson(entity));
+                _logger.LogInformation("Add Entity Model: {@EntityModel}", entity);
                await _context.Set<T>().AddAsync(entity);
             }
             else
             {
-                _logger.LogInformation("Update Entity Model:\n{EntityModel}", ToLogJson(entity));
+                _logger.LogInformation("Update Entity Model: {@EntityModel}", entity);
                 _context.Entry(entity).State = EntityState.Modified;
             }
 
@@ -90,7 +90,7 @@ namespace Core.Repositories
                 new SqlParameter(TakeParam, take),
                 new SqlParameter(ShowCompletedParam, showCompleted),
             };
-            _logger.LogInformation("Repository Get All DB Parameters:\n{DbParams}", ToLogJson(dbParams));
+            _logger.LogInformation("Repository Get All DB Parameters: {@DbParams}", dbParams);
 
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
@@ -129,7 +129,7 @@ namespace Core.Repositories
                     {
                         return Result<InstantCoachDb>.AsSuccess(InstantCoachDb.FromReader(reader));
                     }
-                    _logger.LogError("Repository Get By Id Error.\nNot existing Id: {Id}", id);
+                    _logger.LogError("Repository Get By Id Error. Not existing Id: {Id}", id);
                     return Result<InstantCoachDb>.AsError(ErrorType.UnknownId);
                 }
             }
@@ -145,7 +145,7 @@ namespace Core.Repositories
                 using(var reader = await command.ExecuteReaderAsync())
                 {
                     if (await reader.ReadAsync()) { return reader.GetInt32(0); }
-                    _logger.LogError("Repository Get Existing Id Error.\nNot existing Id: {Id}", id);
+                    _logger.LogError("Repository Get Existing Id Error. Not existing [Id]: {Id}", id);
                     return 0;
                 }
             }
@@ -154,7 +154,7 @@ namespace Core.Repositories
         private SqlParameter GetAndLogIdParam(int id)
         {
             var result = new SqlParameter(IdParam, id);
-            _logger.LogInformation("Get By Id DB Parameters:\n{DbParams}", ToLogJson(result));
+            _logger.LogInformation("Get By Id DB Parameters: {@DbParams}", result);
             return result;
         }
     }

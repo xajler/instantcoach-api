@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Exceptions;
+using Serilog.Events;
 using Api;
 using Core.Context;
 using static Tests.Integration.TestHelpers;
@@ -14,38 +18,53 @@ namespace Tests.Integration
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.UseEnvironment(SUTEnv);
-            builder.ConfigureServices(services =>
-            {
-                var serviceProvider = new ServiceCollection()
-                        .AddEntityFrameworkInMemoryDatabase()
-                        .BuildServiceProvider();
+            // !!!! Remove comment if needed for more info when running ClientController tests. !!!
+            // Log.Logger = CreateLogger();
+            builder.UseEnvironment(SUTEnv)
+                   .ConfigureServices(services =>
+                    {
+                        var serviceProvider = new ServiceCollection()
+                                .AddEntityFrameworkInMemoryDatabase()
+                                .BuildServiceProvider();
 
-                var config = CreateConfigForTest();
-                services.AddDbContextService(config.GetSUTConnectionString());
+                        var config = CreateConfigForTest();
+                        services.AddDbContextService(config.GetSUTConnectionString());
 
-                var sp = services.BuildServiceProvider();
+                        var sp = services.BuildServiceProvider();
 
-                using (var scope = sp.CreateScope())
-                {
-                    var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<ICContext>();
-                    var logger = scopedServices
-                        .GetRequiredService<ILogger<TestWebApplicationFactory<TStartup>>>();
+                        using (var scope = sp.CreateScope())
+                        {
+                            var scopedServices = scope.ServiceProvider;
+                            var db = scopedServices.GetRequiredService<ICContext>();
+                            var logger = scopedServices
+                                .GetRequiredService<ILogger<TestWebApplicationFactory<TStartup>>>();
 
-                    //db.Database.EnsureCreated();
+                            //db.Database.EnsureCreated();
 
-                    // try
-                    // {
-                    //     db.EnsureSeeded();
-                    // }
-                    // catch (Exception ex)
-                    // {
-                    //     logger.LogError(ex, "An error occurred seeding the " +
-                    //         $"database with test messages. Error: {ex.Message}");
-                    // }
-                }
-            });
+                            // try
+                            // {
+                            //     db.EnsureSeeded();
+                            // }
+                            // catch (Exception ex)
+                            // {
+                            //     logger.LogError(ex, "An error occurred seeding the " +
+                            //         $"database with test messages. Error: {ex.Message}");
+                            // }
+                        }
+                    });
+        }
+
+        private Serilog.ILogger CreateLogger()
+        {
+            return new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails()
+                .WriteTo.Console(
+                    outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} " +
+                                    "{Properties:j}{NewLine}{Exception}"
+                ).CreateLogger();
         }
     }
 }

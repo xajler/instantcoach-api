@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using Serilog.Exceptions;
@@ -7,21 +8,25 @@ namespace Core
 {
     public static class Logging
     {
-        public static ILogger Logger()
+        private const string OutputFormat = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}";
+
+        public static ILogger Logger(IConfiguration config, string esUrl)
         {
-            string elasticUri = "http://localhost:9200";
+           var logConfig = new LoggerConfiguration()
+                .ReadFrom.Configuration(config)
+                .Enrich.FromLogContext()
+                .Enrich.WithMachineName()
+                .Enrich.WithExceptionDetails()
+                .WriteTo.Console(outputTemplate: OutputFormat);
 
-            Log.Logger = new LoggerConfiguration()
-            .Enrich.FromLogContext()
-            .Enrich.WithExceptionDetails()
-            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(
-                new Uri(elasticUri))
-                {
-                    AutoRegisterTemplate = true,
-                })
-            .CreateLogger();
+            if (!string.IsNullOrWhiteSpace(esUrl))
+            {
+                logConfig.WriteTo.Elasticsearch(
+                    new ElasticsearchSinkOptions(
+                        new Uri(esUrl)) { AutoRegisterTemplate = true });
+            }
 
-            return Log.Logger;
+            return logConfig.CreateLogger();
         }
     }
 }

@@ -77,19 +77,19 @@ Runs with locally installed _.NET Core SDK_. Uses only _MSSQL_ as a _Docker_ con
 
 Find out more how to run [Local Dev](_docs/local-dev-env.md).
 
-### Local Docker Dev
+### Docker Dev
 
-Runs all services as _docker_ containers, but with mounted _docker volumes_ to code repository and _https certificate_. Uses
+Runs all services as _docker_ containers, but with mounted _docker volumes_ to code repository and _https certificate_. Has `ASPNETCORE_ENVIRONMENT` set to `Development`, and uses _APM Server_ with _ElasticSearch LogStash_ as main development driver
 
-Find out more how to run [Local Docker Dev](_docs/local-docker-dev-env.md).
+Find out more how to run [Docker Dev](_docs/docker-dev-env.md).
 
 
 ### Docker Testing/Production
 
-Similar to [Local Docker Dev](_docs/local-docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes. Everything runs inside of docker containers.
+Similar to [Docker Dev](_docs/docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes. Everything runs inside of docker containers.
 
 TODO
 
 ## APM Server
 
-[Local Docker Dev](docs/local-docker-dev-env.md) and Testing can use _Elasticsearch APM Server_ for monitoring errors and requests.
+[Docker Dev](docs/docker-dev-env.md) and Testing can use _Elasticsearch APM (Application Performance Monitor) Server_ for monitoring errors and requests and system metrics. At this point in time _.NET Core Agent for APM Server_ is not production ready, but it is of great value for developers. It can be great to for stress testing with _jMeter_ or _Postman_ runner.

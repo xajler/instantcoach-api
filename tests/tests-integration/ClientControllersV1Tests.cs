@@ -14,8 +14,6 @@ using Domain;
 using Core.Context;
 using Core.Models;
 using Api;
-using static System.Console;
-using static Domain.Comment;
 using static Tests.Integration.TestHelpers;
 using static Core.Constants;
 
@@ -27,7 +25,7 @@ namespace Tests.Integration
         private readonly dynamic _bearer = new ExpandoObject();
         private const string UserName = "SUTUser";
         private readonly string[] Roles = new[] { "Role1" };
-        private readonly List<InstantCoachList> _items = new List<InstantCoachList>();
+        private List<InstantCoachList> _items = new List<InstantCoachList>();
         private readonly ICContext _context;
 
         public ClientControllersV1Tests(TestWebApplicationFactory<Startup> factory)
@@ -75,7 +73,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_ok_with_list_without_completed()
         {
-            await Insert4ItemsWith1Completed();
+            _items = await Insert4ItemsWith1Completed(_context);
             var request = "/api/instantcoaches";
             SetFakeBearerToken();
             var response = await _client.GetAsync(request);
@@ -95,7 +93,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_ok_with_list_first_page_list_completed()
         {
-            await Insert4ItemsWith1Completed();
+            _items = await Insert4ItemsWith1Completed(_context);
             var request = $"/api/instantcoaches?skip=0&take=2&showCompleted=true";
             SetFakeBearerToken();
             var response = await _client.GetAsync(request);
@@ -115,7 +113,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_ok_with_model_by_id()
         {
-            await Insert4ItemsWith1Completed();
+            _items = await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var request = $"/api/instantcoaches/{id}";
             SetFakeBearerToken();
@@ -180,7 +178,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_success_when_updated_from_model_and_id()
         {
-            await Insert4ItemsWith1Completed();
+            _items = await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var model = new InstantCoachUpdateClient
             {
@@ -223,7 +221,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_success_when_patched_as_completed_by_id()
         {
-            await Insert4ItemsWith1Completed();
+            _items = await Insert4ItemsWith1Completed(_context);
             int id = 1;
             //var content = new StringContent("{}", Encoding.UTF8, "application/json-patch+json");
             var request = $"/api/instantcoaches/{id}/completed";
@@ -241,7 +239,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_success_when_deleted_by_id()
         {
-            await Insert4ItemsWith1Completed();
+            _items = await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var request = $"/api/instantcoaches/{id}";
             SetFakeBearerToken();
@@ -261,104 +259,16 @@ namespace Tests.Integration
             _context.Dispose();
         }
 
-        private async Task Insert4ItemsWith1Completed()
-        {
-            var item1 = new InstantCoach(
-                description: "Some description 1",
-                ticketId: "41",
-                evaluatorId: 1,
-                agentId: 2,
-                evaluatorName: "John Evaluator",
-                agentName: "Jane Agent");
-            item1.AddComments(GetComments());
-            item1.AddBookmarkPins(GetBookmarkPins());
-            var item2 = new InstantCoach(
-                description: "Some description 2",
-                ticketId: "42",
-                evaluatorId: 1,
-                agentId: 2,
-                evaluatorName: "John Evaluator",
-                agentName: "Jane Agent");
-            item2.AddComments(GetComments());
-            item2.AddBookmarkPins(GetBookmarkPins());
-            var item3 = new InstantCoach(
-                description: "Some description 3",
-                ticketId: "43",
-                evaluatorId: 1,
-                agentId: 2,
-                evaluatorName: "John Evaluator",
-                agentName: "Jane Agent");
-            item3.AddComments(GetComments());
-            item3.AddBookmarkPins(GetBookmarkPins());
-            var item4 = new InstantCoach(
-                description: "Some description 3",
-                ticketId: "43",
-                evaluatorId: 1,
-                agentId: 2,
-                evaluatorName: "John Evaluator",
-                agentName: "Jane Agent");
-            item4.AddComments(GetComments());
-            item4.AddBookmarkPins(GetBookmarkPins());
-
-            await _context.Set<InstantCoach>().AddAsync(item1);
-            await _context.Set<InstantCoach>().AddAsync(item2);
-            await _context.Set<InstantCoach>().AddAsync(item3);
-            await _context.Set<InstantCoach>().AddAsync(item4);
-            await _context.SaveChangesAsync();
-            //WriteLine($"Inserted items: {item1.Id},{item2.Id},{item3.Id},{item4.Id}");
-            var item4Entity = await _context.Set<InstantCoach>().FindAsync(item4.Id);
-            item4Entity.UpdateAsCompletedAndValidate();
-            _context.Entry(item4Entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            _items.Add(EntityToModelList(item1));
-            _items.Add(EntityToModelList(item2));
-            _items.Add(EntityToModelList(item3));
-            _items.Add(EntityToModelList(item4));
-            // WriteLine($"Db IC count: {_context.InstantCoaches.Count()}");
-            // WriteLine($"Db IC count2: {_context.Set<InstantCoach>().Count()}");
-            WriteLine($"Inserted Ids: {item1.Id}, {item2.Id}, {item3.Id}, {item4.Id}");
-        }
-
-        private List<Comment> GetComments()
-        {
-            return new List<Comment>
-            {
-                Bookmark(bookmarkPinId: 1, authorType: EvaluationCommentAuthor.Agent, createdAt: DateTime.UtcNow),
-                Textual("some comment", authorType: EvaluationCommentAuthor.Evaluator, createdAt: DateTime.UtcNow)
-            };
-        }
-
-        private List<BookmarkPin> GetBookmarkPins()
-        {
-            var result = new List<BookmarkPin>();
-            var bookmarkPin = new BookmarkPin(id: 1, index: 1, new Range(1, 2),
-                mediaurl: "https://example.com/test.png", comment: "No comment");
-            result.Add(bookmarkPin);
-            return result;
-        }
-
-        private string ExpectedCount(int count)
-        {
-            return $"\"totalCount\":{count}";
-        }
-
         private void SetFakeBearerToken()
         {
             _bearer.name = SUTEnv;
             _client.SetFakeBearerToken(UserName, Roles, (object)_bearer);
         }
 
-        private InstantCoachList EntityToModelList(InstantCoach entity)
+        private static string ExpectedCount(int count)
         {
-            return new InstantCoachList(
-                id: entity.Id,
-                status: entity.Status,
-                reference: entity.Reference,
-                description: entity.Description,
-                createdAt: entity.CreatedAt,
-                updatedAt: entity.UpdatedAt,
-                commentsCount: entity.CommentsCount,
-                evaluatorName: entity.EvaluatorName);
+            return $"\"totalCount\":{count}";
         }
+
     }
 }

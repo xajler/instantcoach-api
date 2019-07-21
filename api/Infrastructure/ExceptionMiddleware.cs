@@ -40,14 +40,14 @@ namespace Api
             catch (Exception ex) when (IsUsualExceptionsFilter(ex))
             {
                 _logger.LogError(ex,
-                    "{BugText} Exception of Type: {ExceptionType} and Message: {Message}\nStack Trace:\n{StackTrace}",
+                    "{BugText} Exception of Type: {ExceptionType} and Message: {Message} Stack Trace: {StackTrace}",
                     PossibleBugText, ex.GetType().Name, ex.Message, ex.ToInnerMessagesDump());
                 await HandleExceptionAsync(httpContext);
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex,
-                    "Unknown exception on server of Type: {ExceptionType} and Message: {Message}\nStack Trace:\n{StackTrace}",
+                    "Unknown exception on server of Type: {ExceptionType} and Message: {Message} Stack Trace: {StackTrace}",
                     ex.GetType().Name, ex.Message, ex.ToInnerMessagesDump());
                 await HandleExceptionAsync(httpContext);
             }
@@ -68,7 +68,7 @@ namespace Api
             }
             else
             {
-                _logger.LogCritical(ex, "Failed to Save DB Changes.\nStack Trace:\n{StackTrace}",
+                _logger.LogCritical(ex, "Failed to Save DB Changes. Stack Trace: {StackTrace}",
                     ex.ToInnerMessagesDump());
             }
         }
@@ -79,13 +79,13 @@ namespace Api
             if (dbError == DatabaseError.Unhandled)
             {
                 _logger.LogCritical(ex,
-                    "Unhandled DB exception. Possible connection error.\nStack Trace:\n{StackTrace}",
+                    "Unhandled DB exception. Possible connection error. Stack Trace: {StackTrace}",
                         ex.ToInnerMessagesDump());
             }
             else
             {
                 _logger.LogError(ex,
-                    "{BugText} Database error: {DbError}.\nStack Trace:\n{StackTrace}",
+                    "{BugText} Database error: {DbError}. Stack Trace: {StackTrace}",
                     PossibleBugText, dbError, ex.ToInnerMessagesDump());
             }
         }

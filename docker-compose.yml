@@ -23,13 +23,11 @@ services:
       - ELASTIC_APM_SERVER_URLS=http://apm:8200
       - ELASTIC_APM_SERVICE_NAME=InstantCoach API
       - ELASTIC_APM_METRICS_INTERVAL="30s"
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     ports:
         - "5000:5000"
     depends_on:
       - db
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.4
 
   proxy:
     #image: x430n/ic-nginx:latest
@@ -46,24 +44,31 @@ services:
 
   # APM stack
   elasticsearch:
-    build:
-      context: ./_apm/elasticsearch
-      dockerfile: Dockerfile
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    # build:
+    #   context: ./_apm/elasticsearch
+    #   dockerfile: Dockerfile
     environment:
-      - cluster.name=apm-ic
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    # - cluster.name=apm-ic
+    # - network.host=0.0.0.0
+    - discovery.type=single-node
+    - xpack.security.enabled=false
+    - xpack.monitoring.enabled=true
+    - xpack.watcher.enabled=false
+    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     ports:
       - 9200:9200
+      #- 9300:9300
 
   kibana:
-    image: kibana:6.8.1
+    image: kibana:7.2.0
     environment:
-      - "LOGGING_QUIET=true"
+    - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    - XPACK_MONITORING_ENABLED=true
     links:
       - elasticsearch
     ports:

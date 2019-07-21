@@ -2,13 +2,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Elastic.Apm.All;
-using Serilog;
 using Core.Context;
 using Core;
 using Core.Repositories;
@@ -20,18 +18,10 @@ namespace Api
 {
     public class Startup
     {
-        //public Startup() { }
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             WriteLine($"Env is: {env.EnvironmentName}");
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
-            // Configuration = configuration;
-            Log.Logger = Logging.Logger();
+            Configuration = configuration;
             Env = env;
         }
 
@@ -68,10 +58,8 @@ namespace Api
         }
 
         public void Configure(IApplicationBuilder app,
-            IApiVersionDescriptionProvider provider,
-            ILoggerFactory loggerFactory)
+            IApiVersionDescriptionProvider provider)
         {
-            loggerFactory.AddSerilog();
             RunDbMigrationsAndSeedDataIfNeeded(app);
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddleware<ResponseTimeMiddleware>();
