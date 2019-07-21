@@ -22,17 +22,37 @@ Domain Errors and Endpoint Request Logging
 >
 > Most of C# files contain multiple classes, because of microservices nature, if this wouldn't be microservice, those would go to folders and separate files.
 
-Created using:
+## Table of contents
 
-* Linux (ArchLinux)
-* .NET Core 2.2 (Local and Docker)
+* [Dev Stack](#dev-stack)
+* [Features](#features)
+* [TODO for separate projects](#todo-for-separate-projects)
+* [Run](#run)
+  * [Local Dev](#local-dev)
+  * [Docker Dev](#docker-dev)
+  * [Docker Test/Production](#docker-testproduction)
+* [Unit/Integration Testing](#unitintegration-testing)
+  * [All Tests](#all-tests)
+  * [Unit Tests](#unit-tests)
+  * [Integration Tests](#integration-tests)
+  * [Code Coverage Report](#code-coverage-report)
+* [Travis CI](#travis-ci)
+* [APM Server & LogStash](#apm-server--logstash)
+
+## Dev Stack
+
+* Linux ([ArchLinux](https://archlinux.org))
+* .NET Core 2.2 (Local and [Docker](https://hub.docker.com/_/microsoft-dotnet-core-sdk))
 * C#7
-* EF Core (Commands) / ADO.NET via EF Core (Queries)
-* SQL Server 2017 (Docker)
-* Nginx (Docker)
-* VS Code (With C# Extensions)
-* Azure Data Studio (Local GUI for SQL Server)
-* Unit Testing (xUnit, FluentAssertions, Coverlet, Moq)
+* [EF Core](https://docs.microsoft.com/en-us/ef/core/) (Commands) / ADO.NET via EF Core (Queries)
+* [Docker](https://www.docker.com/) and Docker Compose
+* [SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) [Linux, Docker]((https://hub.docker.com/_/microsoft-mssql-server))
+* [Nginx](https://nginx.org/en/) ([Docker](https://hub.docker.com/_/nginx))
+* [VS Code](https://code.visualstudio.com/) (With C# Extensions)
+* [Azure Data Studio](https://docs.microsoft.com/en-us/sql/azure-data-studio/what-is?view=sql-server-2017) (Local GUI for SQL Server)
+* Unit Testing ([xUnit](https://xunit.net/), [FluentAssertions](https://fluentassertions.com/), [Coverlet](https://github.com/tonerdo/coverlet), [Moq](https://github.com/moq/moq4))
+* [ElasticSearch](https://www.elastic.co/products/elasticsearch), [Kibana](https://www.elastic.co/products/kibana) and [APM](https://www.elastic.co/products/apm)
+* Logging with [Serilog](https://serilog.net/) with sinks to _Console_ and [ElasticSearch](https://github.com/serilog/serilog-sinks-elasticsearch).
 
 ## Features
 
@@ -56,7 +76,7 @@ Created using:
 * [x] Dockerfile Nginx web server with SSL nginx.conf (Not really necessary because this REST API should be internal/private)
 * [x] Docker Compose (Development with watch, Test, CI Testing)
 * [x] SSL (local development: dotnet dev-certs https, test: nginx self-signed certificate)
-* [x] Github badges for Code Coverage (coveralls.io) and CI (Travis CI) (master branch)
+* [x] Github badges for Code Coverage ([coveralls.io](https://coveralls.io/github/xajler/instantcoach-api)) and CI ([Travis CI](https://travis-ci.org/xajler/instantcoach-api)) (master branch)
 * [x] Integrated Elasticsearch APM (Application Performance Monitoring)
 * [x] Integrated Elasticsearch LogStash through Kibana.
 * [ ] Unit Testing - Mock Services, problem Repository is not interface?
@@ -66,6 +86,7 @@ Created using:
 * [ ] Apiary
 * [ ] Domain validation: Maybe use `FluentValidation` and send errors (merge with DataAnnotations ones) in Controller.
 * [ ] CD Azure (? only one I have access to deploy)
+* [ ] Check difference between Serilog [ElasticSearch Sink](https://github.com/serilog/serilog-sinks-elasticsearch) and [LogStash Sink](https://github.com/asukhodko/serilog-sinks-logstash-http)
 
 ## TODO for separate projects
 
@@ -111,13 +132,11 @@ Find out more how to run [Docker Dev](_docs/docker-dev-env.md).
 Short version:
 
 ```shell
-docker pull microsoft/mssql-server-linux
-./docker-mssql-run.sh
-./run-local.sh
+./run-dev-docker.sh
 ```
 
 
-### Docker Testing/Production
+### Docker Test/Production
 
 Similar to [Docker Dev](_docs/docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes. Everything runs inside of docker containers.
 
@@ -125,11 +144,9 @@ TODO: More to add.
 
 ## Unit/Integration Testing
 
-### Local
-
 Make sure _MSSQL_ runs for Integration tests.
 
-#### All Tests
+### All Tests
 
 Best to run script:
 
@@ -140,7 +157,7 @@ DB_HOST=localhost ./run-code-coverage.sh
 
 Runs all tests and at the end generates code coverage report, more info in _Local Code Coverage Report_ section.
 
-#### Unit Tests
+### Unit Tests
 
 Best to run test with watcher, so any time change to file is saved it will restart all unit tests.
 
@@ -155,7 +172,7 @@ It can show code coverage when all tests ran successfully with this command:
 dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./coverage.xml
 ```
 
-#### Integration Test
+### Integration Tests
 
 For Integration tests it is not recommended to use `dotnet watch`.
 
@@ -172,16 +189,7 @@ DB_HOST=localhost
 dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./coverage.xml
 ```
 
-### Travis CI
-
-CI testing is done entirely in docker, because _Travis CI_ is currently not supports _.NET Core 2.2_had. When tests are ran successfully generated code coverage will be sent to [coveralls.io](https://coveralls.io/github/xajler/instantcoach-api) service.
-
-There are two ways to do CI Testing depending on branch:
-
-* `master`: Docker compose on up it will start all tests (Unit and Integration).
-* `dev` (or any other): `Dockerfile` that on run will start only Unit tests.
-
-## Local Code Coverage Report
+### Code Coverage Report
 
 Run all tests with _coverlet_ (Make sure MSSQL docker container is created)
 
@@ -193,7 +201,17 @@ DB_HOST=localhost ./run-code-coverage.sh
 On test runs success _coverlet_ wil generate _coverage.xml_ in test folders and _Report Generator_ will merge code coverages and create coverage report in folder `_coveragereport`.
 To see coverage report open `_coveragereport/index.htm` in your favourite browser.
 
-## APM Server & Log Stash
+
+## Travis CI
+
+CI testing is done entirely in docker, because _Travis CI_ is currently not supports _.NET Core 2.2_had. When tests are ran successfully generated code coverage will be sent to [coveralls.io](https://coveralls.io/github/xajler/instantcoach-api) service.
+
+There are two ways to do CI Testing depending on branch:
+
+* `master`: Docker compose on up it will start all tests (Unit and Integration).
+* `dev` (or any other): `Dockerfile` that on run will start only Unit tests.
+
+## APM Server & LogStash
 
 [Docker Dev](_docs/docker-dev-env.md) and Test Environment can use _Elasticsearch APM (Application Performance Monitor) Server_ for monitoring errors and requests and system metrics. At this point in time _.NET Core Agent for APM Server_ is not production ready, but it is of great value for developers. It can be great to for stress testing with _jMeter_ or _Postman_ runner.
 

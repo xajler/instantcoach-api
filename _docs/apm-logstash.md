@@ -1,5 +1,12 @@
 # APM and LogStash
 
+## Table of contents
+
+* [Open kibana](#open-kibana)
+* [First time Index for LogStash](#first-time-index-for-logstash)
+* [APM](#apm)
+* [LogStash](#logstash)
+
 TODO: more context and images.
 
 When running _Docker Dev_ environment it will be started by default _elasticsearch_, _kibana_ and _APM Server_. There is a need for few minutes to connect all of this services and be up and functional.

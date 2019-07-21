@@ -6,13 +6,14 @@ Using local folder `<src-root>` mapped to `/app` docker container volume. Even t
 >
 > MS Build uses [Directory.Build.props](../Directory.Build.props) and uses `container` folder, to differentiate _local_ from _local docker_ build and publish (e.g. for docker build `bin/container/Debug/netcoreapp2.2` and for local build: `bin/Debug/netcoreapp2.2`).
 
-
-## First time docker
-
-```shell
-cd <src-root>
-docker-compose -f docker-compose-dev.yml build
-```
+* [SSL](#ssl)
+* [Quick Way](#quick-way)
+* [Elaborate way](#elaborate-way)
+* [Docker Clean Up](#docker-clean-up)
+* [Using API](#using-api)
+  * [Swagger](#swagger)
+  * [Postman](#postman)
+* [APM & LogStash](#apm--logstash)
 
 ## SSL
 
@@ -49,6 +50,7 @@ It would be better to start docker compose in detached mode `-d`, but it can be 
 
 ```shell
 cd <src-root>
+docker-compose -f docker-compose-dev.yml build
 docker-compose -f docker-compose-dev.yml up -d
 # Check that all are running with
 docker ps -a
@@ -113,7 +115,7 @@ Import postman collection `InstantCoach API.postman_collection.json` from `_post
 > * From type choose _Bearer Token_.
 > * In _Token_ textbox paste up-to-date [JWT Token](jwt-token.md).
 
-## APM and LogStash
+## APM & LogStash
 
 _Elasticsearch APM (Application Performance Monitor) Server_ for monitoring errors and requests and system metrics. At this point in time _.NET Core Agent for APM Server_ is not production ready, but it is of great value for developers. It can be great to for stress testing with _jMeter_ or _Postman_ runner.
 
