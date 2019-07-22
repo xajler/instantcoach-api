@@ -20,7 +20,7 @@ namespace Tests.Integration
                    .ConfigureServices(services =>
                     {
                         var config = CreateConfigForTest();
-                        services.AddDbContextService(config.GetSUTConnectionString());
+                        services.AddDbContextService(config.GetSutConnectionString());
                     });
         }
 

@@ -47,7 +47,7 @@ namespace Domain
     {
         public static string CheckGreaterThanZero(this int value, string memberName)
         {
-            if (value <= 0) { return $"{memberName} should be greater than 0."; };
+            if (value <= 0) { return $"{memberName} should be greater than 0."; }
             return null;
         }
     }

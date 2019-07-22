@@ -50,24 +50,23 @@ namespace Domain
 
         public bool Equals(Entity other)
         {
-            if (other == null && this == null) { return true; }
-            else if (other == null || this == null) { return false; }
-            else if (Id == other.Id) { return true; }
-            else { return false; }
+            if (other == null) { return false; }
+            if (Id == other.Id) { return true; }
+            return false;
         }
     }
 
     public abstract class ValueObject
     {
-        protected static bool EqualOperator(ValueObject left, ValueObject right)
-        {
-            return left is null || left.Equals(right);
-        }
+        // protected static bool EqualOperator(ValueObject a, ValueObject b)
+        // {
+        //     return a is null || a.Equals(b);
+        // }
 
-        protected static bool NotEqualOperator(ValueObject left, ValueObject right)
-        {
-            return !EqualOperator(left, right);
-        }
+        // protected static bool NotEqualOperator(ValueObject a, ValueObject b)
+        // {
+        //     return !EqualOperator(a, b);
+        // }
 
         protected abstract IEnumerable<object> GetAtomicValues();
 

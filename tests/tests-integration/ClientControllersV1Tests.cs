@@ -39,7 +39,7 @@ namespace Tests.Integration
                 .AddEntityFrameworkSqlServer()
                 .BuildServiceProvider();
             var builder = new DbContextOptionsBuilder<ICContext>();
-            builder.UseSqlServer(CreateConfigForTest().GetSUTConnectionString())
+            builder.UseSqlServer(CreateConfigForTest().GetSutConnectionString())
                    .UseInternalServiceProvider(serviceProvider);
             _context = new ICContext(builder.Options);
             _context.Database.Migrate();
@@ -109,7 +109,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_ok_with_model_by_id()
         {
-            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var request = $"/api/instantcoaches/{id}";
             SetFakeBearerToken();
@@ -141,20 +141,10 @@ namespace Tests.Integration
                 {
                     new CommentClient
                     {
-                        CommentType = CommentType.Bookmark,
-                        BookmarkPinId = 1,
+                        CommentType = CommentType.Textual,
                         AuthorType = EvaluationCommentAuthor.Agent,
-                        CreatedAt = DateTime.UtcNow
-                    }
-                },
-                BookmarkPins = new List<BookmarkPinClient>
-                {
-                    new BookmarkPinClient
-                    {
-                        Id = 1,
-                        Index = 1,
-                        Range = new RangeClient { Start = 1, End = 2 },
-                        MediaUrl = "https://example.com/test.png"
+                        CreatedAt = DateTime.UtcNow,
+                        Text = "Some Comment"
                     }
                 }
             };
@@ -170,10 +160,46 @@ namespace Tests.Integration
             response.Dispose();
         }
 
+
+        [Fact]
+        public async Task Should_return_bad_request_on_create_when_model_is_invalid()
+        {
+            var model = new InstantCoachCreateClient
+            {
+                Description = "New description",
+                TicketId = "50",
+                EvaluatorId = 0,
+                AgentId = 0,
+                EvaluatorName = "John Evaluator",
+                AgentName = "Jane Agent",
+                Comments = new List<CommentClient>
+                {
+                    new CommentClient
+                    {
+                        CommentType = CommentType.Textual,
+                        AuthorType = EvaluationCommentAuthor.Agent,
+                        CreatedAt = DateTime.UtcNow
+                    }
+                }
+            };
+
+            var request = "/api/instantcoaches";
+            SetFakeBearerToken();
+            var response = await _client.PostAsJsonAsync(request, model);
+            int expected = 400;
+
+
+            int actual = (int)response.StatusCode;
+            actual.Should().Be(expected);
+
+            response.Dispose();
+        }
+
+
         [Fact]
         public async Task Should_return_success_when_updated_from_model_and_id()
         {
-            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var model = new InstantCoachUpdateClient
             {
@@ -182,11 +208,25 @@ namespace Tests.Integration
                 {
                     new CommentClient
                     {
+                        CommentType = CommentType.Textual,
+                        AuthorType = EvaluationCommentAuthor.Agent,
+                        CreatedAt = DateTime.UtcNow,
+                        Text = "Some Comment"
+                    },
+                    new CommentClient
+                    {
+                        CommentType = CommentType.Attachment,
+                        AuthorType = EvaluationCommentAuthor.Agent,
+                        CreatedAt = DateTime.UtcNow,
+                        Text = "http://example.com/example.pdf"
+                    },
+                    new CommentClient
+                    {
                         CommentType = CommentType.Bookmark,
                         BookmarkPinId = 1,
                         AuthorType = EvaluationCommentAuthor.Agent,
                         CreatedAt = DateTime.UtcNow
-                    }
+                    },
                 },
                 BookmarkPins = new List<BookmarkPinClient>
                 {
@@ -212,9 +252,49 @@ namespace Tests.Integration
         }
 
         [Fact]
+        public async Task Should_return_bad_request_when_updated_with_invalid_model()
+        {
+            int id = 1;
+            var model = new InstantCoachUpdateClient
+            {
+                UpdateType = UpdateType.Save,
+                Comments = new List<CommentClient>
+                {
+                    new CommentClient
+                    {
+                        CommentType = CommentType.Bookmark,
+                        BookmarkPinId = 1,
+                        AuthorType = EvaluationCommentAuthor.Agent,
+                        CreatedAt = DateTime.UtcNow
+                    },
+                },
+                BookmarkPins = new List<BookmarkPinClient>
+                {
+                    new BookmarkPinClient
+                    {
+                        Id = 0,
+                        Index = 0,
+                        Range = new RangeClient { Start = 0, End = 0 }
+                    }
+                }
+            };
+
+            var request = $"/api/instantcoaches/{id}";
+            SetFakeBearerToken();
+            var response = await _client.PutAsJsonAsync(request, model);
+            int expected = 400;
+
+
+            int actual = (int)response.StatusCode;
+            actual.Should().Be(expected);
+
+            response.Dispose();
+        }
+
+        [Fact]
         public async Task Should_return_success_when_patched_as_completed_by_id()
         {
-            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var request = $"/api/instantcoaches/{id}/completed";
             SetFakeBearerToken();
@@ -239,6 +319,56 @@ namespace Tests.Integration
 
             Action result = () => response.EnsureSuccessStatusCode();
             result.Should().NotThrow();
+
+            response.Dispose();
+        }
+
+        [Fact]
+        public async Task Should_return_JSON_schema_for_create()
+        {
+            string schemaType = "create";
+            var request = $"/api/instantcoaches/schema/{schemaType}";
+            SetFakeBearerToken();
+            var response = await _client.GetAsync(request);
+
+
+            Action result = () => response.EnsureSuccessStatusCode();
+            result.Should().NotThrow();
+
+            response.Dispose();
+        }
+
+        [Fact]
+        public async Task Should_return_JSON_schema_for_update()
+        {
+            string schemaType = "update";
+            var request = $"/api/instantcoaches/schema/{schemaType}";
+            SetFakeBearerToken();
+            var response = await _client.GetAsync(request);
+
+
+            Action result = () => response.EnsureSuccessStatusCode();
+            result.Should().NotThrow();
+
+            response.Dispose();
+        }
+
+        [Fact]
+        public async Task Should_return_bad_request_when_sent_invalid_JSON_schema_type()
+        {
+            string schemaType = "notSupportedType";
+            var request = $"/api/instantcoaches/schema/{schemaType}";
+            SetFakeBearerToken();
+            var response = await _client.GetAsync(request);
+
+
+            // Action result = () => response.EnsureSuccessStatusCode();
+            // result.Should().NotThrow();
+
+            int actual = (int)response.StatusCode;
+            int expected = 400;
+
+            actual.Should().Be(expected);
 
             response.Dispose();
         }

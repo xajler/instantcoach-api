@@ -82,6 +82,24 @@ namespace Core.Models
         public int Id { get; }
     }
 
+    public class Msg
+    {
+        public Msg(string message) => Message = message;
+        public string Message { get; }
+    }
+
+
+    public class SqlParamValue
+    {
+        public string Param { get; set; }
+        public string Value { get; set; }
+
+        public static SqlParamValue ToSelf(string paramName, string value)
+        {
+            return new SqlParamValue { Param = paramName, Value = value };
+        }
+    }
+
     // Return Models
     // Read-Only For List and GetById
     public class InstantCoachList

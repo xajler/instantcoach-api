@@ -30,6 +30,8 @@ namespace Tests.Unit
             var expected = Textual(TextValue, AuthorTypeValue, createdAt);
             actual.Should().BeEquivalentTo(expected);
             actual.GetHashCode().Should().Be(expected.GetHashCode());
+            actual.Should().Be(expected);
+            //Assert.True(actual == expected);
         }
 
         [Fact]
@@ -39,6 +41,8 @@ namespace Tests.Unit
             var actual = Textual(TextValue, AuthorTypeValue, DateTime.UtcNow);
             var expected = Textual(TextValue, AuthorTypeValue, createdAt);
             actual.GetHashCode().Should().NotBe(expected.GetHashCode());
+            actual.Should().NotBe(expected);
+            //Assert.True(actual != expected);
         }
 
         [Fact]

@@ -19,7 +19,21 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public static void Should_be_valid_bookmark_pin_via_ctor()
+        public static void Should_be_valid_bookmark_pin_via_ctor_without_comment()
+        {
+            var bp = new BookmarkPin(
+                id: 1,
+                index: 1,
+                new Range(1, 2),
+                MediaUrlValue);
+
+            var actual = bp.Validate();
+
+            actual.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public static void Should_be_valid_bookmark_pin_via_ctor_full()
         {
             var bp = new BookmarkPin(
                 id: 1,

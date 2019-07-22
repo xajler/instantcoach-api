@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Design;
 using Core.Context;
 using static System.Console;
 
-namespace Api
+namespace Core
 {
     //
     // NOTE:
     //
-    // Neded only for running `dotnet ef` commands, not used for creating db context...
+    // Needed only for running `dotnet ef` commands, not used for creating db context...
     //
     public class ICContextDesignTimeFactory : IDesignTimeDbContextFactory<ICContext>
     {

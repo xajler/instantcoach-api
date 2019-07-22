@@ -90,7 +90,7 @@ namespace Core.Services
             InstantCoach entity = data.ToNewInstantCoach();
             var validationResult = entity.Validate();
             _logger.LogInformation("Entity after validate: {@EntityModel}", entity);
-            return await OnSave(entity, validationResult).ConfigureAwait(false);
+            return await OnSave(entity, validationResult);
         }
 
         public async Task<Result> Update(int id, InstantCoachUpdateClient data)
@@ -103,7 +103,7 @@ namespace Core.Services
                 data.UpdateType,
                 data.Comments.ToComments(),
                 data.BookmarkPins.ToBookmarkPins());
-            return await OnSave(entity, validationResult).ConfigureAwait(false);
+            return await OnSave(entity, validationResult);
         }
 
         public async Task<Result> MarkCompleted(int id)
@@ -112,7 +112,7 @@ namespace Core.Services
             if (!entityResult.Success) { return OnNotExistingId(id); }
             var entity = entityResult.Value;
             ValidationResult validationResult = entity.UpdateAsCompletedAndValidate();
-            return await OnSave(entity, validationResult).ConfigureAwait(false);
+            return await OnSave(entity, validationResult);
         }
 
         public async Task<Result> Remove(int id)

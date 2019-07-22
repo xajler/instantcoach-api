@@ -7,7 +7,6 @@ using Serilog;
 using Core;
 using static System.Environment;
 
-
 namespace Api
 {
     public static class Program
@@ -33,9 +32,7 @@ namespace Api
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex,
-                    "Host terminated unexpectedly.\nStack trace:\n{0}",
-                    ex.ToInnerMessagesDump());
+                Log.Fatal(ex, "Host terminated unexpectedly.");
                 return 1;
             }
             finally

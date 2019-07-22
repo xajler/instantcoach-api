@@ -27,7 +27,7 @@ namespace Tests.Integration
                 .AddEntityFrameworkSqlServer()
                 .BuildServiceProvider();
             var builder = new DbContextOptionsBuilder<ICContext>();
-            builder.UseSqlServer(Config.GetSUTGuidConnectionString()).UseInternalServiceProvider(serviceProvider);
+            builder.UseSqlServer(Config.GetSutGuidConnectionString()).UseInternalServiceProvider(serviceProvider);
             _context = new ICContext(builder.Options);
             _context.Database.Migrate();
             _repository = new InstantCoachRepository(new LoggerFactory(), _context);

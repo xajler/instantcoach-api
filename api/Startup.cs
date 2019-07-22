@@ -38,7 +38,7 @@ namespace Api
 
             if (Env.EnvironmentName == SUTEnv)
             {
-                services.AddDbContextService(config.GetSUTConnectionString());
+                services.AddDbContextService(config.GetSutConnectionString());
                 services.AddFakeSUTJwtAuthenticationService();
             }
             else
@@ -63,7 +63,7 @@ namespace Api
             app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseSwagger();
             // More info: https://github.com/microsoft/aspnet-api-versioning/tree/master/samples/aspnetcore/SwaggerSample
-            app.UseSwaggerUIAsHomeRoute(provider);
+            app.UseSwaggerAsHomeRoute(provider);
             app.UseElasticApm(Configuration);
             app.UseAuthentication();
             app.UseMvc();

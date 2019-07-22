@@ -4,7 +4,7 @@ using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using Serilog.Exceptions;
 
-namespace Core
+namespace Api
 {
     public static class Logging
     {

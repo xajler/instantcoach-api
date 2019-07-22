@@ -27,7 +27,7 @@ namespace Tests.Integration
         public ControllersV1Tests()
         {
             var builder = new DbContextOptionsBuilder<ICContext>();
-            builder.UseSqlServer(Config.GetSUTGuidConnectionString());
+            builder.UseSqlServer(Config.GetSutGuidConnectionString());
             _context = new ICContext(builder.Options);
             _context.Database.Migrate();
             _context.Database.EnsureCreated();

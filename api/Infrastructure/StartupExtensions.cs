@@ -24,7 +24,7 @@ namespace Api
 {
     public static class StartupExtensions
     {
-        public static void UseSwaggerUIAsHomeRoute(this IApplicationBuilder app,
+        public static void UseSwaggerAsHomeRoute(this IApplicationBuilder app,
             IApiVersionDescriptionProvider provider)
         {
             app.UseSwaggerUI(s =>

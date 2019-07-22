@@ -97,7 +97,7 @@ namespace Core.Repositories
                 var items = new List<InstantCoachList>();
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandText = GetAllStoreProcedure;
-                command.Parameters.AddRange(dbParams);
+                command.Parameters.AddRange(GetListParams(skip, take, showCompleted));
                 await _context.Database.OpenConnectionAsync();
                 using (var reader = await command.ExecuteReaderAsync())
                 {
@@ -153,7 +153,28 @@ namespace Core.Repositories
         private SqlParameter GetAndLogIdParam(int id)
         {
             var result = new SqlParameter(IdParam, id);
-            _logger.LogInformation("Get By Id DB Parameters: {@DbParams}", result);
+            var dbParams = SqlParamValue.ToSelf(IdParam, id.ToString());
+            _logger.LogInformation("Get By Id DB Parameters: {@DbParams}", dbParams);
+            return result;
+        }
+
+        private SqlParameter[] GetListParams(int skip, int take, bool showCompleted)
+        {
+            SqlParameter[] result = new[]
+{
+                new SqlParameter(SkipParam, skip),
+                new SqlParameter(TakeParam, take),
+                new SqlParameter(ShowCompletedParam, showCompleted),
+            };
+
+            SqlParamValue[] dbParams = new[]
+{
+                SqlParamValue.ToSelf(SkipParam, skip.ToString()),
+                SqlParamValue.ToSelf(TakeParam, take.ToString()),
+                SqlParamValue.ToSelf(ShowCompletedParam, showCompleted.ToString()),
+            };
+            _logger.LogInformation("Repository Get All DB Parameters: {@DbParams}", dbParams);
+
             return result;
         }
     }

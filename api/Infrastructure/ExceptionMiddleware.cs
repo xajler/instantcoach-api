@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Core;
 using static Core.Constants;
 
 namespace Api
@@ -66,26 +65,26 @@ namespace Api
             catch (DbUpdateException ex)
             {
                 OnDbUpdateException(ex);
-                await HandleExceptionAsync(httpContext).ConfigureAwait(false);
+                await HandleExceptionAsync(httpContext);
             }
             catch (SqlException ex)
             {
                 OnDbException(ex);
-                await HandleExceptionAsync(httpContext).ConfigureAwait(false);
+                await HandleExceptionAsync(httpContext);
             }
             catch (Exception ex) when (IsUsualExceptionsFilter(ex))
             {
                 _logger.LogError(ex,
-                    "{BugText} Exception of Type: {ExceptionType} and Message: {Message} Stack Trace: {StackTrace}",
-                    PossibleBugText, ex.GetType().Name, ex.Message, ex.ToInnerMessagesDump());
-                await HandleExceptionAsync(httpContext).ConfigureAwait(false);
+                    "{BugText} Exception of Type: {ExceptionType} and Message: {Message}",
+                    PossibleBugText, ex.GetType().Name);
+                await HandleExceptionAsync(httpContext);
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex,
-                    "Unknown exception on server of Type: {ExceptionType} and Message: {Message} Stack Trace: {StackTrace}",
-                    ex.GetType().Name, ex.Message, ex.ToInnerMessagesDump());
-                await HandleExceptionAsync(httpContext).ConfigureAwait(false);
+                    "Unknown exception on server of Type: {ExceptionType} an Message: {Message}",
+                    ex.GetType().Name, ex.Message);
+                await HandleExceptionAsync(httpContext);
             }
         }
 
@@ -104,8 +103,7 @@ namespace Api
             }
             else
             {
-                _logger.LogCritical(ex, "Failed to Save DB Changes. Stack Trace: {StackTrace}",
-                    ex.ToInnerMessagesDump());
+                _logger.LogCritical(ex, "Failed to Save DB Changes.");
             }
         }
 
@@ -114,15 +112,12 @@ namespace Api
             var dbError = SqlServerErrorManager.GetError(ex);
             if (dbError == DatabaseError.Unhandled)
             {
-                _logger.LogCritical(ex,
-                    "Unhandled DB exception. Possible connection error. Stack Trace: {StackTrace}",
-                        ex.ToInnerMessagesDump());
+                _logger.LogCritical(ex, "Unhandled DB exception. Possible connection error.");
             }
             else
             {
-                _logger.LogError(ex,
-                    "{BugText} Database error: {DbError}. Stack Trace: {StackTrace}",
-                    PossibleBugText, dbError, ex.ToInnerMessagesDump());
+                _logger.LogError(ex,"{BugText} Database error: {DbError}.",
+                    PossibleBugText, dbError);
             }
         }
 

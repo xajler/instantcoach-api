@@ -26,7 +26,6 @@ namespace Core.Models
         public static List<Comment> ToComments(this List<CommentClient> comments)
         {
             List<Comment> result = null;
-
             if (comments != null && comments.Count > 0)
             {
                 result = new List<Comment>();
@@ -35,31 +34,16 @@ namespace Core.Models
                     result.Add(CreateComment(item));
                 }
             }
-
             return result;
         }
 
         public static List<BookmarkPin> ToBookmarkPins(this List<BookmarkPinClient> bookmarkPins)
         {
-            List<BookmarkPin> result = null;
-
             if (bookmarkPins != null && bookmarkPins.Count > 0)
             {
-                result = new List<BookmarkPin>();
-
-                foreach (var item in bookmarkPins)
-                {
-                    var pin = new BookmarkPin(
-                        item.Id,
-                        item.Index,
-                        new Range(item.Range.Start, item.Range.End),
-                        item.MediaUrl,
-                        item.Comment);
-
-                    result.Add(pin);
-                }
+                return CreateBookmarkPins(bookmarkPins);
             }
-            return result;
+            return null;
         }
 
         public static InstantCoachForId ToInstantCoachForId(this InstantCoachDb db)
@@ -76,6 +60,24 @@ namespace Core.Models
                 evaluatorName: db.EvaluatorName,
                 comments: FromJson<List<Comment>>(db.Comments),
                 bookmarkPins);
+        }
+
+        private static List<BookmarkPin> CreateBookmarkPins(List<BookmarkPinClient> bookmarkPins)
+        {
+            List<BookmarkPin> result = new List<BookmarkPin>();
+            foreach (var item in bookmarkPins)
+            {
+                var range = new Range(item.Range.Start, item.Range.End);
+                if (string.IsNullOrWhiteSpace(item.Comment))
+                {
+                    result.Add(new BookmarkPin(item.Id, item.Index, range, item.MediaUrl));
+                }
+                else
+                {
+                    result.Add(new BookmarkPin(item.Id, item.Index, range, item.MediaUrl, item.Comment));
+                }
+            }
+            return result;
         }
 
         private static Comment CreateComment(CommentClient item)

@@ -65,12 +65,13 @@ namespace Api.Controllers
                 if(error == ErrorType.UnknownId)
                 {
                     _logger.LogInformation("Status Code: {StatusCode} NotFound", Status404NotFound);
-                    return NotFound($"Not existing id: {id}");
+                    return NotFound(new Msg($"Not existing id: {id}"));
                 }
                 else
                 {
                 _logger.LogInformation("Status Code: {StatusCode} BadRequest", Status400BadRequest);
-                return BadRequest("Invalid data or unable to store changes.");
+                // TODO: show errors in response.
+                return BadRequest(new Msg("Invalid data or unable to store changes."));
                 }
         }
     }

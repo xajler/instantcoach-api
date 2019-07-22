@@ -32,14 +32,14 @@ namespace Core.Context
 
         public async Task<int> SaveChangesAsync()
         {
-            return await SaveChangesAsync(true, default).ConfigureAwait(false);
+            return await SaveChangesAsync(true, default);
         }
 
         public override async Task<int> SaveChangesAsync(
             CancellationToken cancellationToken )
         {
             SetAuditInfo();
-            return await SaveChangesAsync(true, cancellationToken).ConfigureAwait(false);
+            return await SaveChangesAsync(true, cancellationToken);
         }
 
         private void SetAuditInfo()
