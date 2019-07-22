@@ -7,17 +7,11 @@ Using local folder `<src-root>` mapped to `/app` docker container volume. Even t
 > MS Build uses [Directory.Build.props](../Directory.Build.props) and uses `container` folder, to differentiate _local_ from _local docker_ build and publish (e.g. for docker build `bin/container/Debug/netcoreapp2.2` and for local build: `bin/Debug/netcoreapp2.2`).
 
 *   [SSL](#ssl)
-
 *   [Quick Way](#quick-way)
-
 *   [Elaborate way](#elaborate-way)
-
 *   [Docker Clean Up](#docker-clean-up)
-
 *   [Using API](#using-api)
-
   *   [Swagger](#swagger)
-
   *   [Postman](#postman)
 *   [APM & LogStash](#apm--logstash)
 

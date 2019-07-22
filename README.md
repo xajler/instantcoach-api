@@ -23,132 +23,75 @@ Domain Errors and Endpoint Request Logging
 ## Table of contents
 
 *   [Dev Stack](#dev-stack)
-
 *   [Features](#features)
-
 *   [TODO for separate projects](#todo-for-separate-projects)
-
 *   [API Documentation](#api-documentation)
-
 *   [Run](#run)
-
     *   [Local Dev](#local-dev)
-
     *   [Docker Dev](#docker-dev)
-
     *   [Docker Test/Production](#docker-testproduction)
-
 *   [Unit/Integration Testing](#unitintegration-testing)
-
     *   [All Tests](#all-tests)
-
     *   [Unit Tests](#unit-tests)
-
     *   [Integration Tests](#integration-tests)
-
     *   [Code Coverage Report](#code-coverage-report)
-
 *   [Travis CI](#travis-ci)
 *   [APM Server & LogStash](#apm-server--logstash)
 
 ## Dev Stack
 
 *   Linux ([ArchLinux](https://archlinux.org))
-
 *   .NET Core 2.2 (Local and [Docker](https://hub.docker.com/_/microsoft-dotnet-core-sdk))
-
 *   C#7
-
-*   [EF Core](https://docs.microsoft.com/en-us/ef/core/) (Commands) / ADO.NET via EF Core (
-    Queries)
-
+*   [EF Core](https://docs.microsoft.com/en-us/ef/core/) (Commands) / ADO.NET via EF Core (Queries)
 *   [Docker](https://www.docker.com/) and Docker Compose
-
 *   [SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) [Linux, D  ocker]((https://hub.docker.com/_/microsoft-mssql-server))
-
 *   [Nginx](https://nginx.org/en/) ([Docker](https://hub.docker.com/_/nginx))
-
 *   [VS Code](https://code.visualstudio.com/) (With C# Extensions)
-
 *   [Azure Data Studio](https://docs.microsoft.com/en-us/sql/azure-data-studio/what-is?v  iew=sql-server-2017) (Local GUI for SQL Server)
-
 *   Unit Testing ([xUnit](https://xunit.net/), [FluentAssertions](https://fluentassertions.com/),   [Coverlet](https://github.com/tonerdo/coverlet), [Moq](https://github.com/moq/moq4))
-
 *   [ElasticSearch](https://www.elastic.co/products/elasticsearch), [Kibana](https://w  ww.elastic.co/products/kibana) and [APM](https://www.elastic.co/products/apm)
 *   Logging with [Serilog](https://serilog.net/) with sinks to _Console_ and [ElasticSearch](https://github.com/serilog/serilog-sinks-elasticsearch).
 
 ## Features
 
 *   [x] EF Migrations (Will update to last migration or create database in `Startup`)
-
 *   [x] Config through `IOptions<T>`
-
 *   [x] Linux MSSQL in Docker
-
 *   [x] API Versioning (Dummy v2 inherited from v1, HTTP Header versioning `X-Api-Version`)
-
 *   [x] REST API Endpoint (multiple versions, JWT Auth)
-
 *   [x] Swagger (multiple versions, JWT Auth)
-
 *   [x] Db CRUD / Service (to make Controller cleaner)
-
 *   [x] JWT Auth
-
-*   [x] Error Handling (Known Errors as `Result` and `Result<T>`, Global Exception through M
-Middleware)
-
+*   [x] Error Handling (Known Errors as `Result` and `Result<T>`, Global Exception through Middleware)
 *   [x] Logging (`Serilog` console and sink to ElasticSearch)
-
 *   [x] Request response time Middleware (including response time in logs and HTTP header as `  X-Response-Time`)
-
 *   [x] Domain Models Validation
-
 *   [x] Unit Testing (Domain)
-
 *   [x] Refactoring (Domain to DDD and separate project)
-
 *   [x] Integration Testing (Repositories and Controllers V1)
-
 *   [x] Code Coverage (_coverlet_)
-
 *   [x] Dockerfile Build/Publish/Run API
-
 *   [x] Dockerfile Nginx web server with SSL nginx.conf (Not really necessary because this REST A  PI should be internal/private)
-
 *   [x] Docker Compose (Development with watch, Test, CI Testing)
-
 *   [x] SSL (local development: dotnet dev-certs https, test: nginx self-signed certificate)
-
 *   [x] Github badges for Code Coverage ([coveralls.io](https://coveralls.io/github/xajler/i  nstantcoach-api)) and CI ([Travis CI](https://travis-ci.org/xajler/instantcoach-api)) (  master branch)
-
 *   [x] Integrated Elasticsearch APM (Application Performance Monitoring)
-
 *   [x] Integrated Elasticsearch LogStash through Kibana.
-
 *   [ ] Unit Testing - Mock Services, problem Repository is not interface?
-
 *   [ ] xUnit Categories for focused testing.
-
 *   [ ] Redis cache Docker or Nginx
-
 *   [ ] Health checks
-
 *   [x] [Apiary docs created](https://instantcoachapi.docs.apiary.io) added badge to github r  epository
-
 *   [ ] [Apiary](https://app.apiary.io) Tests
-
 *   [ ] Domain validation: Maybe use `FluentValidation` and send errors (merge with D  ataAnnotations ones) in Controller.
-
 *   [ ] CD Azure (? only one I have access to deploy)
 *   [ ] Check difference between Serilog [ElasticSearch Sink](https://github.com/serilog/s  erilog-sinks-elasticsearch) and [LogStash Sink](https://github.com/asukhodko/s  erilog-sinks-logstash-http)
 
 ## TODO for separate projects
 
 *   GraphQL (? maybe separate project)
-
 *   Message Queue (? maybe separate project)
-
 *   CQRS (? maybe separate project)
 *   Storyteller tests (?)
 

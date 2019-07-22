@@ -5,16 +5,11 @@
 > `docker-run.sh` might fail first time running in new terminal, because it starts docker mssql instance and sometimes it will compile and run quicker than starting mssql docker instance, in that case, run same command again.
 
 *   [First time docker](#first-time-docker)
-
 *   [SSL](#ssl)
-
 *   [Quick Run](#quick-run)
-
 *   [Step by Step Run](#step-by-step-run)
-
 *   [Using API](#using-api)
   *   [Swagger](#swagger)
-
   *   [Postman](#postman)
 
 ## First time docker
@@ -80,9 +75,7 @@ https://localhost:5001
 Authorize API for swagger with these steps:
 
 *   Get up-to-date [JWT Token](jwt-token.md).
-
 *   At right side of page click button `Authorize`.
-
 *   Write down `Bearer <paste-generated-token>`. Make sure to have space between _Bearer_ and JWT token.
 
 > Note:

@@ -3,11 +3,8 @@
 ## Table of contents
 
 *   [Open kibana](#open-kibana)
-
 *   [First time Index for LogStash](#first-time-index-for-logstash)
-
 *   [APM](#apm)
-
 *   [LogStash](#logstash)
 
 TODO: more context and images.
