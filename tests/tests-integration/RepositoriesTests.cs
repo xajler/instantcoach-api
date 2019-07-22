@@ -11,13 +11,12 @@ using Core;
 using Core.Repositories;
 using Core.Context;
 using Core.Models;
-using static System.Console;
 using static Domain.Comment;
 using static Tests.Integration.TestHelpers;
 
 namespace Tests.Integration
 {
-    public class RepositoriesTests : IDisposable
+    public sealed class RepositoriesTests : IDisposable
     {
         private readonly ICContext _context;
         private readonly InstantCoachRepository _repository;

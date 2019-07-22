@@ -19,7 +19,7 @@ using static Core.Constants;
 
 namespace Tests.Integration
 {
-    public class ClientControllersV1Tests : IClassFixture<TestWebApplicationFactory<Startup>>, IDisposable
+    public sealed class ClientControllersV1Tests : IClassFixture<TestWebApplicationFactory<Startup>>, IDisposable
     {
         private readonly HttpClient _client;
         private readonly dynamic _bearer = new ExpandoObject();

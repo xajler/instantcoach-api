@@ -36,8 +36,8 @@ namespace Domain
         public static bool operator ==(Entity a, Entity b)
         {
             if (a is null && b is null) { return true; }
-            if (a is null || b is null) { return false; }
-            return a.Equals(b);
+            else if (a is null || b is null) { return false; }
+            else { return a.Equals(b); }
         }
 
         public static bool operator !=(Entity a, Entity b) => !(a == b);
@@ -51,9 +51,9 @@ namespace Domain
         public bool Equals(Entity other)
         {
             if (other == null && this == null) { return true; }
-            if (other == null || this == null) { return false; }
-            if (Id == other.Id) { return true; }
-            return false;
+            else if (other == null || this == null) { return false; }
+            else if (Id == other.Id) { return true; }
+            else { return false; }
         }
     }
 

@@ -18,7 +18,7 @@ using static Tests.Integration.TestHelpers;
 
 namespace Tests.Integration
 {
-    public class ControllersV1Tests : IDisposable
+    public sealed class ControllersV1Tests : IDisposable
     {
         private readonly ICContext _context;
         private readonly ApiV1Controller _controller;
