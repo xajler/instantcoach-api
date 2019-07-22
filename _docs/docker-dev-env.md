@@ -6,21 +6,26 @@ Using local folder `<src-root>` mapped to `/app` docker container volume. Even t
 >
 > MS Build uses [Directory.Build.props](../Directory.Build.props) and uses `container` folder, to differentiate _local_ from _local docker_ build and publish (e.g. for docker build `bin/container/Debug/netcoreapp2.2` and for local build: `bin/Debug/netcoreapp2.2`).
 
-* [SSL](#ssl)
-* [Quick Way](#quick-way)
-* [Elaborate way](#elaborate-way)
-* [Docker Clean Up](#docker-clean-up)
-* [Using API](#using-api)
-  * [Swagger](#swagger)
-  * [Postman](#postman)
-* [APM & LogStash](#apm--logstash)
+*   [SSL](#ssl)
+
+*   [Quick Way](#quick-way)
+
+*   [Elaborate way](#elaborate-way)
+
+*   [Docker Clean Up](#docker-clean-up)
+
+*   [Using API](#using-api)
+
+  *   [Swagger](#swagger)
+
+  *   [Postman](#postman)
+*   [APM & LogStash](#apm--logstash)
 
 ## SSL
 
 > Note:
 >
 > If you created SSL certificate by running [Local Dev](local-dev-env.md), this step can be skipped.
-
 
 To run docker container with SSL on port (`5001`), make sure to run this command to create local dotnet core certificate:
 
@@ -80,10 +85,12 @@ Make sure [docker compose for dev](../docker-compose-dev.yml) is up and running.
 
 Navigate to home url, and choose version of API to try:
 
-    http://localhost:5000
+```
+http://localhost:5000
 
-    # or SSL version
-    https://localhost:5001
+# or SSL version
+https://localhost:5001
+```
 
 Authorize API for swagger with these steps:
 
@@ -95,25 +102,24 @@ Authorize API for swagger with these steps:
 >
 > Need for JWT Token can be removed all together by removing `[Authorize]` in [BaseController](../api/BaseController.cs) attribute and re-building API container.
 
-
 ### Postman
 
 Run all API calls through Postman.
 
 Import postman collection `InstantCoach API.postman_collection.json` from `_postman` folder.
 
->Note:
+> Note:
 >
 > `Id` used for requests is integer `1`, if database is empty, first run Create (_POST_) request. If database is not empty and there is no `Id` of integer `1`, change it to existing number, use List (_GET_) to get existing `Id`'s.
 
->Note:
+> Note:
 >
 > To add Authorization to all request in postman collection, follow these steps:
-> * Hover right of the _InstantCoach API_ collection in sidebar.
-> * click _..._ and choose _Edit_.
-> * With open _Edit Collection_ modal window, choose second tab _Authorization_.
-> * From type choose _Bearer Token_.
-> * In _Token_ textbox paste up-to-date [JWT Token](jwt-token.md).
+> *  Hover right of the _InstantCoach API_ collection in sidebar.
+> *  click _..._ and choose _Edit_.
+> *  With open _Edit Collection_ modal window, choose second tab _Authorization_.
+> *  From type choose _Bearer Token_.
+> *  In _Token_ textbox paste up-to-date [JWT Token](jwt-token.md).
 
 ## APM & LogStash
 
@@ -125,4 +131,6 @@ For more information read [APM and LogStash docs](apm-logstash.md).
 
 Short version open _Kibana_ and use _APM_ and _Discover_ modules:
 
-    http://localhost:5601
+```
+http://localhost:5601
+```

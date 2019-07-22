@@ -4,7 +4,7 @@ using Domain;
 
 namespace Tests.Unit
 {
-    public class BookmarkPinTests
+    public static class BookmarkPinTests
     {
         private const string MediaUrlValue = "https://example.com/test.png";
         private const string CommentValue =  "No comment";

@@ -10,7 +10,7 @@ using static System.Environment;
 
 namespace Api
 {
-    public class Program
+    public static class Program
     {
         private static readonly string AspNetEnv =
             GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";

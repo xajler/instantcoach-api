@@ -52,7 +52,6 @@ namespace Tests.Integration
 
             // Insert
             var result = await _repository.Save(entity);
-            var actual = result.Value;
 
             entity.Id.Should().Be(1);
             result.Success.Should().BeTrue();
@@ -349,7 +348,7 @@ namespace Tests.Integration
             _context.Dispose();
         }
 
-        private List<Comment> GetUpdateComments()
+        private static List<Comment> GetUpdateComments()
         {
             var result = GetComments();
             result.Add(Attachment(

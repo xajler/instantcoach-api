@@ -52,7 +52,6 @@ namespace Tests.Integration
             };
             response.Should().BeOfType(typeof(OkObjectResult));
             actual.Items.Should().HaveCount(expected.Items.Count);
-            //WriteLine($"Total count: {actual.TotalCount}");
             actual.TotalCount.Should().Be(expected.TotalCount);
         }
 

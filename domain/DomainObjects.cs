@@ -36,7 +36,7 @@ namespace Domain
         public static bool operator ==(Entity a, Entity b)
         {
             if (a is null && b is null) { return true; }
-            if (a is null || b is null) { return false;  }
+            if (a is null || b is null) { return false; }
             return a.Equals(b);
         }
 

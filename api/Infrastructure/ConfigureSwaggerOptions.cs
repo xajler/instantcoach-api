@@ -25,7 +25,7 @@ namespace Api
 
         static Info CreateInfoForApiVersion(ApiVersionDescription description)
         {
-            var info = new Info()
+            var info = new Info
             {
                 Title = "InstantCoach API",
                 Version = description.ApiVersion.ToString(),

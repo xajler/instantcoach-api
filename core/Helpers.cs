@@ -31,47 +31,6 @@ namespace Core
 
     public static class ExceptionExtensions
     {
-        public static string ToStackTraceDump(this Exception exception)
-        {
-            if (exception == null) { return string.Empty; }
-
-            var stringBuilder = new StringBuilder();
-            int index = 0;
-
-            while (exception != null)
-            {
-                if (index > 0)
-                {
-                    stringBuilder.AppendFormat("Inner Exception {0}", index).AppendLine();
-                    stringBuilder.AppendLine("-------------------");
-                    stringBuilder.AppendLine();
-                }
-
-                if (!string.IsNullOrEmpty(exception.Message))
-                {
-                    stringBuilder.AppendFormat("Message: {0}", exception.Message);
-                }
-
-                if (!string.IsNullOrEmpty(exception.StackTrace))
-                {
-                    stringBuilder.AppendLine();
-                    stringBuilder.AppendFormat("Stack Trace: {0}", exception.StackTrace);
-                }
-
-                if (index > 0)
-                {
-                    stringBuilder.AppendLine();
-                    stringBuilder.AppendLine("-------------------");
-                    stringBuilder.AppendLine();
-                }
-
-                exception = exception.InnerException;
-                index++;
-            }
-
-            return stringBuilder.ToString();
-        }
-
         public static string ToInnerMessagesDump(this Exception exception)
         {
             if (exception == null) { return string.Empty; }

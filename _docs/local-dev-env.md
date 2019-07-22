@@ -4,13 +4,19 @@
 >
 > `docker-run.sh` might fail first time running in new terminal, because it starts docker mssql instance and sometimes it will compile and run quicker than starting mssql docker instance, in that case, run same command again.
 
-* [First time docker](#first-time-docker)
-* [SSL](#ssl)
-* [Quick Run](#quick-run)
-* [Step by Step Run](#step-by-step-run)
-* [Using API](#using-api)
-  * [Swagger](#swagger)
-  * [Postman](#postman)
+*   [First time docker](#first-time-docker)
+
+*   [SSL](#ssl)
+
+*   [Quick Run](#quick-run)
+
+*   [Step by Step Run](#step-by-step-run)
+
+*   [Using API](#using-api)
+
+  *   [Swagger](#swagger)
+
+  *   [Postman](#postman)
 
 ## First time docker
 
@@ -65,10 +71,12 @@ Make sure having API running with either [run-local.sh](../run-local.sh) or _VS 
 
 Navigate to home url, and choose version of API to try:
 
-    http://localhost:5000
+```
+http://localhost:5000
 
-    # or SSL version
-    https://localhost:5001
+# or SSL version
+https://localhost:5001
+```
 
 Authorize API for swagger with these steps:
 
@@ -80,18 +88,17 @@ Authorize API for swagger with these steps:
 >
 > Need for JWT Token can be removed all together by removing `[Authorize]` in [BaseController](../api/BaseController.cs) attribute and re-running API.
 
-
 ### Postman
 
 Run all API calls through Postman.
 
 Import postman collection `InstantCoach API.postman_collection.json` from `_postman` folder.
 
->Note:
+> Note:
 >
 > `Id` used for requests is integer `1`, if database is empty, first run Create (_POST_) request. If database is not empty and there is no `Id` of integer `1`, change it to existing number, use List (_GET_) to get existing `Id`'s.
 
->Note:
+> Note:
 >
 > To add Authorization to all request in postman collection, follow these steps:
 > * Hover right of the _InstantCoach API_ collection in sidebar.

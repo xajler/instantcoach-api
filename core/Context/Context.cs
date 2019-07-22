@@ -32,7 +32,7 @@ namespace Core.Context
 
         public async Task<int> SaveChangesAsync()
         {
-            return await SaveChangesAsync(true, default);
+            return await SaveChangesAsync(true, default).ConfigureAwait(false);
         }
 
         public override async Task<int> SaveChangesAsync(

@@ -4,7 +4,6 @@ JWT Token used in REST API is created with service [Auth0](https://auth0.com).
 
 Token is needed for testing REST API, can be used with swagger or Postman (or any other HTTP Client).
 
-
 Issue this request with `curl` or any HTTP Client to get up-to-data token
 
 ```shell
@@ -13,7 +12,6 @@ curl --request POST \
         --header 'content-type: application/json' \
         --data '{"client_id":"D1dMonrAXz9UpLzcdl3rPH3J6mfdk3VE", "client_secret":"lnSg98MN7NuLgC9N4qrrmTRqNUeje088nnSITDguot7N8a2MAxU8RDo8nyXIhLSx","audience":"https://ic.x430n.com","grant_type":"client_credentials"}'
 ```
-
 
 ## JWT Authentication
 

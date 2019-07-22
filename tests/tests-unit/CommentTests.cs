@@ -6,7 +6,7 @@ using static Domain.Comment;
 
 namespace Tests.Unit
 {
-    public class CommentTests
+    public static class CommentTests
     {
         private const string TextValue = "Some text value";
         private const string UrlTextValue = "https://xxx.xxx/xxx.xml";

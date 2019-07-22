@@ -2,10 +2,13 @@
 
 ## Table of contents
 
-* [Open kibana](#open-kibana)
-* [First time Index for LogStash](#first-time-index-for-logstash)
-* [APM](#apm)
-* [LogStash](#logstash)
+*   [Open kibana](#open-kibana)
+
+*   [First time Index for LogStash](#first-time-index-for-logstash)
+
+*   [APM](#apm)
+
+*   [LogStash](#logstash)
 
 TODO: more context and images.
 
@@ -28,7 +31,6 @@ _Kibana_ will be available on this url:
 When containers are up and running for first time, to make available LogStash index in _Kibana_. Open _kibana_ and on left in sidebar choose last item _Settings_.
 
 `TODO`: forgot the name of link. Create index `logstash-*`, choose `timestamp` (or timestamp from logging structured data) and create index. `End TODO`
-
 
 ## APM
 

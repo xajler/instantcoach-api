@@ -20,7 +20,6 @@ namespace Api
     {
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            WriteLine($"Env is: {env.EnvironmentName}");
             Configuration = configuration;
             Env = env;
         }

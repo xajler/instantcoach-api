@@ -32,7 +32,7 @@ namespace Core.Models
                 result = new List<Comment>();
                 foreach (var item in comments)
                 {
-                    if (result != null) { result.Add(CreateComment(item)); }
+                    result.Add(CreateComment(item));
                 }
             }
 

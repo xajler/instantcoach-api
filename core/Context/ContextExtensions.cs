@@ -32,7 +32,6 @@ namespace Core.Context
         {
             if (!context.InstantCoaches.Any())
             {
-                // var types = JsonConvert.DeserializeObject<List<ThreatType>>(File.ReadAllText("seed" + Path.DirectorySeparatorChar + "types.json"));
                 var item1 = new InstantCoach(
                 description: "Some description 1",
                 ticketId: "41",

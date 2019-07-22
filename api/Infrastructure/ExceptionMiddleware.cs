@@ -126,7 +126,7 @@ namespace Api
             }
         }
 
-        private bool IsUsualExceptionsFilter(Exception ex)
+        private static bool IsUsualExceptionsFilter(Exception ex)
         {
             return ex is IndexOutOfRangeException
                    || ex is InvalidOperationException

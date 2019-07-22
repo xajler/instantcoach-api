@@ -70,7 +70,7 @@ namespace Api.Controllers.Version1
         public ActionResult GetAsync(string schemaType)
         {
             var result = _service.GetJsonSchema(schemaType);
-            if (result.Success) return Ok(result.Value);
+            if (result.Success) { return Ok(result.Value); }
             return BadRequest($"Valid schema types are: '{SchemaCreate}' or '{SchemaUpdate}'!");
         }
 

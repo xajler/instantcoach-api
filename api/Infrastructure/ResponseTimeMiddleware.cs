@@ -33,8 +33,11 @@ namespace Api
                 var method = context.Request.Method;
 
                 if (_env.EnvironmentName == LocalEnv)
+                {
                     _logger.LogInformation("\n\n----- START {HttpMethod} {HttpPath} ---------------\n\n",
                     method, path);
+                }
+
                 var watch = Stopwatch.StartNew();
 
                 context.Response.OnStarting(() =>
@@ -46,8 +49,10 @@ namespace Api
                         method, path, responseTime);
 
                     if (_env.EnvironmentName == LocalEnv)
+                    {
                         _logger.LogInformation("\n\n----- END {HttpMethod} {HttpPath} ---------------\n\n",
                         method, path);
+                    }
 
                     return Task.CompletedTask;
                 });

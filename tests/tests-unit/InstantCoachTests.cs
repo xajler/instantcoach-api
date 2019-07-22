@@ -9,7 +9,7 @@ using static Tests.Unit.TestHelpers;
 
 namespace Tests.Unit
 {
-    public class InstantCoachTests
+    public static class InstantCoachTests
     {
         private const string DescriptionValue = "Some description";
         private const string TicketIdValue = "42";

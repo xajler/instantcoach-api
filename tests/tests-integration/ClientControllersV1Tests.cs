@@ -224,14 +224,13 @@ namespace Tests.Integration
             Action result = () => response.EnsureSuccessStatusCode();
             result.Should().NotThrow();
 
-            //content.Dispose();
             response.Dispose();
         }
 
         [Fact]
         public async Task Should_return_success_when_deleted_by_id()
         {
-            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var request = $"/api/instantcoaches/{id}";
             SetFakeBearerToken();

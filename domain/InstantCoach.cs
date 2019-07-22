@@ -52,7 +52,7 @@ namespace Domain
         }
 
         public ValidationResult UpdateAsCompletedAndValidate()
-            => UpdateAsCompletedAndValidate(id: 0);
+            => UpdateAsCompletedAndValidate(id: default);
 
 
         public ValidationResult UpdateAsCompletedAndValidate(int id = 0)
@@ -160,7 +160,7 @@ namespace Domain
                     EvaluatorName.CheckLength(nameof(EvaluatorName), 128),
                     AgentName.CheckForNull(nameof(AgentName)),
                     AgentName.CheckLength(nameof(AgentName), 128)
-                }.ClenupNullItems();
+                }.CleanUpNullItems();
         }
 
         private string CreateReference()
