@@ -27,19 +27,14 @@ namespace Core.Services
     public class InstantCoachService : IInstantCoachService
     {
         private readonly ILogger _logger;
-        // TODO: think of example to get something from Config
-        //private readonly Config _config;
         private readonly InstantCoachRepository _repository;
 
         public InstantCoachService(
             ILogger<InstantCoachService> logger,
-            //IOptions<Config> configOptions,
             InstantCoachRepository repository)
         {
             _logger = logger;
-            //_config = configOptions.Value;
             _repository = repository;
-
         }
 
         public async Task<ListResult<InstantCoachList>> GetList(
@@ -74,11 +69,15 @@ namespace Core.Services
                 generator.GenerationProviders.Add(new StringEnumGenerationProvider());
 
                 if (schemaType == SchemaCreate)
+                {
                     return Result<JSchema>.AsSuccess(
-                        generator.Generate(typeof(InstantCoachCreateClient)));
+                    generator.Generate(typeof(InstantCoachCreateClient)));
+                }
                 else
+                {
                     return Result<JSchema>.AsSuccess(
                         generator.Generate(typeof(InstantCoachUpdateClient)));
+                }
             }
 
             return Result<JSchema>.AsError(ErrorType.InvalidData);
@@ -91,7 +90,7 @@ namespace Core.Services
             InstantCoach entity = data.ToNewInstantCoach();
             var validationResult = entity.Validate();
             _logger.LogInformation("Entity after validate: {@EntityModel}", entity);
-            return await OnSave(entity, validationResult);
+            return await OnSave(entity, validationResult).ConfigureAwait(false);
         }
 
         public async Task<Result> Update(int id, InstantCoachUpdateClient data)
@@ -104,7 +103,7 @@ namespace Core.Services
                 data.UpdateType,
                 data.Comments.ToComments(),
                 data.BookmarkPins.ToBookmarkPins());
-            return await OnSave(entity, validationResult);
+            return await OnSave(entity, validationResult).ConfigureAwait(false);
         }
 
         public async Task<Result> MarkCompleted(int id)
@@ -113,7 +112,7 @@ namespace Core.Services
             if (!entityResult.Success) { return OnNotExistingId(id); }
             var entity = entityResult.Value;
             ValidationResult validationResult = entity.UpdateAsCompletedAndValidate();
-            return await OnSave(entity, validationResult);
+            return await OnSave(entity, validationResult).ConfigureAwait(false);
         }
 
         public async Task<Result> Remove(int id)
@@ -129,9 +128,13 @@ namespace Core.Services
             Result vResult;
 
             if (validationResult.IsValid)
+            {
                 vResult = Result.AsSuccess();
+            }
             else
+            {
                 vResult = Result.AsDomainError(validationResult.Errors);
+            }
 
             Result<InstantCoach> result;
 
@@ -141,7 +144,9 @@ namespace Core.Services
                 result = await _repository.Save(entity);
             }
             else
+            {
                 result = Result<InstantCoach>.AsDomainError(validationResult.Errors);
+            }
 
             _logger.LogInformation("Create Result: {@Result}", result);
             return result;

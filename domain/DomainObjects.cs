@@ -14,10 +14,10 @@ namespace Domain
     {
     }
 
-    public abstract class Entity
+    public abstract class Entity : IEquatable<Entity>
     {
         protected virtual object Actual => this;
-        public int Id { get; private set; } = 0;
+        public int Id { get; private set; }
 
         protected void UpdateId(int id)
         {
@@ -26,42 +26,33 @@ namespace Domain
 
         public override bool Equals(object obj)
         {
-            var other = obj as Entity;
-
-            if (other is null)
-                return false;
-
-            if (ReferenceEquals(this, other))
-                return true;
-
-            if (Actual.GetType() != other.Actual.GetType())
-                return false;
-
-            if (Id == 0 || other.Id == 0)
-                return false;
-
+            if (!(obj is Entity other)) { return false; }
+            if (ReferenceEquals(this, other)) { return true; }
+            if (Actual.GetType() != other.Actual.GetType()) { return false;  }
+            if (Id == 0 || other.Id == 0) { return false; }
             return Id == other.Id;
         }
 
         public static bool operator ==(Entity a, Entity b)
         {
-            if (a is null && b is null)
-                return true;
-
-            if (a is null || b is null)
-                return false;
-
+            if (a is null && b is null) { return true; }
+            if (a is null || b is null) { return false;  }
             return a.Equals(b);
         }
 
-        public static bool operator !=(Entity a, Entity b)
-        {
-            return !(a == b);
-        }
+        public static bool operator !=(Entity a, Entity b) => !(a == b);
+
 
         public override int GetHashCode()
         {
             return (Actual.GetType().ToString() + Id).GetHashCode();
+        }
+
+        public bool Equals(Entity other)
+        {
+            if (other == null) { return false; }
+            if (Id == other.Id) { return true; }
+            return false;
         }
     }
 
@@ -69,10 +60,6 @@ namespace Domain
     {
         protected static bool EqualOperator(ValueObject left, ValueObject right)
         {
-            if (left is null ^ right is null)
-            {
-                return false;
-            }
             return left is null || left.Equals(right);
         }
 
@@ -85,22 +72,13 @@ namespace Domain
 
         public override bool Equals(object obj)
         {
-            if (obj == null || obj.GetType() != GetType())
-            {
-                return false;
-            }
+            if (obj == null || obj.GetType() != GetType()) { return false; }
 
             ValueObject other = (ValueObject)obj;
             IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
             IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
             while (thisValues.MoveNext() && otherValues.MoveNext())
             {
-                if (thisValues.Current is null ^
-                    otherValues.Current is null)
-                {
-                    return false;
-                }
-
                 if (thisValues.Current != null &&
                     !thisValues.Current.Equals(otherValues.Current))
                 {

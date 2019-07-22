@@ -53,7 +53,6 @@ namespace Tests.Integration
             // Insert
             var result = await _repository.Save(entity);
             var actual = result.Value;
-            WriteLine($"Id: {actual.Id}");
 
             entity.Id.Should().Be(1);
             result.Success.Should().BeTrue();
@@ -66,7 +65,6 @@ namespace Tests.Integration
 
             // Insert
             var actual = await _repository.Save(entity);
-            WriteLine("Id: null");
 
             actual.Success.Should().BeFalse();
             actual.Error.Should().Be(ErrorType.InvalidData);
@@ -88,7 +86,6 @@ namespace Tests.Integration
 
             // Insert
             var insertResult = await _repository.Save(entity);
-            WriteLine($"Id: {entity.Id}");
             insertResult.Success.Should().BeTrue();
 
             // Get By Id
@@ -126,7 +123,6 @@ namespace Tests.Integration
 
             // Insert
             var insertResult = await _repository.Save(entity);
-            WriteLine($"Id: {entity.Id}");
             insertResult.Success.Should().BeTrue();
 
             // Find by Id
@@ -164,7 +160,6 @@ namespace Tests.Integration
 
             // Insert
             var insertResult = await _repository.Save(entity);
-            WriteLine($"Id: {entity.Id}");
             insertResult.Success.Should().BeTrue();
 
             // Find by Id
@@ -198,7 +193,6 @@ namespace Tests.Integration
 
             // Insert
             var insertResult = await _repository.Save(entity);
-            WriteLine($"Id: {entity.Id}");
             insertResult.Success.Should().BeTrue();
 
             // Get By Id
@@ -222,7 +216,6 @@ namespace Tests.Integration
 
             // Insert
             var actual = await _repository.Delete(entity);
-            WriteLine("Id: null");
 
             actual.Success.Should().BeFalse();
             actual.Error.Should().Be(ErrorType.InvalidData);
@@ -238,7 +231,6 @@ namespace Tests.Integration
                 skip: 0,
                 take: 10,
                 showCompleted: false);
-            WriteLine($"List Result count: {actual.TotalCount}");
 
             actual.GetType().Should().Be(typeof(ListResult<InstantCoachList>));
             actual.Items.Should().HaveCount(3);
@@ -252,7 +244,6 @@ namespace Tests.Integration
                 skip: 0,
                 take: 10,
                 showCompleted: false);
-            WriteLine($"List Result count: {actual.TotalCount}");
 
             actual.Items.Should().HaveCount(0);
             actual.TotalCount.Should().Be(0);
@@ -267,7 +258,6 @@ namespace Tests.Integration
                 skip: 0,
                 take: 3,
                 showCompleted: true);
-            WriteLine($"List Result count: {actual.TotalCount}");
 
             actual.Items.Should().HaveCount(3);
             actual.TotalCount.Should().Be(4);
@@ -282,7 +272,6 @@ namespace Tests.Integration
                 skip: 1,
                 take: 3,
                 showCompleted: true);
-            WriteLine($"List Result count: {actual.TotalCount}");
 
             actual.Items.Should().HaveCount(1);
             actual.TotalCount.Should().Be(4);
@@ -302,7 +291,6 @@ namespace Tests.Integration
             entity.AddBookmarkPins(GetBookmarkPins());
 
             var insertResult = await _repository.Save(entity);
-            WriteLine($"Id: {entity.Id}");
             insertResult.Success.Should().BeTrue();
             var getByIdResult = await _repository.GetById(entity.Id);
             var actual = getByIdResult.Value;
@@ -341,7 +329,6 @@ namespace Tests.Integration
             entity.AddBookmarkPins(GetBookmarkPins());
 
             var insertResult = await _repository.Save(entity);
-            WriteLine($"Id: {entity.Id}");
             insertResult.Success.Should().BeTrue();
             var actual = await _repository.GetExistingId(entity.Id);
 
@@ -351,7 +338,6 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_zero_when_getting_not_existing_IC_id()
         {
-            WriteLine("Id: 0");
             var actual = await _repository.GetExistingId(1);
 
             actual.Should().Be(0);

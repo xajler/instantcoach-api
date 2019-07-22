@@ -25,7 +25,6 @@ namespace Tests.Integration
         private readonly dynamic _bearer = new ExpandoObject();
         private const string UserName = "SUTUser";
         private readonly string[] Roles = new[] { "Role1" };
-        private List<InstantCoachList> _items = new List<InstantCoachList>();
         private readonly ICContext _context;
 
         public ClientControllersV1Tests(TestWebApplicationFactory<Startup> factory)
@@ -50,7 +49,6 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_ok_with_empty_list_when_no_data()
         {
-            //await _context.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE[InstantCoaches]");
             var request = "/api/instantcoaches";
             SetFakeBearerToken();
             var response = await _client.GetAsync(request);
@@ -73,18 +71,17 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_ok_with_list_without_completed()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
             var request = "/api/instantcoaches";
             SetFakeBearerToken();
             var response = await _client.GetAsync(request);
 
 
             Action result = () => response.EnsureSuccessStatusCode();
-            var expected = ExpectedCount(_items.Where(x => x.Status != InstantCoachStatus.Completed).Count());
+            var expected = ExpectedCount(items.Where(x => x.Status != InstantCoachStatus.Completed).Count());
 
             result.Should().NotThrow();
             var content = await response.Content.ReadAsStringAsync();
-            //WriteLine($"Default content: {content}");
             content.Should().Contain(expected);
 
             response.Dispose();
@@ -93,18 +90,17 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_ok_with_list_first_page_list_completed()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
             var request = $"/api/instantcoaches?skip=0&take=2&showCompleted=true";
             SetFakeBearerToken();
             var response = await _client.GetAsync(request);
 
 
             Action result = () => response.EnsureSuccessStatusCode();
-            var expected = ExpectedCount(_items.Count());
+            var expected = ExpectedCount(items.Count());
 
             result.Should().NotThrow();
             var content = await response.Content.ReadAsStringAsync();
-            //WriteLine($"Completed content: {content}");
             content.Should().Contain(expected);
 
             response.Dispose();
@@ -113,7 +109,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_ok_with_model_by_id()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var request = $"/api/instantcoaches/{id}";
             SetFakeBearerToken();
@@ -125,7 +121,6 @@ namespace Tests.Integration
 
             result.Should().NotThrow();
             var content = await response.Content.ReadAsStringAsync();
-            //WriteLine($"Completed content: {content}");
             content.Should().Contain(expected);
 
             response.Dispose();
@@ -178,7 +173,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_success_when_updated_from_model_and_id()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var model = new InstantCoachUpdateClient
             {
@@ -211,8 +206,6 @@ namespace Tests.Integration
 
 
             Action result = () => response.EnsureSuccessStatusCode();
-            // WriteLine($"response: {await response.Content.ReadAsStringAsync()}");
-            // WriteLine($"response status code: {response.StatusCode}");
             result.Should().NotThrow();
 
             response.Dispose();
@@ -221,12 +214,11 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_success_when_patched_as_completed_by_id()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
             int id = 1;
-            //var content = new StringContent("{}", Encoding.UTF8, "application/json-patch+json");
             var request = $"/api/instantcoaches/{id}/completed";
             SetFakeBearerToken();
-            var response = await _client.PatchAsync(request, null); //, content);
+            var response = await _client.PatchAsync(request, null);
 
 
             Action result = () => response.EnsureSuccessStatusCode();
@@ -239,7 +231,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_return_success_when_deleted_by_id()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
             int id = 1;
             var request = $"/api/instantcoaches/{id}";
             SetFakeBearerToken();

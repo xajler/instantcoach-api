@@ -24,8 +24,13 @@ namespace Domain
     {
         private readonly List<string> _errors = new List<string>();
 
+        public BookmarkPin(int id, int index, Range range, string mediaurl)
+            : this(id, index, range, mediaurl, null)
+        {
+        }
+
         public BookmarkPin(int id, int index, Range range,
-            string mediaurl, string comment = null)
+            string mediaurl, string comment)
         {
             Id = id;
             Index = index;
@@ -42,13 +47,17 @@ namespace Domain
 
         public IReadOnlyList<string> Validate()
         {
-            if (Id <= 0) _errors.Add("Bookmark Pin Id should be greater than 0.");
-            if (Index <= 0) _errors.Add("Bookmark Pin Index should be greater than 0.");
-            if (Range.Start <= 0) _errors.Add("Bookmark Pin Range Start should be greater than 0.");
+            if (Id <= 0) { _errors.Add("Bookmark Pin Id should be greater than 0."); }
+            if (Index <= 0) { _errors.Add("Bookmark Pin Index should be greater than 0."); }
+            if (Range.Start <= 0) { _errors.Add("Bookmark Pin Range Start should be greater than 0."); }
             if (Range.Start >= Range.End)
+            {
                 _errors.Add("Bookmark Pin Range end number must be greater than start number.");
+            }
             if (string.IsNullOrWhiteSpace(MediaUrl))
+            {
                 _errors.Add("Bookmark Pin MediaUrl is required.");
+            }
             return _errors;
         }
 

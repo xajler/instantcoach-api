@@ -39,7 +39,6 @@ namespace Api
 
             if (Env.EnvironmentName == SUTEnv)
             {
-                WriteLine("Setting SUT services...");
                 services.AddDbContextService(config.GetSUTConnectionString());
                 services.AddFakeSUTJwtAuthenticationService();
             }
@@ -81,7 +80,6 @@ namespace Api
                 if (!context.AllMigrationsApplied())
                 {
                     context.Database.Migrate();
-                    //context.EnsureSeeded();
                 }
             }
         }

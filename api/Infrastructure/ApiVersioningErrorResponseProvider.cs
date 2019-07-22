@@ -8,16 +8,15 @@ namespace Api
         public override IActionResult CreateResponse(ErrorResponseContext context)
         {
             var msg = "An API version is required, but was not specified. Please set HTTP Header 'X-Api-Version' with API version number.";
-            switch (context.ErrorCode)
+
+            if (context.ErrorCode == "ApiVersionUnspecified")
             {
-                case "ApiVersionUnspecified":
-                    context = new ErrorResponseContext(
-                        context.Request,
-                        context.StatusCode,
-                        context.ErrorCode,
-                        msg,
-                        context.MessageDetail);
-                    break;
+                context = new ErrorResponseContext(
+                    context.Request,
+                    context.StatusCode,
+                    context.ErrorCode,
+                    msg,
+                    context.MessageDetail);
             }
 
             return base.CreateResponse(context);

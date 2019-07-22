@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Domain;
 using Core.Context;
 using Core.Models;
-using static Core.Helpers;
 using static Core.Constants.Db;
 
 namespace Core.Repositories

@@ -13,6 +13,7 @@ namespace Api
         {
             _logger = loggerFactory.CreateLogger<OperationCancelledExceptionFilter>();
         }
+
         public override void OnException(ExceptionContext context)
         {
             if (context.Exception is OperationCanceledException)

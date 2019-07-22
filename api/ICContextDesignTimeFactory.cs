@@ -11,7 +11,7 @@ namespace Api
     //
     // NOTE:
     //
-    // Neded only for running `dotnet ef` commands, not used for creating db context...
+    // Needed only for running `dotnet ef` commands, not used for creating db context...
     //
     public class ICContextDesignTimeFactory : IDesignTimeDbContextFactory<ICContext>
     {
@@ -23,7 +23,6 @@ namespace Api
                 .Build();
             Config config = configuration.GetSection(Config.Name).Get<Config>();
             var connectionString = config.GetConnectionString();
-            WriteLine($"conn string: {connectionString}");
             var builder = new DbContextOptionsBuilder<ICContext>();
             builder.UseSqlServer(connectionString);
             return new ICContext(builder.Options);

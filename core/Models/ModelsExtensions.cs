@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Domain;
 using static Core.Helpers;
@@ -29,25 +30,9 @@ namespace Core.Models
             if (comments != null && comments.Count > 0)
             {
                 result = new List<Comment>();
-
                 foreach (var item in comments)
                 {
-                    Comment comment = null;
-                    switch (item.CommentType)
-                    {
-                        case CommentType.Textual:
-                            comment = Comment.Textual(item.Text, item.AuthorType, item.CreatedAt);
-                            break;
-                        case CommentType.Attachment:
-                            comment = Comment.Attachment(item.Text, item.AuthorType, item.CreatedAt);
-                            break;
-                        case CommentType.Bookmark:
-                            comment = Comment.Bookmark(item.BookmarkPinId, item.AuthorType, item.CreatedAt);
-                            break;
-                    }
-
-                    if (result != null)
-                        result.Add(comment);
+                    if (result != null) { result.Add(CreateComment(item)); }
                 }
             }
 
@@ -91,6 +76,21 @@ namespace Core.Models
                 evaluatorName: db.EvaluatorName,
                 comments: FromJson<List<Comment>>(db.Comments),
                 bookmarkPins);
+        }
+
+        private static Comment CreateComment(CommentClient item)
+        {
+            switch (item.CommentType)
+            {
+                case CommentType.Textual:
+                    return Comment.Textual(item.Text, item.AuthorType, item.CreatedAt);
+                case CommentType.Attachment:
+                    return Comment.Attachment(item.Text, item.AuthorType, item.CreatedAt);
+                case CommentType.Bookmark:
+                    return Comment.Bookmark(item.BookmarkPinId, item.AuthorType, item.CreatedAt);
+                default:
+                    throw new ArgumentOutOfRangeException($"Unknown comment: {item.CommentType}");
+            }
         }
     }
 }

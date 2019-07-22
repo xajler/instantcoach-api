@@ -33,7 +33,6 @@ namespace Core.Context
             if (!context.InstantCoaches.Any())
             {
                 // var types = JsonConvert.DeserializeObject<List<ThreatType>>(File.ReadAllText("seed" + Path.DirectorySeparatorChar + "types.json"));
-                Console.WriteLine("Start db seed...");
                 var item1 = new InstantCoach(
                 description: "Some description 1",
                 ticketId: "41",
@@ -79,8 +78,6 @@ namespace Core.Context
                 item4Entity.UpdateAsCompletedAndValidate();
                 context.Entry(item4Entity).State = EntityState.Modified;
                 context.SaveChanges();
-                Console.WriteLine($"Db IC count: {context.InstantCoaches.Count()}");
-                Console.WriteLine($"Db IC count2: {context.Set<InstantCoach>().Count()}");
             }
         }
 

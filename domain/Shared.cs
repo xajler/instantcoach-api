@@ -36,12 +36,12 @@ namespace Domain
         public List<string> Errors { get; private set; } = new List<string>();
         public void AddError(string error)
         {
-            if (string.IsNullOrWhiteSpace(error)) return;
+            if (string.IsNullOrWhiteSpace(error)) { return; }
             Errors.Add(error);
         }
         public void AddErrorRange(IReadOnlyList<string> errors)
         {
-            if (errors == null || errors.Count == 0) return;
+            if (errors == null || errors.Count == 0) { return; }
             Errors.AddRange(errors);
         }
     }

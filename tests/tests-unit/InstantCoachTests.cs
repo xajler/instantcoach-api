@@ -6,7 +6,6 @@ using Domain;
 using static Domain.Helpers;
 using static Domain.Comment;
 using static Tests.Unit.TestHelpers;
-using static System.Console;
 
 namespace Tests.Unit
 {
@@ -20,7 +19,7 @@ namespace Tests.Unit
         private const string AgentNameValue = "Jane Agent";
 
         [Fact]
-        public void Should_be_able_to_create_correct_reference_via_GetTicksExcludingFirst5Digits()
+        public static void Should_be_able_to_create_correct_reference_via_GetTicksExcludingFirst5Digits()
         {
             var result = GetTicksExcludingFirst5Digits();
 
@@ -32,7 +31,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_of_aggregate_root_type()
+        public static void Should_be_of_aggregate_root_type()
         {
             var actual = typeof(InstantCoach);
             var expected = typeof(AggregateRoot);
@@ -41,7 +40,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_of_entity_type()
+        public static void Should_be_of_entity_type()
         {
             var actual = typeof(InstantCoach);
             var expected = typeof(Entity);
@@ -50,7 +49,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_equel_when_same_identity()
+        public static void Should_be_equal_when_same_identity()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -89,7 +88,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_not_be_equal_when_different_identity()
+        public static void Should_not_be_equal_when_different_identity()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -129,7 +128,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_valid_on_create_IC_via_ctor()
+        public static void Should_be_valid_on_create_IC_via_ctor()
         {
             var ic = new InstantCoach(
                 DescriptionValue,
@@ -148,7 +147,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_comments_are_null_on_create_IC_ctor()
+        public static void Should_have_errors_when_comments_are_null_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                 DescriptionValue,
@@ -168,7 +167,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_valid_on_update()
+        public static void Should_be_valid_on_update()
         {
             var ic = new InstantCoach(
                 DescriptionValue,
@@ -191,7 +190,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_of_status_waiting_on_review_update()
+        public static void Should_be_of_status_waiting_on_review_update()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -214,7 +213,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_of_status_completed_on_update_as_completed()
+        public static void Should_be_of_status_completed_on_update_as_completed()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -233,7 +232,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_valid_adding_bookmark_pins_on_update()
+        public static void Should_be_valid_adding_bookmark_pins_on_update()
         {
             var ic = new InstantCoach(
                 DescriptionValue,
@@ -257,7 +256,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_comments_are_null_on_update()
+        public static void Should_have_errors_when_comments_are_null_on_update()
         {
             var ic = new InstantCoach(
                 DescriptionValue,
@@ -281,7 +280,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_valid_reference_on_create_IC_via_ctor()
+        public static void Should_have_valid_reference_on_create_IC_via_ctor()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -298,7 +297,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_of_status_New_on_create_IC_via_ctor()
+        public static void Should_be_of_status_New_on_create_IC_via_ctor()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -315,7 +314,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_comments_count_set_on_create_IC_via_ctor()
+        public static void Should_have_comments_count_set_on_create_IC_via_ctor()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -331,7 +330,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_status_in_progress_on_update()
+        public static void Should_have_status_in_progress_on_update()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -354,7 +353,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_comments_count_set_on_update()
+        public static void Should_have_comments_count_set_on_update()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -377,7 +376,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_some_properties_on_update_same_as_on_create()
+        public static void Should_have_some_properties_on_update_same_as_on_create()
         {
             var actual = new InstantCoach(
                 DescriptionValue,
@@ -413,7 +412,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_description_is_empty_on_create_IC_ctor()
+        public static void Should_have_errors_when_description_is_empty_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  description: "",
@@ -433,7 +432,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_description_larger_then_1000_chars_on_create_IC_ctor()
+        public static void Should_have_errors_when_description_larger_then_1000_chars_on_create_IC_ctor()
         {
 
             var ic = new InstantCoach(
@@ -454,7 +453,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_ticketId_is_empty_on_create_IC_ctor()
+        public static void Should_have_errors_when_ticketId_is_empty_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  DescriptionValue,
@@ -474,7 +473,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_ticketId_larger_then_64_chars_on_create_IC_ctor()
+        public static void Should_have_errors_when_ticketId_larger_then_64_chars_on_create_IC_ctor()
         {
 
             var ic = new InstantCoach(
@@ -495,7 +494,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_evaluatorId_smaller_or_equal_to_zero_on_create_IC_ctor()
+        public static void Should_have_errors_when_evaluatorId_smaller_or_equal_to_zero_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  DescriptionValue,
@@ -510,16 +509,12 @@ namespace Tests.Unit
             var expected = "EvaluatorId should be greater than 0.";
 
             actual.IsValid.Should().BeFalse();
-            foreach (var error in actual.Errors)
-            {
-                WriteLine(error);
-            }
             actual.Errors.Should().HaveCount(1);
             actual.Errors[0].Should().Be(expected);
         }
 
         [Fact]
-        public void Should_have_errors_when_agentId_smaller_or_equal_to_zero_on_create_IC_ctor()
+        public static void Should_have_errors_when_agentId_smaller_or_equal_to_zero_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  DescriptionValue,
@@ -534,16 +529,12 @@ namespace Tests.Unit
             var expected = "AgentId should be greater than 0.";
 
             actual.IsValid.Should().BeFalse();
-            foreach (var error in actual.Errors)
-            {
-                WriteLine(error);
-            }
             actual.Errors.Should().HaveCount(1);
             actual.Errors[0].Should().Be(expected);
         }
 
         [Fact]
-        public void Should_have_errors_when_evaluator_name_is_empty_on_create_IC_ctor()
+        public static void Should_have_errors_when_evaluator_name_is_empty_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  DescriptionValue,
@@ -563,7 +554,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_evaluator_name_larger_then_128_chars_on_create_IC_ctor()
+        public static void Should_have_errors_when_evaluator_name_larger_then_128_chars_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  DescriptionValue,
@@ -583,7 +574,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_agent_name_is_empty_on_create_IC_ctor()
+        public static void Should_have_errors_when_agent_name_is_empty_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  DescriptionValue,
@@ -603,7 +594,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_agent_name_larger_then_128_chars_on_create_IC_ctor()
+        public static void Should_have_errors_when_agent_name_larger_then_128_chars_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  DescriptionValue,
@@ -618,16 +609,12 @@ namespace Tests.Unit
             var expected = "AgentName should not exceed 128 characters.";
 
             actual.IsValid.Should().BeFalse();
-            foreach (var error in actual.Errors)
-            {
-                WriteLine(error);
-            }
             actual.Errors.Should().HaveCount(1);
             actual.Errors[0].Should().Be(expected);
         }
 
         [Fact]
-        public void Should_have_errors_when_one_or_more_comments_are_invalid_on_create_IC_ctor()
+        public static void Should_have_errors_when_one_or_more_comments_are_invalid_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  DescriptionValue,
@@ -646,7 +633,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_one_or_more_bookmark_pins_are_invalid_on_create_IC_ctor()
+        public static void Should_have_errors_when_one_or_more_bookmark_pins_are_invalid_on_create_IC_ctor()
         {
             var ic = new InstantCoach(
                  DescriptionValue,
@@ -665,7 +652,7 @@ namespace Tests.Unit
             actual.Errors.Should().HaveCount(expected);
         }
 
-        private List<Comment> GetComments()
+        private static List<Comment> GetComments()
         {
             return new List<Comment>
             {
@@ -674,7 +661,7 @@ namespace Tests.Unit
             };
         }
 
-        private List<Comment> GetUpdateComments()
+        private static List<Comment> GetUpdateComments()
         {
             var result = GetComments();
             result.Add(
@@ -682,7 +669,7 @@ namespace Tests.Unit
             return result;
         }
 
-        private List<BookmarkPin> GetBookmarkPins()
+        private static List<BookmarkPin> GetBookmarkPins()
         {
             var result = new List<BookmarkPin>();
             var bookmarkPin = new BookmarkPin(id: 1, index: 1, new Range(1, 2),
@@ -691,7 +678,7 @@ namespace Tests.Unit
             return result;
         }
 
-        private List<BookmarkPin> GetBookmarkPinsWithError()
+        private static List<BookmarkPin> GetBookmarkPinsWithError()
         {
             var result = new List<BookmarkPin>();
             var bookmarkPin = new BookmarkPin(id: 0, index: 1, new Range(1, 2),
@@ -700,7 +687,7 @@ namespace Tests.Unit
             return result;
         }
 
-        private List<Comment> GetCommentsWithError()
+        private static List<Comment> GetCommentsWithError()
         {
             return new List<Comment>
             {
@@ -710,8 +697,3 @@ namespace Tests.Unit
         }
     }
 }
-
-            // foreach (var error in actual.Errors)
-            // {
-            //     WriteLine(error);
-            // }

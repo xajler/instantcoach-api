@@ -51,6 +51,10 @@ namespace Domain
             return Validate();
         }
 
+        public ValidationResult UpdateAsCompletedAndValidate()
+            => UpdateAsCompletedAndValidate(id: 0);
+
+
         public ValidationResult UpdateAsCompletedAndValidate(int id = 0)
         {
             UpdateId(id);
@@ -72,35 +76,15 @@ namespace Domain
             {
                 Comments = new List<Comment>();
                 int index = 1;
+
                 foreach (var item in comments)
                 {
-                    Comment comment = null;
-                    //Console.WriteLine($"[{index}] type: {item.CommentType}");
-                    switch (item.CommentType)
-                    {
-                        case CommentType.Textual:
-                            comment = Comment.Textual(
-                                item.Text, item.AuthorType, item.CreatedAt);
-                            break;
-                        case CommentType.Attachment:
-                            comment = Comment.Attachment(
-                                item.Text, item.AuthorType, item.CreatedAt);
-                            break;
-                        case CommentType.Bookmark:
-                            //Console.WriteLine($"[{index}] BKMID: {item.BookmarkPinId}");
-                            comment = Comment.Bookmark(
-                                item.BookmarkPinId, item.AuthorType, item.CreatedAt);
-                            break;
-                    }
-
+                    Comment comment = CreateComment(item);
+                    // TODO: Adde index to errors
                     index++;
-
-                    if (comment != null)
-                    {
-                        var errors = comment.Validate();
-                        if (errors.Any()) { _errors.AddErrorRange(errors); }
-                        else { Comments.Add(comment); }
-                    }
+                    var errors = comment.Validate();
+                    if (errors.Any()) { _errors.AddErrorRange(errors); }
+                    else { Comments.Add(comment); }
                 }
 
                 CommentsCount = Comments.Count;
@@ -133,7 +117,7 @@ namespace Domain
             BookmarkPinsConvert = BookmarkPins;
         }
 
-        private InstantCoachStatus SetStatus(UpdateType updateType)
+        private static InstantCoachStatus SetStatus(UpdateType updateType)
         {
             if (updateType == UpdateType.Save)
             {
@@ -142,6 +126,25 @@ namespace Domain
 
             return InstantCoachStatus.Waiting;
         }
+
+        private static Comment CreateComment(Comment item)
+        {
+            switch (item.CommentType)
+            {
+                case CommentType.Textual:
+                    return Comment.Textual(
+                        item.Text, item.AuthorType, item.CreatedAt);
+                case CommentType.Attachment:
+                    return Comment.Attachment(
+                        item.Text, item.AuthorType, item.CreatedAt);
+                case CommentType.Bookmark:
+                    return Comment.Bookmark(
+                        item.BookmarkPinId, item.AuthorType, item.CreatedAt);
+                default:
+                    throw new ArgumentOutOfRangeException($"Unknown comment: {item.CommentType}");
+            }
+        }
+
 
         private List<string> CreateValidationErrors()
         {
@@ -177,8 +180,7 @@ namespace Domain
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(BookmarkPinsValue))
-                    return null;
+                if (string.IsNullOrWhiteSpace(BookmarkPinsValue)) { return null; }
                 else
                 {
                     var result = FromJson<List<Comment>>(CommentsValue);
@@ -192,8 +194,7 @@ namespace Domain
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(BookmarkPinsValue))
-                    return null;
+                if (string.IsNullOrWhiteSpace(BookmarkPinsValue)) { return null; }
                 else
                 {
                     var result = FromJson<List<BookmarkPin>>(BookmarkPinsValue);
@@ -203,10 +204,8 @@ namespace Domain
             }
             private set
             {
-                if (value == null)
-                    BookmarkPinsValue = null;
-                else
-                    BookmarkPinsValue = ToJson(value);
+                if (value == null) { BookmarkPinsValue = null; }
+                else { BookmarkPinsValue = ToJson(value); }
             }
         }
 

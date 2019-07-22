@@ -19,14 +19,10 @@ namespace Tests.Integration
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             // !!!! Remove comment if needed for more info when running ClientController tests. !!!
-            // Log.Logger = CreateLogger();
+            Log.Logger = CreateLogger();
             builder.UseEnvironment(SUTEnv)
                    .ConfigureServices(services =>
                     {
-                        var serviceProvider = new ServiceCollection()
-                                .AddEntityFrameworkInMemoryDatabase()
-                                .BuildServiceProvider();
-
                         var config = CreateConfigForTest();
                         services.AddDbContextService(config.GetSUTConnectionString());
 
@@ -38,23 +34,11 @@ namespace Tests.Integration
                             var db = scopedServices.GetRequiredService<ICContext>();
                             var logger = scopedServices
                                 .GetRequiredService<ILogger<TestWebApplicationFactory<TStartup>>>();
-
-                            //db.Database.EnsureCreated();
-
-                            // try
-                            // {
-                            //     db.EnsureSeeded();
-                            // }
-                            // catch (Exception ex)
-                            // {
-                            //     logger.LogError(ex, "An error occurred seeding the " +
-                            //         $"database with test messages. Error: {ex.Message}");
-                            // }
                         }
                     });
         }
 
-        private Serilog.ILogger CreateLogger()
+        private static Serilog.ILogger CreateLogger()
         {
             return new LoggerConfiguration()
                 .MinimumLevel.Debug()

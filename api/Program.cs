@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Core;
-using static System.Console;
 using static System.Environment;
 
 
@@ -24,9 +23,7 @@ namespace Api
 
         public static int Main(string[] args)
         {
-            WriteLine($"Current path: {Directory.GetCurrentDirectory()}");
             var esUrl = GetEnvironmentVariable(Constants.EsUrlEnVar);
-            WriteLine("ES URI: {0}", esUrl);
             Log.Logger = Logging.Logger(Configuration, esUrl);
             try
             {
@@ -45,7 +42,6 @@ namespace Api
             {
                 Log.CloseAndFlush();
             }
-
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

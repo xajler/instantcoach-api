@@ -31,7 +31,7 @@ namespace Core
             string result = Environment.GetEnvironmentVariable(envVar);
             if (string.IsNullOrEmpty(result))
             {
-                throw new Exception($"Missing ENV Var: {envVar}");
+                throw new ArgumentNullException($"Missing ENV Var: {envVar}");
             }
             return result;
         }

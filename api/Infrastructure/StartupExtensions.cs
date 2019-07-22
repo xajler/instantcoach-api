@@ -81,15 +81,13 @@ namespace Api
         public static void AddDbContextService(this IServiceCollection services,
             string connectionString)
         {
-            Console.WriteLine($"conn string: {connectionString}");
             services.AddDbContext<ICContext>(options =>
                   options.UseSqlServer(connectionString, providerOptions =>
                           {
-                              //providerOptions.CommandTimeout(180);
                               providerOptions.EnableRetryOnFailure(
-                              maxRetryCount: 10,
-                              maxRetryDelay: TimeSpan.FromSeconds(30),
-                              errorNumbersToAdd: null);
+                                maxRetryCount: 10,
+                                maxRetryDelay: TimeSpan.FromSeconds(30),
+                                errorNumbersToAdd: null);
                           })
                          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
         }
@@ -113,7 +111,6 @@ namespace Api
         {
             services.AddAuthentication(options =>
             {
-                //options.DefaultScheme = FakeJwtBearerDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = FakeJwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = FakeJwtBearerDefaults.AuthenticationScheme;
             }).AddFakeJwtBearer();

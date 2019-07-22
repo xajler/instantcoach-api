@@ -21,7 +21,6 @@ namespace Tests.Integration
     public class ControllersV1Tests : IDisposable
     {
         private readonly ICContext _context;
-        private List<InstantCoachList> _items = new List<InstantCoachList>();
         private readonly ApiV1Controller _controller;
         private readonly ILoggerFactory _loggerFactory;
 
@@ -60,25 +59,25 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_be_ok_result_with_second_page_of_completed_list_when_data_on_GET()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
             var response = await _controller.GetAsync(skip: 1, take: 3, showCompleted: true);
             var result = response as ObjectResult;
             var actual = result.Value as ListResult<InstantCoachList>;
             var expected = 1;
             response.Should().BeOfType(typeof(OkObjectResult));
             actual.Items.Should().HaveCount(expected);
-            actual.TotalCount.Should().Be(_items.Count);
+            actual.TotalCount.Should().Be(items.Count);
         }
 
         [Fact]
         public async Task Should_be_ok_result_with_model_by_id_on_GET()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
-            int id = _items.Select(x => x.Id).First();
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            int id = items.Select(x => x.Id).First();
             var response = await _controller.GetAsync(id: id);
             var result = response as ObjectResult;
             var actual = result.Value as InstantCoachForId;
-            var expected = _items.Where(x => x.Id == id).FirstOrDefault();
+            var expected = items.Where(x => x.Id == id).FirstOrDefault();
             response.Should().BeOfType(typeof(OkObjectResult));
             actual.EvaluatorName.Should().Be(expected.EvaluatorName);
             actual.Comments.Should().HaveCount(expected.CommentsCount);
@@ -209,8 +208,8 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_be_no_content_result_when_updated_by_model_and_id_on_PUT()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
-            int id = _items.Select(x => x.Id).First();
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            int id = items.Select(x => x.Id).First();
             var model = new InstantCoachUpdateClient
             {
                 UpdateType = UpdateType.Save,
@@ -276,8 +275,8 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_be_bad_request_result_when_model_not_valid_only_when_enums_not_set_for_update_by_id_on_PUT()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
-            int id = _items.Select(x => x.Id).First();
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            int id = items.Select(x => x.Id).First();
             var model = new InstantCoachUpdateClient
             {
                 UpdateType = UpdateType.Save,
@@ -308,8 +307,8 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_be_bad_request_result_when_domain_model_not_valid_for_update_by_id_on_PUT()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
-            int id = _items.Select(x => x.Id).First();
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            int id = items.Select(x => x.Id).First();
             var model = new InstantCoachUpdateClient
             {
                 UpdateType = UpdateType.Save,
@@ -342,8 +341,8 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_be_no_content_result_with_id_on_PATCH()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
-            int id = _items.Select(x => x.Id).First();
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            int id = items.Select(x => x.Id).First();
             var response = await _controller.PatchAsync(id);
 
             response.Should().BeOfType(typeof(NoContentResult));
@@ -360,8 +359,8 @@ namespace Tests.Integration
         [Fact]
         public async Task Should_be_no_content_result_with_id_on_DELETE()
         {
-            _items = await Insert4ItemsWith1Completed(_context);
-            int id = _items.Select(x => x.Id).First();
+            List<InstantCoachList> items = await Insert4ItemsWith1Completed(_context);
+            int id = items.Select(x => x.Id).First();
             var response = await _controller.DeleteAsync(id);
 
             response.Should().BeOfType(typeof(NoContentResult));
