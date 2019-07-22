@@ -50,7 +50,8 @@ namespace Domain
 
         public bool Equals(Entity other)
         {
-            if (other == null) { return false; }
+            if (other == null && this == null) { return true; }
+            if (other == null || this == null) { return false; }
             if (Id == other.Id) { return true; }
             return false;
         }

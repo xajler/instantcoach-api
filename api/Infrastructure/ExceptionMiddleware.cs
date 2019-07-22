@@ -48,18 +48,20 @@ namespace Api
 
     public class ExceptionMiddleware
     {
+        private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
         public ExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<ExceptionMiddleware>();
+            _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
+        public async Task InvokeAsync(HttpContext httpContext)
         {
             try
             {
-                await next(httpContext);
+                await _next(httpContext);
             }
             catch (DbUpdateException ex)
             {

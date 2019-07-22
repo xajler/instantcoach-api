@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Domain
 {
@@ -29,6 +30,7 @@ namespace Domain
         {
         }
 
+        [JsonConstructor]
         public BookmarkPin(int id, int index, Range range,
             string mediaurl, string comment)
         {
