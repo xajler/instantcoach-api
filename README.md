@@ -75,7 +75,7 @@ Domain Errors and Endpoint Request Logging
 *   [x] Dockerfile Nginx web server with SSL nginx.conf (Not really necessary because this REST A  PI should be internal/private)
 *   [x] Docker Compose (Development with watch, Test, CI Testing)
 *   [x] SSL (local development: dotnet dev-certs https, test: nginx self-signed certificate)
-*   [x] Github badges for Code Coverage ([coveralls.io](https://coveralls.io/github/xajler/i  nstantcoach-api)) and CI ([Travis CI](https://travis-ci.org/xajler/instantcoach-api)) (  master branch)
+*   [x] Github badges for Code Coverage [coveralls.io](https://coveralls.io/github/xajler/instantcoach-api) and CI [Travis CI](https://travis-ci.org/xajler/instantcoach-api) (master branch)
 *   [x] Integrated Elasticsearch APM (Application Performance Monitoring)
 *   [x] Integrated Elasticsearch LogStash through Kibana.
 *   [ ] Unit Testing - Mock Services, problem Repository is not interface?
@@ -86,7 +86,7 @@ Domain Errors and Endpoint Request Logging
 *   [ ] [Apiary](https://app.apiary.io) Tests
 *   [ ] Domain validation: Maybe use `FluentValidation` and send errors (merge with D  ataAnnotations ones) in Controller.
 *   [ ] CD Azure (? only one I have access to deploy)
-*   [ ] Check difference between Serilog [ElasticSearch Sink](https://github.com/serilog/s  erilog-sinks-elasticsearch) and [LogStash Sink](https://github.com/asukhodko/s  erilog-sinks-logstash-http)
+*   [ ] Check difference between Serilog [ElasticSearch Sink](https://github.com/serilog/serilog-sinks-elasticsearch) and [LogStash Sink](https://github.com/asukhodko/serilog-sinks-logstash-http)
 
 ## TODO for separate projects
 
