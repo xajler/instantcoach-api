@@ -73,7 +73,7 @@ docker logs <api-container> -f
 
 When there is need to stop and remove all containers and images created, run in terminal:
 
-```ssh
+```shell
 ./rm-dev-docker.sh
 ```
 
@@ -85,7 +85,7 @@ Make sure [docker compose for dev](../docker-compose-dev.yml) is up and running.
 
 Navigate to home url, and choose version of API to try:
 
-```
+```text
 http://localhost:5000
 
 # or SSL version
@@ -131,6 +131,6 @@ For more information read [APM and LogStash docs](apm-logstash.md).
 
 Short version open _Kibana_ and use _APM_ and _Discover_ modules:
 
-```
+```text
 http://localhost:5601
 ```

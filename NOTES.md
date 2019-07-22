@@ -66,7 +66,7 @@ sqlcmd -S 10.5.0.2,1433 -U sa -P 'Abc$12345'
 
 Make sure that WebApi or class library project have this packages installed:
 
-```
+```shell
 dotnet add package Microsoft.EntityFrameworkCore.Design
 ```
 
@@ -74,7 +74,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Design
 
 Note: package `Microsoft.EntityFrameworkCore.Tools.DotNet` is part of .NET SDK 2.1 and above, so it only refers to .NET SDK 2.0.
 
-```
+```shell
 dotnet add package Microsoft.EntityFrameworkCore.Tools.DotNet
 ```
 

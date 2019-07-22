@@ -69,7 +69,7 @@ namespace Api
             app.UseMvc();
         }
 
-        private void RunDbMigrationsAndSeedDataIfNeeded(IApplicationBuilder app)
+        private static void RunDbMigrationsAndSeedDataIfNeeded(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices
                              .GetRequiredService<IServiceScopeFactory>()

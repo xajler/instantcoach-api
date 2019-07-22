@@ -1,13 +1,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Events;
 using Api;
-using Core.Context;
 using static Tests.Integration.TestHelpers;
 using static Core.Constants;
 
@@ -25,16 +21,6 @@ namespace Tests.Integration
                     {
                         var config = CreateConfigForTest();
                         services.AddDbContextService(config.GetSUTConnectionString());
-
-                        var sp = services.BuildServiceProvider();
-
-                        using (var scope = sp.CreateScope())
-                        {
-                            var scopedServices = scope.ServiceProvider;
-                            var db = scopedServices.GetRequiredService<ICContext>();
-                            var logger = scopedServices
-                                .GetRequiredService<ILogger<TestWebApplicationFactory<TStartup>>>();
-                        }
                     });
         }
 

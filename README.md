@@ -48,7 +48,6 @@ Domain Errors and Endpoint Request Logging
     *   [Code Coverage Report](#code-coverage-report)
 
 *   [Travis CI](#travis-ci)
-
 *   [APM Server & LogStash](#apm-server--logstash)
 
 ## Dev Stack
@@ -75,10 +74,9 @@ Domain Errors and Endpoint Request Logging
 *   Unit Testing ([xUnit](https://xunit.net/), [FluentAssertions](https://fluentassertions.com/),   [Coverlet](https://github.com/tonerdo/coverlet), [Moq](https://github.com/moq/moq4))
 
 *   [ElasticSearch](https://www.elastic.co/products/elasticsearch), [Kibana](https://w  ww.elastic.co/products/kibana) and [APM](https://www.elastic.co/products/apm)
-
 *   Logging with [Serilog](https://serilog.net/) with sinks to _Console_ and [ElasticSearch](https://github.com/serilog/serilog-sinks-elasticsearch).
 
-#  # Features
+## Features
 
 *   [x] EF Migrations (Will update to last migration or create database in `Startup`)
 
@@ -142,7 +140,6 @@ Middleware)
 *   [ ] Domain validation: Maybe use `FluentValidation` and send errors (merge with D  ataAnnotations ones) in Controller.
 
 *   [ ] CD Azure (? only one I have access to deploy)
-
 *   [ ] Check difference between Serilog [ElasticSearch Sink](https://github.com/serilog/s  erilog-sinks-elasticsearch) and [LogStash Sink](https://github.com/asukhodko/s  erilog-sinks-logstash-http)
 
 ## TODO for separate projects
@@ -152,7 +149,6 @@ Middleware)
 *   Message Queue (? maybe separate project)
 
 *   CQRS (? maybe separate project)
-
 *   Storyteller tests (?)
 
 ## API Documentation

@@ -52,7 +52,7 @@ namespace Domain
         }
 
         public ValidationResult UpdateAsCompletedAndValidate()
-            => UpdateAsCompletedAndValidate(id: default);
+            => UpdateAsCompletedAndValidate(id: 0);
 
 
         public ValidationResult UpdateAsCompletedAndValidate(int id = 0)
@@ -163,7 +163,7 @@ namespace Domain
                 }.CleanUpNullItems();
         }
 
-        private string CreateReference()
+        private static string CreateReference()
         {
             string value = GetTicksExcludingFirst5Digits();
             return $"IC{value}";

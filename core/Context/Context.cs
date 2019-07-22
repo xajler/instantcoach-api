@@ -75,8 +75,6 @@ namespace Core.Context
             builder.Property(x => x.Status)
                    .HasConversion(statusConvert)
                    .IsRequired();
-            // builder.Property(x => x.Status)
-            //        .HasDefaultValue(InstantCoachStatus.New);
             builder.Property(x => x.TicketId)
                    .HasMaxLength(64)
                    .IsRequired();

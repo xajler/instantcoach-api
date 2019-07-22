@@ -13,7 +13,6 @@
 *   [Step by Step Run](#step-by-step-run)
 
 *   [Using API](#using-api)
-
   *   [Swagger](#swagger)
 
   *   [Postman](#postman)
@@ -71,7 +70,7 @@ Make sure having API running with either [run-local.sh](../run-local.sh) or _VS 
 
 Navigate to home url, and choose version of API to try:
 
-```
+```text
 http://localhost:5000
 
 # or SSL version
@@ -80,9 +79,11 @@ https://localhost:5001
 
 Authorize API for swagger with these steps:
 
-* Get up-to-date [JWT Token](jwt-token.md).
-* At right side of page click button `Authorize`.
-* Write down `Bearer <paste-generated-token>`. Make sure to have space between _Bearer_ and JWT token.
+*   Get up-to-date [JWT Token](jwt-token.md).
+
+*   At right side of page click button `Authorize`.
+
+*   Write down `Bearer <paste-generated-token>`. Make sure to have space between _Bearer_ and JWT token.
 
 > Note:
 >
@@ -101,8 +102,8 @@ Import postman collection `InstantCoach API.postman_collection.json` from `_post
 > Note:
 >
 > To add Authorization to all request in postman collection, follow these steps:
-> * Hover right of the _InstantCoach API_ collection in sidebar.
-> * click _..._ and choose _Edit_.
-> * With open _Edit Collection_ modal window, choose second tab _Authorization_.
-> * From type choose _Bearer Token_.
-> * In _Token_ textbox paste up-to-date [JWT Token](jwt-token.md).
+> *   Hover right of the _InstantCoach API_ collection in sidebar.
+> *   click _..._ and choose _Edit_.
+> *   With open _Edit Collection_ modal window, choose second tab _Authorization_.
+> *   From type choose _Bearer Token_.
+> *   In _Token_ textbox paste up-to-date [JWT Token](jwt-token.md).

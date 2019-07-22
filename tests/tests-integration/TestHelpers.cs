@@ -85,7 +85,6 @@ namespace Tests.Integration
             await context.Set<InstantCoach>().AddAsync(item3);
             await context.Set<InstantCoach>().AddAsync(item4);
             await context.SaveChangesAsync();
-            //WriteLine($"Inserted items: {item1.Id},{item2.Id},{item3.Id},{item4.Id}");
             var item4Entity = await context.Set<InstantCoach>().FindAsync(item4.Id);
             item4Entity.UpdateAsCompletedAndValidate();
             context.Entry(item4Entity).State = EntityState.Modified;
@@ -94,9 +93,6 @@ namespace Tests.Integration
             items.Add(EntityToModelList(item2));
             items.Add(EntityToModelList(item3));
             items.Add(EntityToModelList(item4));
-            // WriteLine($"Db IC count: {context.InstantCoaches.Count()}");
-            // WriteLine($"Db IC count2: {context.Set<InstantCoach>().Count()}");
-            //WriteLine($"Inserted Ids: {item1.Id}, {item2.Id}, {item3.Id}, {item4.Id}");
             return items;
         }
 
