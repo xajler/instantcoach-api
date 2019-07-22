@@ -7,7 +7,7 @@ InstantCoach is an API making easy instant coaching between an Evaluator and an 
 
 ## InstantCoach Collection [/api/instantcoach]
 
-### List All InstantCoaches [GET /api/instantcoach{?skip,take,showCompleted}]
+### List All InstantCoaches [GET /api/instantcoach{?skip}{?take}{?showCompleted}]
 
 List of all InstantCoaches paginated, by default page is containing 10 items. 
 By default returns InstantCoaches that are not `Completed`, to show all Instant Coaches use `showCompleted` and set it to `true`.
@@ -15,24 +15,24 @@ By default returns InstantCoaches that are not `Completed`, to show all Instant 
 + Request Success
 
     + Parameters
-        + skip (number) -  Page number, starts with 0.
-            + default 0
-        + take (number) - Page row number, greater or equal 1.
-            + default 10  
-        + showCompleted (boolean) - When true show all InstantCoaches, when false (default), shows all except those with status Completed.
-            + default false             
+        + skip: 0 (number, optional) -  Page number, starts with 0.
+            + default: 0
+        + take: 10 (number, optional) - Page row number, greater or equal 1.
+            + default: 10  
+        + showCompleted: false (boolean, optional) - When true show all InstantCoaches, when false - default, shows all except those with status Completed.
+            + default: false             
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
 + Response 200 (application/json)
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
     
     + Body
     
@@ -65,24 +65,24 @@ By default returns InstantCoaches that are not `Completed`, to show all Instant 
 + Request No Data
 
     + Parameters
-        + skip (number) -  Page number, starts with 0.
-            + default 0
-        + take (number) - Page row number, greater or equal 1.
-            + default 10  
-        + showCompleted (boolean) - When true show all InstantCoaches, when false (default), shows all except those with status Completed.
-            + default false             
+        + skip: 0 (number, optional) -  Page number, starts with 0.
+            + default: 0
+        + take: 10 (number, optional) - Page row number, greater or equal 1.
+            + default: 10  
+        + showCompleted: false (boolean, optional) - When true show all InstantCoaches, when false - default, shows all except those with status Completed.
+            + default: false            
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
 + Response 200 (application/json)
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
     
     + Body
     
@@ -103,8 +103,8 @@ if referenced in a comments collection.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
     + Body
 
@@ -254,7 +254,6 @@ if referenced in a comments collection.
                             "id",
                             "index",
                             "range",
-                            "comment",
                             "mediaUrl"
                         ]
                     },
@@ -310,10 +309,8 @@ if referenced in a comments collection.
                         },
                         "required": [
                             "commentType",
-                            "text",
                             "authorType",
-                            "createdAt",
-                            "bookmarkPinId"
+                            "createdAt"
                         ]
                     },
                     "RangeClient": {
@@ -350,8 +347,7 @@ if referenced in a comments collection.
                     "agentId",
                     "evaluatorName",
                     "agentName",
-                    "comments",
-                    "bookmarkPins"
+                    "comments"
                 ]
             }
         
@@ -361,8 +357,8 @@ if referenced in a comments collection.
     + Headers
 
             Location: api/instantcoaches/1
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
     + Body
 
@@ -374,8 +370,8 @@ if referenced in a comments collection.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
     + Body
 
@@ -414,8 +410,8 @@ if referenced in a comments collection.
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
     + Body
 
@@ -453,20 +449,20 @@ Get existing data for wanted InstantCoach using this action.
 + Request Success
 
     + Parameters
-        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+        + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
         
 
 + Response 200 (application/json)
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
             
     + Body
 
@@ -519,20 +515,20 @@ Get existing data for wanted InstantCoach using this action.
 + Request Not Found
 
     + Parameters
-        + id: 12 (number, required) - Id of a InstantCoach, greater than zero.
+        + id: 12 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ\
         
 
 + Response 404 (application/json)  
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
     + Body
 
@@ -551,12 +547,12 @@ if referenced in a comments collection.
 + Request Success (application/json)
 
     + Parameters
-        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+        + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
     + Body
 
@@ -679,7 +675,6 @@ if referenced in a comments collection.
                             "id",
                             "index",
                             "range",
-                            "comment",
                             "mediaUrl"
                         ]
                     },
@@ -735,10 +730,8 @@ if referenced in a comments collection.
                         },
                         "required": [
                             "commentType",
-                            "text",
                             "authorType",
-                            "createdAt",
-                            "bookmarkPinId"
+                            "createdAt"
                         ]
                     },
                     "RangeClient": {
@@ -770,8 +763,7 @@ if referenced in a comments collection.
                 },
                 "required": [
                     "updateType",
-                    "comments",
-                    "bookmarkPins"
+                    "comments"
                 ]
             }
         
@@ -780,19 +772,19 @@ if referenced in a comments collection.
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
 
 + Request Not Found (application/json)
 
     + Parameters
-        + id: 12 (number, required) - Id of a InstantCoach, greater than zero.
+        + id: 12 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
     + Body
 
@@ -814,8 +806,8 @@ if referenced in a comments collection.
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
     + Body
 
@@ -828,12 +820,12 @@ if referenced in a comments collection.
 + Request Bad Request (application/json)
 
     + Parameters
-        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+        + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
     + Body
 
@@ -867,8 +859,8 @@ if referenced in a comments collection.
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
     + Body
 
@@ -900,39 +892,39 @@ Make an existing InstantCoach completed using this action.
 + Request Success
 
     + Parameters
-        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+        + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
         
 
 + Response 204
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
 
 + Request Not Found
 
     + Parameters
-        + id: 12 (number, required) - Id of a InstantCoach, greater than zero.
+        + id: 12 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
         
 
 + Response 404 (application/json)  
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
     + Body
 
@@ -947,39 +939,39 @@ Delete an existing InstantCoach using this action.
 + Request Success
 
     + Parameters
-        + id: 1 (number, required) - Id of a InstantCoach, greater than zero.
+        + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
         
 
 + Response 204
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
 
 + Request Not Found
 
     + Parameters
-        + id: 12 (number, required) - Id of a InstantCoach, greater than zero.
+        + id: 12 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
     
-            X-Api-Version: 2                            ... v2 is default, shorthand for 2.0
-            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ  ... JWT Token
+            X-Api-Version: 2.0
+            Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
         
 
 + Response 404 (application/json)  
 
     + Headers
 
-            Api-Supported-Versions: 1.0, 2.0 ... Supported versions of API
-            X-Response-Time: 24ms            ... For all environments except Production
+            Api-Supported-Versions: 1.0, 2.0
+            X-Response-Time: 24ms
 
     + Body
 
