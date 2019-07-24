@@ -20,14 +20,14 @@ namespace Api
             .AddEnvironmentVariables()
             .Build();
 
-        public static int Main(string[] args)
+        public static int Main()
         {
             var esUrl = GetEnvironmentVariable(Constants.EsUrlEnVar);
-            Log.Logger = Logging.Logger(Configuration, esUrl);
+            Log.Logger = new Logging(Configuration, esUrl).Logger;
             try
             {
                 Log.Information("Starting web host");
-                CreateWebHostBuilder(args).Build().Run();
+                CreateWebHostBuilder(new string[]{}).Build().Run();
                 return 0;
             }
             catch (Exception ex)

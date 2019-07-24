@@ -1,7 +1,17 @@
 #!/bin/sh
 
-dotnet test -c Release ./tests/tests-unit /p:CollectCoverage=true /p:CoverletOutputFormat=opencover  /p:CoverletOutput=./opencoverCoverage.xml
-dotnet test -c Release ./tests/tests-integration /p:CollectCoverage=true /p:CoverletOutputFormat=opencover  /p:CoverletOutput=./opencoverCoverage.xml
+dotnet-sonarscanner begin /k:xajler_instantcoach-api \
+    /o:metaintellect \
+    /v:"1.0.0" \
+    /d:sonar.host.url=https://sonarcloud.io \
+    /d:sonar.login=1b11ea53d21b876d23bd89dde1c5be094da3eb60 \
+    /d:sonar.cs.xunit.reportsPaths="tests/**/TestResults/*.trx" \
+    /d:sonar.cs.opencover.reportsPaths="tests/**/opencoverCoverage.xml" \
+    /d:sonar.c.file.suffixes=- \
+    /d:sonar.cpp.file.suffixes=- \
+    /d:sonar.objc.file.suffixes=-
+
+dotnet test -c Release --test-adapter-path:. --logger:xunit /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./opencoverCoverage.xml /p:ExcludeByFile=\"/api/ICContextDesignTimeFactory.cs,/api/Infrastructure/SwaggerDefaultValues.cs,/api/Infrastructure/ApiVersioningErrorResponseProvider.cs,/core/Migrations/ICContextModelSnapshot.cs,/api/Infrastructure/OperationCancelledExceptionFilter.cs,/api/Infrastructure/Logging.cs,/api/Program.cs\"
 
 echo "branch: $TRAVIS_BRANCH"
 echo "commit: $TRAVIS_COMMIT"
@@ -9,6 +19,9 @@ echo "job id: $TRAVIS_JOB_ID"
 echo "author: $REPO_COMMIT_AUTHOR"
 echo "email: $REPO_COMMIT_AUTHOR_EMAIL"
 echo "message: $REPO_COMMIT_MESSAGE"
+
+# End
+dotnet-sonarscanner end /d:sonar.login=1b11ea53d21b876d23bd89dde1c5be094da3eb60
 
 # travis ci
 ./tools/csmacnz.Coveralls --multiple \

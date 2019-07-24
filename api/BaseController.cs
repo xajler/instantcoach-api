@@ -62,17 +62,17 @@ namespace Api.Controllers
 
         private ActionResult OnError(ErrorType error, int id)
         {
-                if(error == ErrorType.UnknownId)
-                {
-                    _logger.LogInformation("Status Code: {StatusCode} NotFound", Status404NotFound);
-                    return NotFound(new Msg($"Not existing id: {id}"));
-                }
-                else
-                {
+            if(error == ErrorType.UnknownId)
+            {
+                _logger.LogInformation("Status Code: {StatusCode} NotFound", Status404NotFound);
+                return NotFound(new Msg { Message = $"Not existing id: {id}" });
+            }
+            else
+            {
                 _logger.LogInformation("Status Code: {StatusCode} BadRequest", Status400BadRequest);
                 // TODO: show errors in response.
-                return BadRequest(new Msg("Invalid data or unable to store changes."));
-                }
+                return BadRequest(new Msg { Message ="Invalid data or unable to store changes." });
+            }
         }
     }
 }

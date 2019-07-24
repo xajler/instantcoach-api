@@ -80,11 +80,10 @@ namespace Tests.Unit
                  GetUpdateComments(),
                  bookmarkPins: null,
                  id: 1);
-            var equality = actual == expected;
-
-            equality.Should().BeTrue();
             actual.Should().BeEquivalentTo(expected);
             actual.GetHashCode().Should().Be(expected.GetHashCode());
+            actual.GetHashCode(expected).Should().Be(actual.GetHashCode());
+            actual.Equals(actual, expected).Should().Be(true);
         }
 
         [Fact]

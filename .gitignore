@@ -44,5 +44,11 @@ coverage.xml
 opencoverCoverage.xml
 _coveragereport/
 
+# Tests
+tests/**/TestResults
+
 # Commit message
 msg.md
+
+# SonarCube
+.sonarqube/

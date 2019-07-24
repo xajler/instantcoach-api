@@ -128,6 +128,7 @@ Short version:
 ```shell
 docker pull microsoft/mssql-server-linux
 ./docker-mssql-run.sh
+dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
 ./run-local.sh
 ```
 

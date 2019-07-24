@@ -43,7 +43,7 @@ namespace Core.Models
             {
                 return CreateBookmarkPins(bookmarkPins);
             }
-            return null;
+            return new List<BookmarkPin>();
         }
 
         public static InstantCoachForId ToInstantCoachForId(this InstantCoachDb db)

@@ -6,14 +6,14 @@ using Serilog.Exceptions;
 
 namespace Api
 {
-    public static class Logging
+    public class Logging
     {
         private const string OutputFormat = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}";
 
-        public static ILogger Logger(IConfiguration config, string esUrl)
+        public Logging(IConfiguration config, string esUrl)
         {
-           var logConfig = new LoggerConfiguration()
-                .ReadFrom.Configuration(config)
+           var logConfig = new LoggerConfiguration();
+            logConfig.ReadFrom.Configuration(config)
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithExceptionDetails()
@@ -26,7 +26,9 @@ namespace Api
                         new Uri(esUrl)) { AutoRegisterTemplate = true });
             }
 
-            return logConfig.CreateLogger();
+            Logger = logConfig.CreateLogger();
         }
+
+        public ILogger Logger { get; }
     }
 }

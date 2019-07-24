@@ -84,8 +84,7 @@ namespace Core.Models
 
     public class Msg
     {
-        public Msg(string message) => Message = message;
-        public string Message { get; }
+        public string Message { get; set; }
     }
 
 
@@ -104,45 +103,28 @@ namespace Core.Models
     // Read-Only For List and GetById
     public class InstantCoachList
     {
-        public InstantCoachList(
-            int id,
-            InstantCoachStatus status,
-            string reference,
-            string description,
-            DateTime createdAt,
-            DateTime updatedAt,
-            int commentsCount,
-            string evaluatorName)
-        {
-            Id = id;
-            Status = status;
-            Reference = reference;
-            Description = description;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
-            CommentsCount = commentsCount;
-            EvaluatorName = evaluatorName;
-        }
-        public int Id { get; }
-        public InstantCoachStatus Status { get; }
-        public string Reference { get; }
-        public string Description { get; }
-        public DateTime CreatedAt { get; }
-        public DateTime UpdatedAt { get; }
-        public int CommentsCount { get; }
-        public string EvaluatorName { get; }
+        public int Id { get; set; }
+        public InstantCoachStatus Status { get; set; }
+        public string Reference { get; set; }
+        public string Description { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public int CommentsCount { get; set; }
+        public string EvaluatorName { get; set; }
 
         public static InstantCoachList FromReader(DbDataReader reader)
         {
-            return new InstantCoachList(
-                id: reader.GetInt32(1),
-                status: (InstantCoachStatus)reader.GetByte(2),
-                reference: reader.GetString(3),
-                description: reader.GetString(4),
-                createdAt: reader.GetDateTime(5),
-                updatedAt: reader.GetDateTime(6),
-                commentsCount: reader.GetInt32(7),
-                evaluatorName: reader.GetString(8));
+            return new InstantCoachList
+            {
+                Id = reader.GetInt32(1),
+                Status = (InstantCoachStatus)reader.GetByte(2),
+                Reference = reader.GetString(3),
+                Description = reader.GetString(4),
+                CreatedAt = reader.GetDateTime(5),
+                UpdatedAt = reader.GetDateTime(6),
+                CommentsCount = reader.GetInt32(7),
+                EvaluatorName = reader.GetString(8)
+            };
         }
     }
 

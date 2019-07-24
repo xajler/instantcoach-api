@@ -45,8 +45,7 @@ namespace Api
         {
             services.AddMvc(options =>
                 {
-                    // TODO: Not sure to use it or not
-                    // options.Filters.Add<OperationCancelledExceptionFilter>();
+                    options.Filters.Add<OperationCancelledExceptionFilterAttribute>();
                 })
                 .AddJsonOptions(options =>
                 {

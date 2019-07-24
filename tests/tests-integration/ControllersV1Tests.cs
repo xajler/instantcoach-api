@@ -373,7 +373,6 @@ namespace Tests.Integration
             response.Should().BeOfType(typeof(NotFoundObjectResult));
         }
 
-
         public void Dispose()
         {
             _context.Database.EnsureDeleted();

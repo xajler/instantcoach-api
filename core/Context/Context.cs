@@ -30,13 +30,8 @@ namespace Core.Context
             return base.SaveChanges();
         }
 
-        public async Task<int> SaveChangesAsync()
-        {
-            return await SaveChangesAsync(true, default);
-        }
-
         public override async Task<int> SaveChangesAsync(
-            CancellationToken cancellationToken )
+            CancellationToken cancellationToken = default)
         {
             SetAuditInfo();
             return await SaveChangesAsync(true, cancellationToken);

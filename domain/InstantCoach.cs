@@ -55,7 +55,7 @@ namespace Domain
             => UpdateAsCompletedAndValidate(id: 0);
 
 
-        public ValidationResult UpdateAsCompletedAndValidate(int id = 0)
+        public ValidationResult UpdateAsCompletedAndValidate(int id)
         {
             UpdateId(id);
             Status = InstantCoachStatus.Completed;
@@ -180,7 +180,10 @@ namespace Domain
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(BookmarkPinsValue)) { return null; }
+                if (string.IsNullOrWhiteSpace(BookmarkPinsValue))
+                {
+                    return new List<Comment>();
+                }
                 else
                 {
                     var result = FromJson<List<Comment>>(CommentsValue);
@@ -194,7 +197,10 @@ namespace Domain
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(BookmarkPinsValue)) { return null; }
+                if (string.IsNullOrWhiteSpace(BookmarkPinsValue))
+                {
+                    return new List<BookmarkPin>();
+                }
                 else
                 {
                     var result = FromJson<List<BookmarkPin>>(BookmarkPinsValue);

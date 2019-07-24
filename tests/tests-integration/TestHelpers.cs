@@ -136,15 +136,17 @@ namespace Tests.Integration
 
         private static InstantCoachList EntityToModelList(InstantCoach entity)
         {
-            return new InstantCoachList(
-                id: entity.Id,
-                status: entity.Status,
-                reference: entity.Reference,
-                description: entity.Description,
-                createdAt: entity.CreatedAt,
-                updatedAt: entity.UpdatedAt,
-                commentsCount: entity.CommentsCount,
-                evaluatorName: entity.EvaluatorName);
+            return new InstantCoachList
+            {
+                Id = entity.Id,
+                Status = entity.Status,
+                Reference = entity.Reference,
+                Description = entity.Description,
+                CreatedAt = entity.CreatedAt,
+                UpdatedAt = entity.UpdatedAt,
+                CommentsCount = entity.CommentsCount,
+                EvaluatorName = entity.EvaluatorName
+            };
         }
     }
 }

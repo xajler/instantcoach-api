@@ -195,6 +195,32 @@ namespace Tests.Integration
             response.Dispose();
         }
 
+        [Fact]
+        public async Task Should_return_bad_request_on_create_when_no_comments_null_or_empty()
+        {
+            var model = new InstantCoachCreateClient
+            {
+                Description = "New description",
+                TicketId = "50",
+                EvaluatorId = 1,
+                AgentId = 2,
+                EvaluatorName = "John Evaluator",
+                AgentName = "Jane Agent",
+                Comments = new List<CommentClient>()
+            };
+
+            var request = "/api/instantcoaches";
+            SetFakeBearerToken();
+            var response = await _client.PostAsJsonAsync(request, model);
+            int expected = 400;
+
+
+            int actual = (int)response.StatusCode;
+            actual.Should().Be(expected);
+
+            response.Dispose();
+        }
+
 
         [Fact]
         public async Task Should_return_success_when_updated_from_model_and_id()

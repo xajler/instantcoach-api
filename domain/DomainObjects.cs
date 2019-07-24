@@ -14,7 +14,7 @@ namespace Domain
     {
     }
 
-    public abstract class Entity : IEquatable<Entity>
+    public abstract class Entity : IEqualityComparer<Entity>
     {
         protected virtual object Actual => this;
         public int Id { get; private set; }
@@ -33,41 +33,26 @@ namespace Domain
             return Id == other.Id;
         }
 
-        public static bool operator ==(Entity a, Entity b)
-        {
-            if (a is null && b is null) { return true; }
-            else if (a is null || b is null) { return false; }
-            else { return a.Equals(b); }
-        }
-
-        public static bool operator !=(Entity a, Entity b) => !(a == b);
-
-
         public override int GetHashCode()
         {
             return (Actual.GetType().ToString() + Id).GetHashCode();
         }
 
-        public bool Equals(Entity other)
+        public bool Equals(Entity x, Entity y)
         {
-            if (other == null) { return false; }
-            if (Id == other.Id) { return true; }
-            return false;
+            if (x is null && y is null) { return true; }
+            if (x is null || y is null) { return false; }
+            return x.Equals(y);
+        }
+
+        public int GetHashCode(Entity obj)
+        {
+            return (Actual.GetType().ToString() + obj.Id).GetHashCode();
         }
     }
 
     public abstract class ValueObject
     {
-        // protected static bool EqualOperator(ValueObject a, ValueObject b)
-        // {
-        //     return a is null || a.Equals(b);
-        // }
-
-        // protected static bool NotEqualOperator(ValueObject a, ValueObject b)
-        // {
-        //     return !EqualOperator(a, b);
-        // }
-
         protected abstract IEnumerable<object> GetAtomicValues();
 
         public override bool Equals(object obj)
