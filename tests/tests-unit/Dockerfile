@@ -7,8 +7,6 @@ ARG REPO_COMMIT_AUTHOR
 ARG REPO_COMMIT_AUTHOR_EMAIL
 ARG REPO_COMMIT_MESSAGE
 
-RUN echo `pwd`
-
 COPY api/. ./api/
 COPY core/. ./core/
 COPY domain/. ./domain/

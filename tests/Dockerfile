@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS test
 
-apt-get update && apt-get upgrade -y
-apt-get install default-jdk -y
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install default-jdk -y
 
 ENV PATH="$PATH:/root/.dotnet/tools"
 COPY .git ./.git
@@ -13,7 +13,6 @@ COPY tools ./tools/
 COPY instantcoach.sln ./
 RUN dotnet tool install --global dotnet-sonarscanner
 
-RUN ls -al /root/.dotnet
 
 RUN dotnet restore
 RUN dotnet build
