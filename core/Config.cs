@@ -47,13 +47,19 @@ namespace Core
         public string GetSutConnectionString()
         {
             string host = GetEnvVarByName(DbHost);
-            return $"Server={host};Initial Catalog=test_db_sut;User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
+            var result = $"Server={host};Initial Catalog=test_db_sut;User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
+            Console.WriteLine("connstring: {0}", result);
+            return result;
+            //return $"Server={host};Initial Catalog=test_db_sut;User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
         }
 
         public static string GetSutGuidConnectionString()
         {
             string host = GetEnvVarByName("DB_HOST");
-            return $"Server={host};Initial Catalog=test_db_sut_{Guid.NewGuid()};User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
+            var result = $"Server={host};Initial Catalog=test_db_sut_{Guid.NewGuid()};User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
+            Console.WriteLine("connstring: {0}", result);
+            return result;
+            //return $"Server={host};Initial Catalog=test_db_sut_{Guid.NewGuid()};User Id=sa;Password=Abc$12345;Integrated Security=false;MultipleActiveResultSets=True;";
         }
     }
 }
