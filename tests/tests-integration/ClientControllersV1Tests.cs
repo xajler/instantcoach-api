@@ -387,10 +387,6 @@ namespace Tests.Integration
             SetFakeBearerToken();
             var response = await _client.GetAsync(request);
 
-
-            // Action result = () => response.EnsureSuccessStatusCode();
-            // result.Should().NotThrow();
-
             int actual = (int)response.StatusCode;
             int expected = 400;
 
