@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS test
 
 RUN apt-get update
-RUN apt-get install default-jdk -y
+RUN apt-get install default-jdk -y --no-install-recommends
 
 ENV PATH="$PATH:/root/.dotnet/tools"
 COPY api ./api/

@@ -45,13 +45,14 @@ Domain Errors and Endpoint Request Logging
 *   C#7
 *   [EF Core](https://docs.microsoft.com/en-us/ef/core/) (Commands) / ADO.NET via EF Core (Queries)
 *   [Docker](https://www.docker.com/) and Docker Compose
-*   [SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) [Linux, D  ocker]((https://hub.docker.com/_/microsoft-mssql-server))
+*   [SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) [Linux, Docker]((https://hub.docker.com/_/microsoft-mssql-server))
 *   [Nginx](https://nginx.org/en/) ([Docker](https://hub.docker.com/_/nginx))
 *   [VS Code](https://code.visualstudio.com/) (With C# Extensions)
 *   [Azure Data Studio](https://docs.microsoft.com/en-us/sql/azure-data-studio/what-is?view=sql-server-2017) (Local GUI for SQL Server)
 *   Unit Testing ([xUnit](https://xunit.net/), [FluentAssertions](https://fluentassertions.com/),   [Coverlet](https://github.com/tonerdo/coverlet), [Moq](https://github.com/moq/moq4))
 *   [ElasticSearch](https://www.elastic.co/products/elasticsearch), [Kibana](https://w  ww.elastic.co/products/kibana) and [APM](https://www.elastic.co/products/apm)
 *   Logging with [Serilog](https://serilog.net/) with sinks to _Console_ and [ElasticSearch](https://github.com/serilog/serilog-sinks-elasticsearch).
+*   Code quality with [SonarCloud](https://sonarcloud.io), [Codacy](https://codacy.com) and [Coveralls](https://coveralls.io).
 
 ## Features
 
@@ -84,6 +85,7 @@ Domain Errors and Endpoint Request Logging
 *   [ ] Health checks
 *   [x] [Apiary docs created](https://instantcoachapi.docs.apiary.io) added badge to github r  epository
 *   [ ] [Apiary](https://app.apiary.io) Tests
+*   [x] Local and online ([SonarCloud](https://sonarcloud.io)) code analysis with [SonarScanner for MSBuild](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-msbuild/). Travis CI running it inside of Docker container.
 *   [ ] Domain validation: Maybe use `FluentValidation` and send errors (merge with D  ataAnnotations ones) in Controller.
 *   [ ] CD Azure (? only one I have access to deploy)
 *   [ ] Check difference between Serilog [ElasticSearch Sink](https://github.com/serilog/serilog-sinks-elasticsearch) and [LogStash Sink](https://github.com/asukhodko/serilog-sinks-logstash-http)
