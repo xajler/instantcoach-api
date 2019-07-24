@@ -7,7 +7,6 @@ dotnet-sonarscanner begin /k:xajler_instantcoach-api \
     /d:sonar.login=1b11ea53d21b876d23bd89dde1c5be094da3eb60 \
     /d:sonar.cs.xunit.reportsPaths="tests/**/TestResults/TestResults.xml" \
     /d:sonar.cs.opencover.reportsPaths="tests/**/opencoverCoverage.xml" \
-    /d:sonar.scm.provider=git \
     /d:sonar.c.file.suffixes=- \
     /d:sonar.cpp.file.suffixes=- \
     /d:sonar.objc.file.suffixes=-

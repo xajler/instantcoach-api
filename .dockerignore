@@ -5,7 +5,6 @@
 _postman/
 _assets/
 _coveragereport
-.git/
 .vscode
 .ionide
 
@@ -13,5 +12,4 @@ _coveragereport
 # files
 **/*.md
 **/*.cmd
-**/coverage.xml
 .gitignore

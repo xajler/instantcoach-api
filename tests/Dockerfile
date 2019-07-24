@@ -4,6 +4,7 @@ RUN apt-get update
 RUN apt-get install default-jdk -y --no-install-recommends
 
 ENV PATH="$PATH:/root/.dotnet/tools"
+COPY .git ./.git
 COPY api ./api/
 COPY core ./core/
 COPY domain ./domain/

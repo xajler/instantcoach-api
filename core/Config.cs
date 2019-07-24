@@ -15,7 +15,6 @@ namespace Core
         public string DbName { get; set; }
         [Required]
         public string DbUser { get; set; }
-        // TODO: Maybe make it encrypted in ENV_VAR and decrypt here
         [Required]
         public string DbPassword { get; set; }
         [Required]
