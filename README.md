@@ -52,7 +52,7 @@ Domain Errors and Endpoint Request Logging
 *   [VS Code](https://code.visualstudio.com/) (With C# Extensions)
 *   [Azure Data Studio](https://docs.microsoft.com/en-us/sql/azure-data-studio/what-is?view=sql-server-2017) (Local GUI for SQL Server)
 *   Unit Testing ([xUnit](https://xunit.net/), [FluentAssertions](https://fluentassertions.com/),   [Coverlet](https://github.com/tonerdo/coverlet), [Moq](https://github.com/moq/moq4))
-*   [ElasticSearch](https://www.elastic.co/products/elasticsearch), [Kibana](https://w  ww.elastic.co/products/kibana) and [APM](https://www.elastic.co/products/apm)
+*   [ElasticSearch](https://www.elastic.co/products/elasticsearch), [Kibana](https://www.elastic.co/products/kibana) and [APM](https://www.elastic.co/products/apm)
 *   Logging with [Serilog](https://serilog.net/) with sinks to _Console_ and [ElasticSearch](https://github.com/serilog/serilog-sinks-elasticsearch).
 *   Code quality with [SonarCloud](https://sonarcloud.io), [Codacy](https://codacy.com) and [Coveralls](https://coveralls.io).
 
@@ -68,14 +68,14 @@ Domain Errors and Endpoint Request Logging
 *   [x] JWT Auth
 *   [x] Error Handling (Known Errors as `Result` and `Result<T>`, Global Exception through Middleware)
 *   [x] Logging (`Serilog` console and sink to ElasticSearch)
-*   [x] Request response time Middleware (including response time in logs and HTTP header as `  X-Response-Time`)
+*   [x] Request response time Middleware (including response time in logs and HTTP header as `X-Response-Time`)
 *   [x] Domain Models Validation
 *   [x] Unit Testing (Domain)
 *   [x] Refactoring (Domain to DDD and separate project)
 *   [x] Integration Testing (Repositories and Controllers V1)
 *   [x] Code Coverage ([coverlet](https://github.com/tonerdo/coverlet))
 *   [x] Dockerfile Build/Publish/Run API
-*   [x] Dockerfile Nginx web server with SSL nginx.conf (Not really necessary because this REST A  PI should be internal/private)
+*   [x] Dockerfile Nginx web server with SSL nginx.conf (Not really necessary because this REST API should be internal/private)
 *   [x] Docker Compose (Development with watch, Test, CI Testing)
 *   [x] SSL (local development: dotnet dev-certs https, test: nginx self-signed certificate)
 *   [x] Github badges for Code Coverage [coveralls.io](https://coveralls.io/github/xajler/instantcoach-api) and CI [Travis CI](https://travis-ci.org/xajler/instantcoach-api) (master branch)
@@ -85,10 +85,10 @@ Domain Errors and Endpoint Request Logging
 *   [ ] xUnit Categories for focused testing.
 *   [ ] Redis cache Docker or Nginx
 *   [ ] Health checks
-*   [x] [Apiary docs created](https://instantcoachapi.docs.apiary.io) added badge to github r  epository
+*   [x] [Apiary docs created](https://instantcoachapi.docs.apiary.io) added badge to github repository
 *   [ ] [Apiary](https://app.apiary.io) Tests
 *   [x] Local and online ([SonarCloud](https://sonarcloud.io)) code analysis with [SonarScanner for MSBuild](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-msbuild/). Travis CI running it inside of Docker container.
-*   [ ] Domain validation: Maybe use `FluentValidation` and send errors (merge with D  ataAnnotations ones) in Controller.
+*   [ ] Domain validation: Maybe use `FluentValidation` and send errors (merge with DataAnnotations ones) in Controller.
 *   [ ] CD Azure (? only one I have access to deploy)
 *   [ ] Check difference between Serilog [ElasticSearch Sink](https://github.com/serilog/serilog-sinks-elasticsearch) and [LogStash Sink](https://github.com/asukhodko/serilog-sinks-logstash-http)
 
@@ -109,7 +109,7 @@ Documentation also includes examples and console to try and run mocked examples 
 
 ## Run
 
-Scripts created are compatible with _Unix_ like operating systems (_Linux_, _BSD_, _macOS_). It won't work on _Windows_, but it should be easy to use command in there to run in _Windows_.
+Scripts created are compatible with _Unix_ like operating systems (_Linux_, _BSD_, _macOS_). It should be quite easy to translate them to _Windows_ scripts or just run commands in scripts, mostly all are _dotnet_ or _docker_.
 
 Make sure that Docker is installed and service is running, on most Linux machines it is achievable with `systemd` command:
 
@@ -130,7 +130,6 @@ Find out more how to run [Local Dev](_docs/local-dev-env.md).
 Short version:
 
 ```shell
-docker pull microsoft/mssql-server-linux
 ./docker-mssql-run.sh
 dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
 ./run-local.sh
