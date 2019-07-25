@@ -7,6 +7,8 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "5433:1433"
+    networks:
+      - docker-network
 
   api:
     #image: x430n/ic-api:latest
@@ -14,11 +16,12 @@ services:
       context:  ../
       dockerfile: docker/Dockerfile
       args:
-        - ASPNETCORE_ENVIRONMENT
+        - ENV
     environment:
+      #- ASPNETCORE_ENVIRONMENT=Test
       - ASPNETCORE_URLS=http://0.0.0.0:5000
       - DB_HOST=db
-      - DB_NAME=test
+      #- DB_NAME=test
       - DB_USER=sa
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
@@ -27,10 +30,14 @@ services:
       - ELASTIC_APM_SERVICE_NAME=InstantCoach API
       - ELASTIC_APM_METRICS_INTERVAL="30s"
       - ELASTICSEARCH_URL=http://elasticsearch:9200
-    ports:
-        - "5000:5000"
+    # ports:
+    #     - "5000:5000"
+    links:
+      - db
     depends_on:
       - db
+    networks:
+      - docker-network
 
   proxy:
     #image: x430n/ic-nginx:latest
@@ -44,6 +51,8 @@ services:
       - api
     depends_on:
       - api
+    networks:
+      - docker-network
 
   # APM stack
   elasticsearch:
@@ -66,6 +75,8 @@ services:
     ports:
       - 9200:9200
       #- 9300:9300
+    networks:
+      - docker-network
 
   kibana:
     image: kibana:7.2.0
@@ -76,6 +87,8 @@ services:
       - elasticsearch
     ports:
       - 5601:5601
+    networks:
+      - docker-network
 
   apm:
     build:
@@ -91,3 +104,9 @@ services:
     depends_on:
       - elasticsearch
       - kibana
+    networks:
+      - docker-network
+
+networks:
+  docker-network:
+    driver: bridge

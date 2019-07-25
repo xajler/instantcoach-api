@@ -11,7 +11,6 @@ COPY src ./src
 COPY tests  ./tests/
 COPY instantcoach.sln .
 
-RUN dotnet restore
-RUN dotnet build
+RUN dotnet restore && dotnet build
 WORKDIR /app/tests/tests-unit
 ENTRYPOINT ["dotnet", "watch", "test", "/p:CollectCoverage=true", "/p:CoverletOutputFormat=opencover", "/p:CoverletOutput=./opencoverCoverage.xml"]

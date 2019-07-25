@@ -12,9 +12,7 @@ COPY tests  ./tests
 COPY tools ./tools
 COPY instantcoach.sln .
 
-RUN dotnet restore
-RUN dotnet build
-RUN dotnet test ./tests/tests-unit
+RUN dotnet restore && dotnet build && dotnet test ./tests/tests-unit
 # /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./opencoverCoverage.xml
 
 # RUN echo "branch: $TRAVIS_BRANCH"

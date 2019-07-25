@@ -1,18 +1,20 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS ci-build
 
 RUN apt-get update && \
-    apt-get install -y openjdk-8-jre -y && \
-    apt-get clean;
+    apt-get install -y locales -y && \
+    apt-get clean
+
+ENV LANGUAGE=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+RUN locale-gen en_US.UTF-8
+
+RUN apt-get install -y default-jre -y
+
 
 # Fix certificate issues
-RUN apt-get update && \
-    apt-get install ca-certificates-java -y && \
-    apt-get clean && \
-    update-ca-certificates -f;
-
-# Setup JAVA_HOME -- useful for docker commandline
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
-RUN export JAVA_HOME
+# RUN apt-get install ca-certificates-java -y && \
+#     update-ca-certificates -f
 
 RUN dotnet tool install -g dotnet-sonarscanner
 ENV PATH="${PATH}:/root/.dotnet/tools"

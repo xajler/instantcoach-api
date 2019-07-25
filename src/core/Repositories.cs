@@ -83,14 +83,6 @@ namespace Core.Repositories
         public async Task<ListResult<InstantCoachList>> GetAll(
             int skip, int take, bool showCompleted)
         {
-            SqlParameter[] dbParams = new []
-            {
-                new SqlParameter(SkipParam, skip),
-                new SqlParameter(TakeParam, take),
-                new SqlParameter(ShowCompletedParam, showCompleted),
-            };
-            _logger.LogInformation("Repository Get All DB Parameters: {@DbParams}", dbParams);
-
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
                 int totalCount = 0;
@@ -161,14 +153,14 @@ namespace Core.Repositories
         private SqlParameter[] GetListParams(int skip, int take, bool showCompleted)
         {
             SqlParameter[] result = new[]
-{
+            {
                 new SqlParameter(SkipParam, skip),
                 new SqlParameter(TakeParam, take),
                 new SqlParameter(ShowCompletedParam, showCompleted),
             };
 
             SqlParamValue[] dbParams = new[]
-{
+            {
                 SqlParamValue.ToSelf(SkipParam, skip.ToString()),
                 SqlParamValue.ToSelf(TakeParam, take.ToString()),
                 SqlParamValue.ToSelf(ShowCompletedParam, showCompleted.ToString()),
