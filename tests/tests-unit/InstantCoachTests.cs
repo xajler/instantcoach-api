@@ -36,6 +36,10 @@ namespace Tests.Unit
             var actual = typeof(InstantCoach);
             var expected = typeof(AggregateRoot);
 
+            // var dbHost = Core.Config.GetEnvVarByName("DB_HOST");
+            // Console.WriteLine("host: {0}", dbHost);
+
+
             actual.Should().BeDerivedFrom(expected);
         }
 

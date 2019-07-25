@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  db.sut:
+  db.ci:
     image: mcr.microsoft.com/mssql/server:2017-GDR-ubuntu
     environment:
       SA_PASSWORD: "Abc$$12345"
@@ -8,11 +8,11 @@ services:
     ports:
       - "5433:1433"
 
-  api.sut:
+  api.ci:
     #image: x430n/ic-api:latest
     build:
-      context:  .
-      dockerfile: ./tests/Dockerfile
+      context:  ../../
+      dockerfile: docker/ci/Dockerfile
       # args:
       #   - TRAVIS_BRANCH
       #   - TRAVIS_COMMIT
@@ -23,7 +23,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=SUT
       - ASPNETCORE_URLS=http://0.0.0.0:5000
-      - DB_HOST=db.sut
+      - DB_HOST=db.ci
       - DB_NAME=test
       - DB_USER=sa
       - DB_PASSWORD="Abc$$12345"
@@ -38,4 +38,4 @@ services:
     ports:
         - "5000:5000"
     depends_on:
-      - db.sut
+      - db.ci

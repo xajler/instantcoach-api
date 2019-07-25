@@ -11,11 +11,11 @@ services:
       - docker-network
 
   api.dev:
-    image: mcr.microsoft.com/dotnet/core/sdk:2.2
+    image: mcr.microsoft.com/dotnet/core/sdk:2.2-alpine3.9
     volumes:
       - ~/src/instantcoach:/app/
       - ~/.aspnet/https:/https/
-    working_dir: /app/api
+    working_dir: /app/src/api
     entrypoint:
       - dotnet
       - watch
@@ -84,7 +84,7 @@ services:
 
   apm.dev:
     build:
-      context: ./_apm/apm-server
+      context: ../apm/apm-server
       dockerfile: Dockerfile
       args:
         - APM_ENV=Local

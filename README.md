@@ -137,7 +137,7 @@ dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv
 
 ### Docker Dev
 
-Runs all services as _docker_ containers, but with mounted _docker volumes_ to code repository and _https certificate_. Has `ASPNETCORE_ENVIRONMENT` set to `Development`, and uses _APM Server_ with _ElasticSearch LogStash_ as main development driver
+Runs all services as _docker_ containers, but with mounted _docker volumes_ to local code repository and _https certificate_ folders. Has `ASPNETCORE_ENVIRONMENT` set to `Development`, and uses _APM Server_ with _ElasticSearch LogStash_ as main development driver.
 
 Find out more how to run [Docker Dev](_docs/docker-dev-env.md).
 
@@ -147,7 +147,7 @@ Short version:
 ./run-dev-docker.sh
 ```
 
-### Docker Test/Production
+### Docker Test/Staging/Production
 
 Similar to [Docker Dev](_docs/docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes. Everything runs inside of docker containers.
 
@@ -159,7 +159,7 @@ Make sure _MSSQL_ runs for Integration tests.
 
 ### All Tests
 
-Best to run script:
+Best to run script with code coverage generation:
 
 ```shell
 # Change DB_HOST, if your DB host different than localhost
@@ -170,22 +170,15 @@ Runs all tests and at the end generates code coverage report, more info in [Code
 
 ### Unit Tests
 
-Best to run test with watcher, so any time file is saved it will restart all unit tests.
+Run inside docker with applied watcher and showing code coverage after all tests successfully ran:
 
 ```shell
-cd tests/tests-unit
-dotnet watch test
-```
-
-It can show code coverage when all tests ran successfully with this command:
-
-```shell
-dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./opencoverCoverage.xml
+./run-dev-unit-testing-docker.sh
 ```
 
 ### Integration Tests
 
-For Integration tests it is not recommended to use `dotnet watch`.
+For Integration tests it is not recommended to use `dotnet watch`. And better to run [All Tests](#all-tests) instead.
 
 ```shell
 cd tests/tests-integration
@@ -197,7 +190,7 @@ It can show code coverage when all tests ran successfully with this command:
 
 ```shell
 DB_HOST=localhost
-dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./coverage.xml
+dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=openCover /p:CoverletOutput=./opencoverCoverage.xml
 ```
 
 ### Code Coverage Report
@@ -209,12 +202,12 @@ Run all tests with _coverlet_ (Make sure MSSQL docker container is created)
 DB_HOST=localhost ./run-code-coverage.sh
 ```
 
-On test runs success _coverlet_ wil generate _coverage.xml_ in test folders and _Report Generator_ will merge code coverages and create coverage report in folder `_coveragereport`.
+On success of all tests _coverlet_ will generate _opencoverCoverage.xml_ in test folders and _Report Generator_ will merge code coverages and create coverage report in folder `_coveragereport`.
 To see coverage report open `_coveragereport/index.htm` in your favourite browser.
 
 ## Travis CI
 
-CI testing is done entirely in docker, because _Travis CI_ is currently not supports _.NET Core 2.2_had. When tests are ran successfully generated code coverage will be sent to [coveralls.io](https://coveralls.io/github/xajler/instantcoach-api) service.
+CI testing is done entirely in docker, because _Travis CI_ is currently not supporting _.NET Core 2.2_. On tests run success, generated code coverage will be sent to [coveralls.io](https://coveralls.io/github/xajler/instantcoach-api) service.
 
 There are two ways to do CI Testing depending on branch:
 

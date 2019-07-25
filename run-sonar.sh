@@ -16,7 +16,7 @@ DOTNET_ROOT=~/.dotnet dotnet-sonarscanner begin /k:xajler_instantcoach-api \
 
 # Run tests and code coerage
 dotnet build -c Release
-DB_HOST=localhost dotnet test -c Release --test-adapter-path:. --logger:xunit /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./opencoverCoverage.xml /p:ExcludeByFile=\"/home/x/src/instantcoach/api/ICContextDesignTimeFactory.cs,/home/x/src/instantcoach/api/Infrastructure/SwaggerDefaultValues.cs,/home/x/src/instantcoach/api/Infrastructure/ApiVersioningErrorResponseProvider.cs,/home/x/src/instantcoach/core/Migrations/*.cs,/home/x/src/instantcoach/api/Infrastructure/OperationCancelledExceptionFilter.cs,/home/x/src/instantcoach/api/Infrastructure/Logging.cs,/api/Program.cs\"
+DB_HOST=localhost dotnet test -c Release --test-adapter-path:. --logger:xunit /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./opencoverCoverage.xml /p:ExcludeByFile=\"/src/instantcoach/src/api/ICContextDesignTimeFactory.cs,/src/instantcoach/src/api/Infrastructure/SwaggerDefaultValues.cs,/src/instantcoach/src/api/Infrastructure/ApiVersioningErrorResponseProvider.cs,/src/instantcoach/src/core/Migrations/*.cs,/src/instantcoach/src/api/Infrastructure/OperationCancelledExceptionFilter.cs,/src/instantcoach/src/api/Infrastructure/Logging.cs,/api/Program.cs\"
 
 # End
 DOTNET_ROOT=~/.dotnet dotnet-sonarscanner end /d:sonar.login=1b11ea53d21b876d23bd89dde1c5be094da3eb60
