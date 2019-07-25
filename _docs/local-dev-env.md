@@ -2,10 +2,9 @@
 
 > Note:
 >
-> `docker-run.sh` might fail first time running in new terminal, because it starts docker mssql instance and sometimes it will compile and run quicker than starting mssql docker instance, in that case, run same command again.
+> `run-local.sh` might fail first time running in new terminal, because it starts docker mssql instance and sometimes it will compile and run quicker than starting mssql docker instance, in that case, run same command again.
 
 *   [First time docker](#first-time-docker)
-*   [SSL](#ssl)
 *   [Quick Run](#quick-run)
 *   [Step by Step Run](#step-by-step-run)
 *   [Using API](#using-api)
@@ -16,17 +15,7 @@
 
 ```shell
 cd <src-root>
-docker pull microsoft/mssql-server-linux
 ./docker-mssql-run.sh
-```
-
-## SSL
-
-To run docker container with SSL on port (`5001`), make sure to run this command to create local dotnet core certificate:
-
-```shell
-# -p is for password, for this app to work use this password
-dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
 ```
 
 This a self-signed certificate and most browsers will complain. On `Windows` and `macOS` there is possibility to add this`*.pfx` key to KeyChain. On `linux` add exception to browser.
@@ -51,15 +40,13 @@ cd <src-root>
 docker start sql1
 # Set env variables for local dev (or add to bashrc, zshrc, etc, then this is not necessary)
 export ASPNETCORE_ENVIRONMENT=Local
-export ASPNETCORE_URLS='http://0.0.0.0:5000;https://0.0.0.0:5001'
+export ASPNETCORE_URLS='http://0.0.0.0:5000'
 export DB_HOST=localhost
 export DB_NAME=test-local-new
 export DB_USER=sa
 export DB_PASSWORD="Abc\$12345"
 export JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
 export JWT_AUDIENCE=https://ic.x430n.com
-export ASPNETCORE_Kestrel__Certificates__Default__Password=bm8kpv@=n2y4Nz@#
-export ASPNETCORE_Kestrel__Certificates__Default__Path=/home/x/.aspnet/https/instant-coach-api.pfx
 dotnet build
 cd api
 # On run will run migrations if DB not existing or not updated to latest migration

@@ -129,13 +129,19 @@ Find out more how to run [Local Dev](_docs/local-dev-env.md).
 
 Short version:
 
+Run _VS Code_ with _Debug (F5)_ or run _Task_ named `run`.
+
+Or in terminal run:
+
 ```shell
-./docker-mssql-run.sh
-dotnet dev-certs https -ep ${HOME}/.aspnet/https/instant-coach-api.pfx -p bm8kpv@=n2y4Nz@#
 ./run-local.sh
 ```
 
 ### Docker Dev
+
+> Note:
+>
+> Make sure that you've set correct paths in service `api.dev` volumes ([docker-compose.yml](docker/dev/docker-compose.yml)). There are two paths, first path is where code is cloned and second path to your `.aspnet` folder for local https certificate.
 
 Runs all services as _docker_ containers, but with mounted _docker volumes_ to local code repository and _https certificate_ folders. Has `ASPNETCORE_ENVIRONMENT` set to `Development`, and uses _APM Server_ with _ElasticSearch LogStash_ as main development driver.
 

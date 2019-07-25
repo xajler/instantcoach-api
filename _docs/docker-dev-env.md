@@ -34,7 +34,12 @@ This a self-signed certificate and most browsers will complain. On `Windows` and
 >
 > `${HOME}/.aspnet/https` is mapped to `/https` docker container volume.
 
+
 ## Quick Way
+
+> Note:
+>
+> Make sure that you've set correct paths in service `api.dev` volumes ([docker-compose.yml](../docker/dev/docker-compose.yml)). There are two paths, first path is where code is cloned and second path to your `.aspnet` folder for local https certificate.
 
 Run in terminal:
 
@@ -44,6 +49,10 @@ cd <src-root>
 ```
 
 ## Elaborate way
+
+> Note:
+>
+> Make sure that you've set correct paths in service `api.dev` volumes ([docker-compose.yml](../docker/dev/docker-compose.yml)). There are two paths, first path is where code is cloned and second path to your `.aspnet` folder for local https certificate.
 
 It would be better to start docker compose in detached mode `-d`, but it can be omitted, if there is need to look at all containers logs simultaneously.
 
@@ -58,6 +67,7 @@ docker logs <container> -f
 ```
 
 At this point API will be running with `watch`, meaning, with each save of code, it will re-run API app. Since each API request will produce console logs, run logs for API container while changing and testing code with this command:
+
 
 ```shell
 docker logs <api-container> -f
