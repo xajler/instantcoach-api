@@ -1,5 +1,8 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 as ci-env
 
+RUN export LANG=en_US.UTF-8
+RUN export LANGUAGE=en_US.UTF-8
+
 RUN apt-get update -y && \
     apt-get install -y openjdk-8-jre --no-install-recommends && \
     apt-get clean;
