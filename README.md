@@ -202,7 +202,7 @@ Run all tests with _coverlet_ (Make sure MSSQL docker container is created)
 DB_HOST=localhost ./run-code-coverage.sh
 ```
 
-On success of all tests _coverlet_ wil generate opencoverCoverage.xml_ in test folders and _Report Generator_ will merge code coverages and create coverage report in folder `_coveragereport`.
+On success of all tests _coverlet_ will generate _opencoverCoverage.xml_ in test folders and _Report Generator_ will merge code coverages and create coverage report in folder `_coveragereport`.
 To see coverage report open `_coveragereport/index.htm` in your favourite browser.
 
 ## Travis CI
