@@ -202,12 +202,12 @@ Run all tests with _coverlet_ (Make sure MSSQL docker container is created)
 DB_HOST=localhost ./run-code-coverage.sh
 ```
 
-On success of all tests _coverlet_ wil generate _coverage.xml_ in test folders and _Report Generator_ will merge code coverages and create coverage report in folder `_coveragereport`.
+On success of all tests _coverlet_ wil generate opencoverCoverage.xml_ in test folders and _Report Generator_ will merge code coverages and create coverage report in folder `_coveragereport`.
 To see coverage report open `_coveragereport/index.htm` in your favourite browser.
 
 ## Travis CI
 
-CI testing is done entirely in docker, because _Travis CI_ is currently not supporting _.NET Core 2.2_. When tests are ran successfully generated code coverage will be sent to [coveralls.io](https://coveralls.io/github/xajler/instantcoach-api) service.
+CI testing is done entirely in docker, because _Travis CI_ is currently not supporting _.NET Core 2.2_. On tests run success, generated code coverage will be sent to [coveralls.io](https://coveralls.io/github/xajler/instantcoach-api) service.
 
 There are two ways to do CI Testing depending on branch:
 
