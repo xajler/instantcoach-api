@@ -1,14 +1,14 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 as ci-env
 
-RUN apt-get update && \
-   apt-get install -y openjdk-8-jre && \
-   apt-get clean;
+RUN apt-get update -y && \
+    apt-get install -y openjdk-8-jre --no-install-recommends && \
+    apt-get clean;
 
 # Fix certificate issues
-RUN apt-get update && \
-   apt-get install ca-certificates-java && \
-   apt-get clean && \
-   update-ca-certificates -f
+RUN apt-get update -y && \
+    apt-get install ca-certificates-java --no-install-recommends && \
+    apt-get clean && \
+    update-ca-certificates -f;
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 RUN export JAVA_HOME
