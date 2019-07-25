@@ -180,7 +180,7 @@ dotnet watch test
 It can show code coverage when all tests ran successfully with this command:
 
 ```shell
-dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./coverage.xml
+dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./opencoverCoverage.xml
 ```
 
 ### Integration Tests
