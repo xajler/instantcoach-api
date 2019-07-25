@@ -10,9 +10,12 @@ services:
 
   api:
     #image: x430n/ic-api:latest
-    build: .
+    build:
+      context:  ../
+      dockerfile: docker/Dockerfile
+      args:
+        - ASPNETCORE_ENVIRONMENT
     environment:
-      - ASPNETCORE_ENVIRONMENT=Test
       - ASPNETCORE_URLS=http://0.0.0.0:5000
       - DB_HOST=db
       - DB_NAME=test
@@ -32,7 +35,7 @@ services:
   proxy:
     #image: x430n/ic-nginx:latest
     build:
-      context:  ./_nginx
+      context:  nginx
       dockerfile: Dockerfile
     ports:
       - "80:80"
@@ -76,7 +79,7 @@ services:
 
   apm:
     build:
-      context: ./_apm/apm-server
+      context: apm/apm-server
       dockerfile: Dockerfile
       args:
         - APM_ENV=Test

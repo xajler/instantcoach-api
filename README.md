@@ -147,7 +147,7 @@ Short version:
 ./run-dev-docker.sh
 ```
 
-### Docker Test/Production
+### Docker Test/Staging/Production
 
 Similar to [Docker Dev](_docs/docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes. Everything runs inside of docker containers.
 
@@ -159,7 +159,7 @@ Make sure _MSSQL_ runs for Integration tests.
 
 ### All Tests
 
-Best to run script:
+Best to run script with code coverage generation:
 
 ```shell
 # Change DB_HOST, if your DB host different than localhost
@@ -170,22 +170,15 @@ Runs all tests and at the end generates code coverage report, more info in [Code
 
 ### Unit Tests
 
-Best to run test with watcher, so any time file is saved it will restart all unit tests.
+Run inside docker with applied watcher and showing code coverage after all tests successfully ran:
 
 ```shell
-cd tests/tests-unit
-dotnet watch test
-```
-
-It can show code coverage when all tests ran successfully with this command:
-
-```shell
-dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./opencoverCoverage.xml
+./rm-unit-testing-docker.sh
 ```
 
 ### Integration Tests
 
-For Integration tests it is not recommended to use `dotnet watch`.
+For Integration tests it is not recommended to use `dotnet watch`. And better to run [All Tests](#all-tests) instead.
 
 ```shell
 cd tests/tests-integration
@@ -197,7 +190,7 @@ It can show code coverage when all tests ran successfully with this command:
 
 ```shell
 DB_HOST=localhost
-dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./coverage.xml
+dotnet watch test /p:CollectCoverage=true /p:CoverletOutputFormat=openCover /p:CoverletOutput=./opencoverCoverage.xml
 ```
 
 ### Code Coverage Report

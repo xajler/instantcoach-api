@@ -36,9 +36,9 @@
 </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\domain\domain.csproj" />
-    <ProjectReference Include="..\..\core\core.csproj" />
-    <ProjectReference Include="..\..\api\api.csproj" />
+    <ProjectReference Include="..\..\src\domain\domain.csproj" />
+    <ProjectReference Include="..\..\src\core\core.csproj" />
+    <ProjectReference Include="..\..\src\api\api.csproj" />
   </ItemGroup>
 
 </Project>

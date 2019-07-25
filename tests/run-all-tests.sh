@@ -16,7 +16,7 @@
 # /d:sonar.cs.vstest.reportsPaths="tests/**/TestResults/*.trx" \
 
 dotnet build -c Release
-dotnet test -c Release --test-adapter-path:. --logger:xunit /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./opencoverCoverage.xml /p:ExcludeByFile=\"/api/ICContextDesignTimeFactory.cs,/api/Infrastructure/SwaggerDefaultValues.cs,/api/Infrastructure/ApiVersioningErrorResponseProvider.cs,/core/Migrations/*.cs,/api/Infrastructure/OperationCancelledExceptionFilter.cs,/api/Infrastructure/Logging.cs,/api/Program.cs\"
+dotnet test -c Release --test-adapter-path:. --logger:xunit /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./opencoverCoverage.xml /p:ExcludeByFile=\"/src/api/ICContextDesignTimeFactory.cs,/src/api/Infrastructure/SwaggerDefaultValues.cs,/src/api/Infrastructure/ApiVersioningErrorResponseProvider.cs,/core/Migrations/*.cs,/src/api/Infrastructure/OperationCancelledExceptionFilter.cs,/src/api/Infrastructure/Logging.cs,/src/api/Program.cs\"
 
 echo "branch: $TRAVIS_BRANCH"
 echo "commit: $TRAVIS_COMMIT"

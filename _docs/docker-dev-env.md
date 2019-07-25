@@ -49,8 +49,8 @@ It would be better to start docker compose in detached mode `-d`, but it can be 
 
 ```shell
 cd <src-root>
-docker-compose -f docker-compose-dev.yml build
-docker-compose -f docker-compose-dev.yml up -d
+docker-compose -f docker/dev/docker-compose.yml build
+docker-compose -f docker/dev/docker-compose.yml up -d
 # Check that all are running with
 docker ps -a
 # If any exited and stopped use logs to check for problems
@@ -73,7 +73,7 @@ When there is need to stop and remove all containers and images created, run in 
 
 ## Using API
 
-Make sure [docker compose for dev](../docker-compose-dev.yml) is up and running.
+Make sure [docker compose for dev](../docker/docker-compose-dev.yml) is up and running.
 
 ### Swagger
 
@@ -94,7 +94,7 @@ Authorize API for swagger with these steps:
 
 > Note:
 >
-> Need for JWT Token can be removed all together by removing `[Authorize]` in [BaseController](../api/BaseController.cs) attribute and re-building API container.
+> Need for JWT Token can be removed all together by removing `[Authorize]` in [BaseController](../src/api/BaseController.cs) attribute and re-building API container.
 
 ### Postman
 
