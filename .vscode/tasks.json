@@ -6,8 +6,7 @@
             "command": "dotnet",
             "type": "process",
             "args": [
-                "build",
-                "${workspaceFolder}/api/api.csproj"
+                "build"
             ],
             "problemMatcher": "$tsc"
         },
@@ -23,26 +22,9 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/api/api.csproj"
+                "${workspaceFolder}/src/api/api.csproj"
             ],
             "problemMatcher": "$tsc"
-        },
-        {
-            "label": "test core with coverage",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "test",
-                "/p:CollectCoverage=true",
-                "/p:CoverletOutputFormat=lcov",
-                "/p:CoverletOutput=./lcov.info",
-                "${workspaceFolder}/tests/tests-domain/Tests.Domain.csproj"
-            ],
-            "problemMatcher": "$msCompile",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            }
         }
     ]
 }

@@ -178,40 +178,19 @@ namespace Domain
         public string BookmarkPinsValue { get; private set; }
         public List<Comment> CommentsConvert
         {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(BookmarkPinsValue))
-                {
-                    return new List<Comment>();
-                }
-                else
-                {
-                    var result = FromJson<List<Comment>>(CommentsValue);
-                    Comments = result;
-                    return result;
-                }
-            }
+            get { return new List<Comment>(); }
             private set { CommentsValue = ToJson(value); }
         }
         public List<BookmarkPin> BookmarkPinsConvert
         {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(BookmarkPinsValue))
-                {
-                    return new List<BookmarkPin>();
-                }
-                else
-                {
-                    var result = FromJson<List<BookmarkPin>>(BookmarkPinsValue);
-                    BookmarkPins = result;
-                    return result;
-                }
-            }
+            get { return new List<BookmarkPin>(); }
             private set
             {
-                if (value == null) { BookmarkPinsValue = null; }
-                else { BookmarkPinsValue = ToJson(value); }
+                if (value != null && value.Count > 0)
+                {
+                    BookmarkPinsValue = ToJson(value);
+                }
+                else { BookmarkPinsValue = null; }
             }
         }
 

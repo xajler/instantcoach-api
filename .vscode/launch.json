@@ -9,15 +9,19 @@
                 "type": "coreclr",
                 "request": "launch",
                 "preLaunchTask": "build",
-                "program": "${workspaceFolder}/api/bin/Debug/netcoreapp2.2/api.dll",
+                "program": "${workspaceFolder}/src/api/bin/Debug/netcoreapp2.2/api.dll",
                 "args": [],
                 "env": {
                     "ASPNETCORE_ENVIRONMENT": "Local",
+                    "ASPNETCORE_URLS": "http://0.0.0.0:5000",
+                    "DB_HOST": "localhost",
                     "DB_NAME": "test-local",
                     "DB_USER": "sa",
-                    "DB_PASSWORD": "Abc$12345"
+                    "DB_PASSWORD": "Abc$12345",
+                    "JWT_AUTHORITY": "https://dev-ajj38rm9.auth0.com",
+                    "JWT_AUDIENCE": "https://ic.x430n.com",
                 },
-                "cwd": "${workspaceFolder}/api",
+                "cwd": "${workspaceFolder}/src/api",
                 "stopAtEntry": false,
                 "console": "internalConsole"
             }
