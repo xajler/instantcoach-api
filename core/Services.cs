@@ -85,8 +85,6 @@ namespace Core.Services
 
         public async Task<Result<InstantCoach>> Create(InstantCoachCreateClient data)
         {
-            // TODO: Checking existence of AgentId or EvaluatorId depending which is LoggedIn
-            //       validation of bookmarkId in comments
             InstantCoach entity = data.ToNewInstantCoach();
             var validationResult = entity.Validate();
             _logger.LogInformation("Entity after validate: {@EntityModel}", entity);

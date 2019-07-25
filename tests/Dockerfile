@@ -1,25 +1,23 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 as ci-env
 
-RUN export LANG=en_US.UTF-8
-RUN export LANGUAGE=en_US.UTF-8
+# RUN apt-get update && \
+#    apt-get install -y openjdk-8-jre && \
+#    apt-get clean;
 
-RUN apt-get update -y && \
-    apt-get install -y openjdk-8-jre --no-install-recommends && \
-    apt-get clean;
+# # Fix certificate issues
+# RUN apt-get update && \
+#    apt-get install ca-certificates-java && \
+#    apt-get clean && \
+#    update-ca-certificates -f;
 
-# Fix certificate issues
-RUN apt-get update -y && \
-    apt-get install ca-certificates-java --no-install-recommends && \
-    apt-get clean && \
-    update-ca-certificates -f;
+# # Setup JAVA_HOME -- useful for docker commandline
+# ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+# RUN export JAVA_HOME
 
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
-RUN export JAVA_HOME
+# RUN dotnet tool install -g dotnet-sonarscanner
+# ENV PATH="${PATH}:/root/.dotnet/tools"
 
-RUN dotnet tool install -g dotnet-sonarscanner
-ENV PATH="${PATH}:/root/.dotnet/tools"
-
-COPY .git ./.git
+# OPY .git ./.git
 COPY api ./api
 COPY core ./core
 COPY domain ./domain

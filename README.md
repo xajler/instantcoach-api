@@ -47,7 +47,7 @@ Domain Errors and Endpoint Request Logging
 *   C#7
 *   [EF Core](https://docs.microsoft.com/en-us/ef/core/) (Commands) / ADO.NET via EF Core (Queries)
 *   [Docker](https://www.docker.com/) and Docker Compose
-*   [SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) [Linux, Docker]((https://hub.docker.com/_/microsoft-mssql-server))
+*   [SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) ([Linux, Docker](https://hub.docker.com/_/microsoft-mssql-server))
 *   [Nginx](https://nginx.org/en/) ([Docker](https://hub.docker.com/_/nginx))
 *   [VS Code](https://code.visualstudio.com/) (With C# Extensions)
 *   [Azure Data Studio](https://docs.microsoft.com/en-us/sql/azure-data-studio/what-is?view=sql-server-2017) (Local GUI for SQL Server)
