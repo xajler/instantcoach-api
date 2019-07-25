@@ -16,7 +16,6 @@ RUN export JAVA_HOME
 RUN dotnet tool install -g dotnet-sonarscanner
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
-WORKDIR
 COPY .git ./.git
 COPY api ./api
 COPY core ./core
