@@ -226,7 +226,7 @@ There are two ways to do CI Testing depending on branch:
 
 ### Sonar Scan Code Analysis
 
-On `master` branch when running all tests, [SonarScanner for MSBuild](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-msbuild/) will send code analysis data to [SonarCloud](https://sonarcloud.io). There was issues with Java running sonar scanner as part of [CI Dockerfile](docker/ci/Dockerfile). Now fixed by creating my own [DockerHub repository](https://hub.docker.com/r/x430n/dotnet-sonarscanner) for [dotnet-sonarscanner](https://github.com/xajler/dotnet-sonarscanner), currently only supporting .NET Core SDK 2.2 and based of [Alpine Linux](https://www.alpinelinux.org).
+On `master` branch after successfully run all tests, [SonarScanner for MSBuild](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-msbuild/) will send code analysis data to [SonarCloud](https://sonarcloud.io). There was issues with Java running sonar scanner inside .NET Core SDK Docker image. Now fixed by creating [DockerHub repository](https://hub.docker.com/r/x430n/dotnet-sonarscanner) for [dotnet-sonarscanner](https://github.com/xajler/dotnet-sonarscanner), supports .NET Core SDK 2.1 and 2.2 and based of [Alpine Linux 3.9](https://www.alpinelinux.org).
 
 ## APM Server & LogStash
 
