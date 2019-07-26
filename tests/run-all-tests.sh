@@ -1,17 +1,17 @@
 #!/bin/sh
 
 # # Begin
-# dotnet-sonarscanner begin /k:xajler_instantcoach-api \
-#     /o:metaintellect \
-#     /v:"1.0.0" \
-#     /d:sonar.host.url=https://sonarcloud.io \
-#     /d:sonar.login=1b11ea53d21b876d23bd89dde1c5be094da3eb60 \
-#     /d:sonar.cs.xunit.reportsPaths="tests/**/TestResults/TestResults.xml" \
-#     /d:sonar.cs.opencover.reportsPaths="tests/**/opencoverCoverage.xml" \
-#     /d:sonar.scm.provider=git \
-#     /d:sonar.c.file.suffixes=- \
-#     /d:sonar.cpp.file.suffixes=- \
-#     /d:sonar.objc.file.suffixes=-
+dotnet-sonarscanner begin /k:xajler_instantcoach-api \
+    /o:metaintellect \
+    /v:"1.0.0" \
+    /d:sonar.host.url=https://sonarcloud.io \
+    /d:sonar.login=1b11ea53d21b876d23bd89dde1c5be094da3eb60 \
+    /d:sonar.cs.xunit.reportsPaths="tests/**/TestResults/TestResults.xml" \
+    /d:sonar.cs.opencover.reportsPaths="tests/**/opencoverCoverage.xml" \
+    /d:sonar.scm.provider=git \
+    /d:sonar.c.file.suffixes=- \
+    /d:sonar.cpp.file.suffixes=- \
+    /d:sonar.objc.file.suffixes=-
 
 # /d:sonar.cs.vstest.reportsPaths="tests/**/TestResults/*.trx" \
 
@@ -25,11 +25,12 @@ echo "author: $REPO_COMMIT_AUTHOR"
 echo "email: $REPO_COMMIT_AUTHOR_EMAIL"
 echo "message: $REPO_COMMIT_MESSAGE"
 
-# # End
-# dotnet-sonarscanner end /d:sonar.login=1b11ea53d21b876d23bd89dde1c5be094da3eb60
+# End
+dotnet-sonarscanner end /d:sonar.login=1b11ea53d21b876d23bd89dde1c5be094da3eb60
 
 # travis ci
-./tools/csmacnz.Coveralls --multiple \
+dotnet tool install --global coveralls.net
+csmacnz.Coveralls --multiple \
     -i "opencover=./tests/tests-unit/opencoverCoverage.xml;opencover=./tests/tests-integration/opencoverCoverage.xml"  \
     --repoToken "NjQNKJWiwvnJ4rH0YUwwxztKf8ucmLxKD" \
     --commitId $TRAVIS_COMMIT \

@@ -157,7 +157,11 @@ Short version:
 
 Similar to [Docker Dev](_docs/docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes. Everything runs inside of docker containers.
 
-TODO: More to add.
+```shell
+# Use 'Test', 'Staging' or 'Production' environments
+# It will create DB with environment name
+./run-env-docker.sh Test
+```
 
 ## Unit/Integration Testing
 
@@ -219,6 +223,10 @@ There are two ways to do CI Testing depending on branch:
 
 * `master`: Docker compose on up it will start all tests (Unit and Integration).
 * `dev` (or any other): `Dockerfile` that on run will start only Unit tests.
+
+### Sonar Scan Code Analysis
+
+On `master` branch when running all tests, [SonarScanner for MSBuild](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-msbuild/) will send code analysis data to [SonarCloud](https://sonarcloud.io). There was issues with Java running sonar scanner as part of [CI Dockerfile](docker/ci/Dockerfile). Now fixed by creating my own [DockerHub repository](https://hub.docker.com/r/x430n/dotnet-sonarscanner) for [dotnet-sonarscanner](https://github.com/xajler/dotnet-sonarscanner), currently only supporting .NET Core SDK 2.2 and based of [Alpine Linux](https://www.alpinelinux.org).
 
 ## APM Server & LogStash
 

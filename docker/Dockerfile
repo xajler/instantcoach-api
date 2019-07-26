@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-alpine3.9 AS build
 
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+
 WORKDIR /app
 COPY /src/api ./api
 COPY /src/core ./core
