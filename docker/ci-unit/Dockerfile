@@ -11,7 +11,6 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 COPY src ./src
 COPY tests  ./tests
-COPY tools ./tools
 COPY instantcoach.sln .
 
 RUN dotnet restore && dotnet build && dotnet test ./tests/tests-unit
