@@ -14,7 +14,7 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine3.9 AS runtime
 ARG ENV
 ENV ASPNETCORE_ENVIRONMENT=${ENV} \
     DB_NAME=${ENV}
-RUN echo $DB_NAME
+
 WORKDIR /app
 COPY --from=build /app/api/out ./
 ENTRYPOINT ["dotnet", "api.dll"]

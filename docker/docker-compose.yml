@@ -18,10 +18,8 @@ services:
       args:
         - ENV
     environment:
-      #- ASPNETCORE_ENVIRONMENT=Test
       - ASPNETCORE_URLS=http://0.0.0.0:5000
       - DB_HOST=db
-      #- DB_NAME=test
       - DB_USER=sa
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com

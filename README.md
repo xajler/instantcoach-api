@@ -153,14 +153,14 @@ Short version:
 ./run-dev-docker.sh
 ```
 
-### Docker Test/Staging/Production
+### Docker Development/Staging/Production
 
 Similar to [Docker Dev](_docs/docker-dev-env.md) but not sharing local machine folder(s) as docker container volumes. Everything runs inside of docker containers.
 
 ```shell
-# Use 'Test', 'Staging' or 'Production' environments
+# Use 'Development', 'Staging' or 'Production' environments, supported by `ASPNETCORE_ENVIRONMENT` variable.
 # It will create DB with environment name
-./run-env-docker.sh Test
+./run-env-docker.sh Staging
 ```
 
 ## Unit/Integration Testing
