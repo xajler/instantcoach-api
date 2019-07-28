@@ -5,8 +5,6 @@ services:
     environment:
       SA_PASSWORD: "Abc$$12345"
       ACCEPT_EULA: "Y"
-    ports:
-      - "5434:1433"
     networks:
       - docker-network
 
@@ -65,9 +63,6 @@ services:
       memlock:
         soft: -1
         hard: -1
-    ports:
-      - 9200:9200
-      #- 9300:9300
     networks:
       - docker-network
 
@@ -89,8 +84,6 @@ services:
       dockerfile: Dockerfile
       args:
         - APM_ENV=Local
-    ports:
-      - 8200:8200
     links:
       - elasticsearch.dev
       - kibana.dev
