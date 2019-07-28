@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+  api:
+    image: x430n/ic-api:latest
+    build:
+      context:  ../../
+      dockerfile: docker/azure/Dockerfile
+      args:
+        - ENV
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - DB_NAME=ic-staging
+      - DB_HOST=db
+      - DB_USER=sa
+      - DB_PASSWORD="Abc$$12345"
+      - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
+      - JWT_AUDIENCE=https://ic.x430n.com
+      - ELASTIC_APM_SERVER_URLS=http://apm:8200
+      - ELASTIC_APM_SERVICE_NAME=InstantCoach API
+      - ELASTIC_APM_METRICS_INTERVAL="30s"
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    # ports:
+    #     - "5000:5000"
+
+  proxy:
+    image: x430n/ic-nginx:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "80:80"
+      - "453:453"
+
+  apm:
+    image: x430n/ic-apm-server
+    build:
+      context: ../apm/apm-server
+      dockerfile: Dockerfile
+      args:
+        - APM_ENV=Test

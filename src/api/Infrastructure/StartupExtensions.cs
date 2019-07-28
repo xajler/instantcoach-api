@@ -37,7 +37,6 @@ namespace Api
                     var name = $"InstantCoach API v{description.GroupName.ToUpperInvariant()}";
                     s.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", name);
                 }
-                s.RoutePrefix = string.Empty;
             });
         }
 
