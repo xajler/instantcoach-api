@@ -25,6 +25,8 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
     depends_on:
       - db
+    links:
+      - db
     networks:
       - ic-network
 
@@ -34,6 +36,8 @@ services:
       - "80:80"
       - "453:453"
     depends_on:
+      - api
+    links:
       - api
       - kibana
     networks:

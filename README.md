@@ -121,6 +121,8 @@ sudo systemctl enable docker.service
 
 For other operating systems do according way of starting/enabling docker service.
 
+To gain JWT Token needed for testing running API, please [read more in documentation for JWT Tokens](_docs/jwt-token.md).
+
 ### Local Dev
 
 Runs with locally installed _.NET Core SDK_. Uses only _MSSQL_ as a _Docker_ container.
@@ -129,7 +131,7 @@ Find out more how to run [Local Dev](_docs/local-dev-env.md).
 
 Short version:
 
-Run _VS Code_ with _Debug (F5)_ or run _Task_ named `run`.
+Run _VS Code_ with _Debug (F5)_, but make sure MSSQL is running as local instance or in docker container.
 
 Or in terminal run:
 
