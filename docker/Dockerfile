@@ -12,8 +12,7 @@ RUN dotnet restore && dotnet publish -c Release -o out --self-contained -r alpin
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine3.9 AS runtime
 ARG ENV
-ENV ASPNETCORE_ENVIRONMENT=${ENV} \
-    DB_NAME=${ENV}
+ENV ASPNETCORE_ENVIRONMENT=${ENV}
 
 WORKDIR /app
 COPY --from=build /app/api/out ./

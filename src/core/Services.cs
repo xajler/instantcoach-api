@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Schema;
@@ -24,7 +23,7 @@ namespace Core.Services
         Task<Result> Remove(int id);
     }
 
-    public class InstantCoachService : IInstantCoachService
+    public sealed class InstantCoachService : IInstantCoachService
     {
         private readonly ILogger _logger;
         private readonly InstantCoachRepository _repository;

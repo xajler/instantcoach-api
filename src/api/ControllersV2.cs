@@ -15,7 +15,7 @@ namespace Api.Controllers.Version2
     // Can omit as default version, uncomment on v3
     // [ApiVersion(ApiVersion2)]
     [Produces(ProducesJsonContent)]
-    public class ApiV2Controller : ApiV1Controller
+    public sealed class ApiV2Controller : ApiV1Controller
     {
         public ApiV2Controller(ILogger<ApiV1Controller> logger, IInstantCoachService service)
             : base(logger, service)

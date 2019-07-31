@@ -10,7 +10,7 @@ namespace Core
     //
     // Needed only for running `dotnet ef` commands, not used for creating db context...
     //
-    public class ICContextDesignTimeFactory : IDesignTimeDbContextFactory<ICContext>
+    public sealed class ICContextDesignTimeFactory : IDesignTimeDbContextFactory<ICContext>
     {
         public ICContext CreateDbContext(string[] args)
         {

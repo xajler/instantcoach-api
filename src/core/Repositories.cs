@@ -68,7 +68,7 @@ namespace Core.Repositories
         }
     }
 
-    public class InstantCoachRepository : Repository<InstantCoach>
+    public sealed class InstantCoachRepository : Repository<InstantCoach>
     {
         private readonly ILogger<InstantCoachRepository> _logger;
         private readonly ICContext _context;

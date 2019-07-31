@@ -1,7 +1,10 @@
 version: "3.7"
 services:
   db:
-    image: mcr.microsoft.com/mssql/server:2017-GDR-ubuntu
+    #image: x430n/ic-db
+    build:
+      context:  db
+      dockerfile: Dockerfile
     environment:
       SA_PASSWORD: "Abc$$12345"
       ACCEPT_EULA: "Y"
@@ -18,7 +21,8 @@ services:
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:5000
       - DB_HOST=db
-      - DB_USER=sa
+      - DB_NAME=ic-staging
+      - DB_USER=icUser
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
       - JWT_AUDIENCE=https://ic.x430n.com
@@ -26,10 +30,6 @@ services:
       - ELASTIC_APM_SERVICE_NAME=InstantCoach API
       - ELASTIC_APM_METRICS_INTERVAL="30s"
       - ELASTICSEARCH_URL=http://elasticsearch:9200
-    # ports:
-    #     - "5000:5000"
-    depends_on:
-      - db
     networks:
       - docker-network
 
@@ -39,8 +39,8 @@ services:
       context:  nginx
       dockerfile: Dockerfile
     ports:
-      - "80:80"
-      - "453:453"
+      - 80:80
+      - 453:453
     depends_on:
       - api
       - kibana

@@ -16,7 +16,7 @@ namespace Core.Models
         SaveChangesFailed
     }
 
-    public class ListResult<T> where T : class
+    public sealed class ListResult<T> where T : class
     {
         public IReadOnlyCollection<T> Items { get; set; }
         public int TotalCount { get; set; }
@@ -48,7 +48,7 @@ namespace Core.Models
         }
     }
 
-    public class Result<T> : Result
+    public sealed class Result<T> : Result
     {
         public T Value { get; private set; }
 
@@ -76,19 +76,19 @@ namespace Core.Models
         }
     }
 
-    public class CreatedId
+    public sealed class CreatedId
     {
         public CreatedId(int id) => Id = id;
         public int Id { get; }
     }
 
-    public class Msg
+    public sealed class Msg
     {
         public string Message { get; set; }
     }
 
 
-    public class SqlParamValue
+    public sealed class SqlParamValue
     {
         public string Param { get; set; }
         public string Value { get; set; }
@@ -101,7 +101,7 @@ namespace Core.Models
 
     // Return Models
     // Read-Only For List and GetById
-    public class InstantCoachList
+    public sealed class InstantCoachList
     {
         public int Id { get; set; }
         public InstantCoachStatus Status { get; set; }
@@ -128,7 +128,7 @@ namespace Core.Models
         }
     }
 
-    public class InstantCoachForId
+    public sealed class InstantCoachForId
     {
         public InstantCoachForId(
             int id,
@@ -158,7 +158,7 @@ namespace Core.Models
 
     [DisplayName(CreateDisplayName)]
     [Description(CreateDesc)]
-    public class InstantCoachCreateClient
+    public sealed class InstantCoachCreateClient
     {
         [Required, MaxLength(1000)]
         [Description(DescriptionDesc)]
@@ -193,7 +193,7 @@ namespace Core.Models
 
     [DisplayName(UpdateDisplayName)]
     [Description(UpdateDesc)]
-    public class InstantCoachUpdateClient
+    public sealed class InstantCoachUpdateClient
     {
         [Required]
         [DisplayName("Update Type")]
@@ -209,7 +209,7 @@ namespace Core.Models
 
     [DisplayName(CommentDisplayName)]
     [Description(CommentDesc)]
-    public class CommentClient
+    public sealed class CommentClient
     {
         [Required]
         [DisplayName("Comment Type")]
@@ -233,7 +233,7 @@ namespace Core.Models
 
     [DisplayName(BookmarkPinDisplayName)]
     [Description(BookmarkPinDesc)]
-    public class BookmarkPinClient
+    public sealed class BookmarkPinClient
     {
         [Required, Range(1, int.MaxValue)]
         [Description(BPIdDesc)]
@@ -253,7 +253,7 @@ namespace Core.Models
 
     [DisplayName(RangeDisplayName)]
     [Description(RangeDesc)]
-    public class RangeClient
+    public sealed class RangeClient
     {
         [Required, Range(1, int.MaxValue)]
         [Description(RangeStartDesc)]
@@ -265,7 +265,7 @@ namespace Core.Models
 
     // Db Models
 
-    public class InstantCoachDb
+    public sealed class InstantCoachDb
     {
         public InstantCoachDb(
             int id,

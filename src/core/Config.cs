@@ -5,7 +5,7 @@ using Domain;
 
 namespace Core
 {
-    public class Config
+    public sealed class Config
     {
         public const string Name = "Config";
 

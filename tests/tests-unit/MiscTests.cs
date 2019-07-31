@@ -6,10 +6,10 @@ using Core.Models;
 
 namespace Tests.Unit
 {
-    public static class MiscTests
+    public sealed class MiscTests
     {
         [Fact]
-        public static void Should_not_add_range_of_errors_to_validation_result_when_range_null_or_empty()
+        public void Should_not_add_range_of_errors_to_validation_result_when_range_null_or_empty()
         {
             var actual = new ValidationResult();
             actual.AddError("Some error");
@@ -22,7 +22,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public static void Should_not_add_error_to_validation_result_when_range_null_or_empty()
+        public void Should_not_add_error_to_validation_result_when_range_null_or_empty()
         {
             var actual = new ValidationResult();
             actual.AddError(null);
@@ -34,7 +34,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public static void Should_be_able_to_create_result_as_error()
+        public void Should_be_able_to_create_result_as_error()
         {
             var actual = Result.AsError(ErrorType.InvalidData);
             var expected = false;
@@ -44,7 +44,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public static void Test_to_cover_context_design_time_factory_in_core()
+        public void Test_to_cover_context_design_time_factory_in_core()
         {
             var factory = new Core.ICContextDesignTimeFactory();
             var actual = factory.CreateDbContext(new string[] { });

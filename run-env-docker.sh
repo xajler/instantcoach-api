@@ -8,4 +8,4 @@
 # Run as:
 # ./run-env-docker.sh <one-of-those-three-stages>
 docker-compose -f docker/docker-compose.yml build --build-arg ENV=$1
-docker-compose -f docker/docker-compose.yml up -d
+docker-compose -f docker/docker-compose.yml up #-d

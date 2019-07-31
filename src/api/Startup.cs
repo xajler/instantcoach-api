@@ -16,7 +16,7 @@ using static Core.Constants;
 
 namespace Api
 {
-    public class Startup
+    public sealed class Startup
     {
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
@@ -58,7 +58,7 @@ namespace Api
         public void Configure(IApplicationBuilder app,
             IApiVersionDescriptionProvider provider)
         {
-            RunDbMigrationsAndSeedDataIfNeeded(app);
+            RunDbMigrationsAndSeedDataIfNeeded(app, Env.EnvironmentName);
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseSwagger();
@@ -69,16 +69,20 @@ namespace Api
             app.UseMvc();
         }
 
-        private static void RunDbMigrationsAndSeedDataIfNeeded(IApplicationBuilder app)
+        private static void RunDbMigrationsAndSeedDataIfNeeded(IApplicationBuilder app,
+            string env)
         {
-            using (var serviceScope = app.ApplicationServices
-                             .GetRequiredService<IServiceScopeFactory>()
-                             .CreateScope())
+            if (env == LocalEnv || env == SUTEnv || env == "Development" )
             {
-                var context = serviceScope.ServiceProvider.GetService<ICContext>();
-                if (!context.AllMigrationsApplied())
+                using (var serviceScope = app.ApplicationServices
+                           .GetRequiredService<IServiceScopeFactory>()
+                           .CreateScope())
                 {
-                    context.Database.Migrate();
+                    var context = serviceScope.ServiceProvider.GetService<ICContext>();
+                    if (!context.AllMigrationsApplied())
+                    {
+                        context.Database.Migrate();
+                    }
                 }
             }
         }

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Domain
 {
-    public class Comment : ValueObject
+    public sealed class Comment : ValueObject
     {
         private readonly List<string> _errors = new List<string>();
 

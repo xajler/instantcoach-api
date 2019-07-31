@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Domain
 {
-    public class Range : ValueObject
+    public sealed class Range : ValueObject
     {
         public Range(int start, int end)
         {
@@ -21,7 +21,7 @@ namespace Domain
         }
     }
 
-    public class BookmarkPin : ValueObject
+    public sealed class BookmarkPin : ValueObject
     {
         private readonly List<string> _errors = new List<string>();
 

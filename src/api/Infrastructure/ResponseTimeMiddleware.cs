@@ -8,7 +8,7 @@ using static Core.Constants;
 
 namespace Api
 {
-    public class ResponseTimeMiddleware
+    public sealed class ResponseTimeMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ResponseTimeMiddleware> _logger;

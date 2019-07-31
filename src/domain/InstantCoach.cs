@@ -5,7 +5,7 @@ using static Domain.Helpers;
 
 namespace Domain
 {
-    public partial class InstantCoach : AggregateRoot, IAuditable
+    public sealed partial class InstantCoach : AggregateRoot, IAuditable
     {
         private const string CommentsErrorMsg = "Comments are required to have at least one element.";
         private readonly ValidationResult _errors = new ValidationResult();
@@ -171,7 +171,7 @@ namespace Domain
     }
 
     // For EF hacks
-    public partial class InstantCoach
+    public sealed partial class InstantCoach
     {
         // EF stuff and hacks
         public string CommentsValue { get; private set; }

@@ -10,7 +10,7 @@ using static Core.Constants;
 namespace Tests.Integration
 {
     public class TestWebApplicationFactory<TStartup>
-    : WebApplicationFactory<TStartup> where TStartup : class
+        : WebApplicationFactory<TStartup> where TStartup : class
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {

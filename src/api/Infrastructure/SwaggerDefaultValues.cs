@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Api
 {
-    public class SwaggerDefaultValues : IOperationFilter
+    public sealed class SwaggerDefaultValues : IOperationFilter
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {

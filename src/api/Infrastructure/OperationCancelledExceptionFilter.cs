@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Api
 {
-    public class OperationCancelledExceptionFilterAttribute : ExceptionFilterAttribute
+    public sealed class OperationCancelledExceptionFilterAttribute : ExceptionFilterAttribute
     {
         private readonly ILogger _logger;
 

@@ -6,7 +6,7 @@ using Serilog.Exceptions;
 
 namespace Api
 {
-    public class Logging
+    public sealed class Logging
     {
         private const string OutputFormat = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}";
 

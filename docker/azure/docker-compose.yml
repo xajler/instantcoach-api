@@ -1,10 +1,7 @@
 version: "3.7"
 services:
   db:
-    image: mcr.microsoft.com/mssql/server:2017-GDR-ubuntu
-    environment:
-      SA_PASSWORD: "Abc$$12345"
-      ACCEPT_EULA: "Y"
+    image: x430n/ic-db:latest
     networks:
       - ic-network
 
@@ -15,80 +12,76 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:5000
       - DB_NAME=ic-staging
       - DB_HOST=db
-      - DB_USER=sa
+      - DB_USER=icUser
       - DB_PASSWORD="Abc$$12345"
       - JWT_AUTHORITY=https://dev-ajj38rm9.auth0.com
       - JWT_AUDIENCE=https://ic.x430n.com
-      - ELASTIC_APM_SERVER_URLS=http://apm:8200
-      - ELASTIC_APM_SERVICE_NAME=InstantCoach API
-      - ELASTIC_APM_METRICS_INTERVAL="30s"
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-    depends_on:
-      - db
-    links:
-      - db
+      #- ELASTIC_APM_SERVER_URLS=http://apm:8200
+      #- ELASTIC_APM_SERVICE_NAME=InstantCoach API
+      #- ELASTIC_APM_METRICS_INTERVAL="30s"
+      #- ELASTICSEARCH_URL=http://elasticsearch:9200
     networks:
       - ic-network
 
   proxy:
     image: x430n/ic-nginx:latest
     ports:
-      - "80:80"
-      - "453:453"
+      - 80:80
+      - 453:453
     depends_on:
       - api
     links:
       - api
-      - kibana
+      #- kibana
     networks:
       - ic-network
 
-  # APM stack
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
-    environment:
-    # - cluster.name=apm-ic
-    # - network.host=0.0.0.0
-    - discovery.type=single-node
-    - xpack.security.enabled=false
-    - xpack.monitoring.enabled=true
-    - xpack.watcher.enabled=false
-    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    networks:
-      - ic-network
+  # # APM stack
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+  #   environment:
+  #   # - cluster.name=apm-ic
+  #   # - network.host=0.0.0.0
+  #   - discovery.type=single-node
+  #   - xpack.security.enabled=false
+  #   - xpack.monitoring.enabled=true
+  #   - xpack.watcher.enabled=false
+  #   - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   networks:
+  #     - ic-network
 
-  kibana:
-    image: kibana:7.2.0
-    environment:
-    - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    - XPACK_MONITORING_ENABLED=true
-    - elasticsearch.url="http://elasticsearch:9200"
-    #- server.host="0.0.0.0"
-    #- server.basePath="/kibana"
-    #- server.rewriteBasePath=true
-    - xpack.reporting.kibanaServer.port=5601
-    - xpack.reporting.kibanaServer.protocol=http
-    - xpack.reporting.kibanaServer.hostname=kibana
-    #- server.port=5601
-    #- base.serverPath="/kibana"
-    links:
-      - elasticsearch
-    ports:
-      - 5601:5601
-    networks:
-      - ic-network
+  # kibana:
+  #   image: kibana:7.2.0
+  #   environment:
+  #   - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  #   - XPACK_MONITORING_ENABLED=true
+  #   - elasticsearch.url="http://elasticsearch:9200"
+  #   #- server.host="0.0.0.0"
+  #   #- server.basePath="/kibana"
+  #   #- server.rewriteBasePath=true
+  #   - xpack.reporting.kibanaServer.port=5601
+  #   - xpack.reporting.kibanaServer.protocol=http
+  #   - xpack.reporting.kibanaServer.hostname=kibana
+  #   #- server.port=5601
+  #   #- base.serverPath="/kibana"
+  #   links:
+  #     - elasticsearch
+  #   ports:
+  #     - 5601:5601
+  #   networks:
+  #     - ic-network
 
-  apm:
-    image: x430/ic-apm-server:latest
-    depends_on:
-      - elasticsearch
-      - kibana
-    networks:
-      - ic-network
+  # apm:
+  #   image: x430/ic-apm-server:latest
+  #   depends_on:
+  #     - elasticsearch
+  #     - kibana
+  #   networks:
+  #     - ic-network
 
 networks:
   ic-network:

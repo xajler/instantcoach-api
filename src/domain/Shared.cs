@@ -30,7 +30,7 @@ namespace Domain
         Review
     }
 
-    public class ValidationResult
+    public sealed class ValidationResult
     {
         public bool IsValid => Errors.Count == 0;
         public List<string> Errors { get; private set; } = new List<string>();

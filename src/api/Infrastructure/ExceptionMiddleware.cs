@@ -45,7 +45,7 @@ namespace Api
         }
     }
 
-    public class ExceptionMiddleware
+    public sealed class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
