@@ -10,7 +10,7 @@ namespace Tests.Unit
         private const string CommentValue =  "No comment";
 
         [Fact]
-        public void Should_be_of_value_object_type()
+        public static void Should_be_of_value_object_type()
         {
             var actual = typeof(BookmarkPin);
             var expected = typeof(ValueObject);
@@ -19,7 +19,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_valid_bookmark_pin_via_ctor_without_comment()
+        public static void Should_be_valid_bookmark_pin_via_ctor_without_comment()
         {
             var bp = new BookmarkPin(
                 id: 1,
@@ -33,7 +33,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_valid_bookmark_pin_via_ctor_full()
+        public static void Should_be_valid_bookmark_pin_via_ctor_full()
         {
             var bp = new BookmarkPin(
                 id: 1,
@@ -48,7 +48,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_equal_when_same_structure()
+        public static void Should_be_equal_when_same_structure()
         {
             var actual = new BookmarkPin(
                 id: 1,
@@ -69,7 +69,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_not_be_equal_when_same_structure()
+        public static void Should_not_be_equal_when_same_structure()
         {
             var actual = new BookmarkPin(
                 id: 1,
@@ -89,7 +89,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_valid_bookmark_without_comment_pin_via_ctor()
+        public static void Should_be_valid_bookmark_without_comment_pin_via_ctor()
         {
             var bp = new BookmarkPin(
                 id: 1,
@@ -104,7 +104,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_id_smaller_or_equal_zero_via_ctor()
+        public static void Should_have_errors_when_id_smaller_or_equal_zero_via_ctor()
         {
             var bp = new BookmarkPin(
                 id: 0,
@@ -121,7 +121,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_index_smaller_or_equal_zero_via_ctor()
+        public static void Should_have_errors_when_index_smaller_or_equal_zero_via_ctor()
         {
             var bp = new BookmarkPin(
                 id: 1,
@@ -138,7 +138,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_range_start_smaller_or_equal_zero_via_ctor()
+        public static void Should_have_errors_when_range_start_smaller_or_equal_zero_via_ctor()
         {
             var bp = new BookmarkPin(
                 id: 1,
@@ -155,7 +155,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_range_start_should_be_greater_then_end_via_ctor()
+        public static void Should_have_errors_when_range_start_should_be_greater_then_end_via_ctor()
         {
             var bp = new BookmarkPin(
                 id: 1,
@@ -172,7 +172,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_media_url_is_null_or_empty_via_ctor()
+        public static void Should_have_errors_when_media_url_is_null_or_empty_via_ctor()
         {
             var bp = new BookmarkPin(
                 id: 1,

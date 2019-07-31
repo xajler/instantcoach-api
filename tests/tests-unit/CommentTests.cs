@@ -14,7 +14,7 @@ namespace Tests.Unit
         private static readonly EvaluationCommentAuthor AuthorTypeValue = EvaluationCommentAuthor.Agent;
 
         [Fact]
-        public void Should_be_of_value_object_type()
+        public static void Should_be_of_value_object_type()
         {
             var actual = typeof(Comment);
             var expected = typeof(ValueObject);
@@ -23,7 +23,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_equal_when_same_structure()
+        public static void Should_be_equal_when_same_structure()
         {
             var createdAt = DateTime.UtcNow;
             var actual = Textual(TextValue, AuthorTypeValue, createdAt);
@@ -34,7 +34,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_not_be_equal_when_same_structure()
+        public static void Should_not_be_equal_when_same_structure()
         {
             var createdAt = DateTime.UtcNow;
             var actual = Textual(TextValue, AuthorTypeValue, DateTime.UtcNow);
@@ -44,7 +44,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_valid_textual_comment_via_ctor()
+        public static void Should_be_valid_textual_comment_via_ctor()
         {
             var comment = Textual(TextValue, AuthorTypeValue, DateTime.UtcNow);
 
@@ -54,7 +54,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_valid_attachment_comment_via_ctor()
+        public static void Should_be_valid_attachment_comment_via_ctor()
         {
             var comment = Attachment(UrlTextValue, AuthorTypeValue, DateTime.UtcNow);
 
@@ -64,7 +64,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_be_valid_bookmark_comment_via_ctor()
+        public static void Should_be_valid_bookmark_comment_via_ctor()
         {
             var comment = Bookmark(BookmarkPinIdValue, AuthorTypeValue, DateTime.UtcNow);
 
@@ -74,7 +74,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_textual_comment_have_text_null_or_empty_via_ctor()
+        public static void Should_have_errors_when_textual_comment_have_text_null_or_empty_via_ctor()
         {
             var comment = Textual(null, AuthorTypeValue, DateTime.UtcNow);
 
@@ -86,7 +86,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_attachment_comment_have_text_null_or_empty_via_ctor()
+        public static void Should_have_errors_when_attachment_comment_have_text_null_or_empty_via_ctor()
         {
             var comment = Attachment("", AuthorTypeValue, DateTime.UtcNow);
 
@@ -98,7 +98,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public void Should_have_errors_when_attachment_comment_have_text_without_url_via_ctor()
+        public static void Should_have_errors_when_attachment_comment_have_text_without_url_via_ctor()
         {
             var comment = Attachment(TextValue, AuthorTypeValue, DateTime.UtcNow);
 

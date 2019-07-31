@@ -4,7 +4,7 @@ ENV MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD
 ENV ACCEPT_EULA=Y
 
 # apt-get and system utilities
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 	curl apt-transport-https debconf-utils \
     && rm -rf /var/lib/apt/lists/*
 
@@ -13,9 +13,9 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 RUN curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
 
 # install SQL Server drivers and tools
-RUN apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql mssql-tools
+RUN apt-get update && ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql mssql-tools
 
-RUN apt-get -y install locales
+RUN apt-get -y --no-install-recommends install locales
 RUN locale-gen en_US.UTF-8
 RUN update-locale LANG=en_US.UTF-8
 

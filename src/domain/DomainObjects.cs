@@ -14,7 +14,7 @@ namespace Domain
     {
     }
 
-    public abstract class Entity : IEqualityComparer<Entity>
+    public abstract class Entity : IEquatable<Entity>
     {
         protected virtual object Actual => this;
         public int Id { get; private set; }
@@ -38,16 +38,26 @@ namespace Domain
             return (Actual.GetType().ToString() + Id).GetHashCode();
         }
 
-        public bool Equals(Entity x, Entity y)
-        {
-            if (x is null && y is null) { return true; }
-            if (x is null || y is null) { return false; }
-            return x.Equals(y);
-        }
+        // public int GetHashCode(Entity obj)
+        // {
+        //     return (Actual.GetType().ToString() + obj.Id).GetHashCode();
+        // }
 
-        public int GetHashCode(Entity obj)
+        public bool Equals(Entity other)
         {
-            return (Actual.GetType().ToString() + obj.Id).GetHashCode();
+            if (other is null)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (Actual.GetType() != other.Actual.GetType())
+                return false;
+
+            if (Id == 0 || other.Id == 0)
+                return false;
+
+            return Id == other.Id;
         }
     }
 
