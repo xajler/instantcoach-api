@@ -6,6 +6,12 @@ using Core.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static Core.Constants.Controller;
 
+using System.Collections.Generic;
+using static System.Console;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
+
 namespace Api.Controllers
 {
     [Authorize]
@@ -33,12 +39,16 @@ namespace Api.Controllers
             }
         }
 
-        protected void LogModelValidationErrors()
+        protected ActionResult LogModelErrorsAndReturnBadRequest()
         {
-            string errors = string.Join("; ", ModelState.Values
-                                      .SelectMany(x => x.Errors)
-                                      .Select(x => x.ErrorMessage));
+            var errors = new {
+                ModelState.IsValid,
+                Errors = ModelState.ToDictionary(
+                    x => x.Key,
+                 x => x.Value.Errors.Select(y => y.ErrorMessage))
+            };
             _logger.LogError("Validaton errors: {ValidationErrors}", errors);
+            return BadRequest(errors);
         }
 
         private ActionResult OnSuccess(int successStatusCode, int id, object data)

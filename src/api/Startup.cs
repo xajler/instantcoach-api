@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,15 @@ namespace Api
             services.AddHttpContextAccessor();
             services.AddHeaderApiVersioning();
             services.AddVersionedApiExplorer();
+
+            // For some reason when [ApiController] is set,
+            // by default it will do ModelState checking without need to use it in controller acctions.
+            // This is how to disable this and check manually for ModelState inside Controller Actions.
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.AddConfigOptionsService(Configuration);
             Config config = Configuration.GetSection(Config.Name).Get<Config>();
 

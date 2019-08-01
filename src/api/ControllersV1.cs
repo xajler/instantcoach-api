@@ -83,8 +83,7 @@ namespace Api.Controllers.Version1
             _logger.LogInformation("POST params [data]: {@HttpBody}", data);
             if (!ModelState.IsValid)
             {
-                LogModelValidationErrors();
-                return new BadRequestResult();
+                return LogModelErrorsAndReturnBadRequest();
             }
             var result = await _service.Create(data);
             int id = result.Value == null ? 0 : result.Value.Id;
@@ -102,8 +101,7 @@ namespace Api.Controllers.Version1
             _logger.LogInformation("PUT params [id]: {Id} | [data]: {@HttpBody}", id, data);
             if (!ModelState.IsValid)
             {
-                LogModelValidationErrors();
-                return new BadRequestResult();
+                return LogModelErrorsAndReturnBadRequest();
             }
             var result = await _service.Update(id, data);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
