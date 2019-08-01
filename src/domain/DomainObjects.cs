@@ -38,11 +38,6 @@ namespace Domain
             return (Actual.GetType().ToString() + Id).GetHashCode();
         }
 
-        // public int GetHashCode(Entity obj)
-        // {
-        //     return (Actual.GetType().ToString() + obj.Id).GetHashCode();
-        // }
-
         public bool Equals(Entity other)
         {
             if (other is null)

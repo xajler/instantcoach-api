@@ -51,31 +51,31 @@ namespace Domain
         public DateTime CreatedAt { get; }
         public int? BookmarkPinId { get; }
 
-        public IReadOnlyList<string> Validate()
+        public IReadOnlyList<string> Validate(int atIndex)
         {
             switch (CommentType)
             {
                 case CommentType.Textual:
                     if (string.IsNullOrWhiteSpace(Text))
                     {
-                        _errors.Add("Comment Text is required for Textual comment.");
+                        _errors.Add($"Comment [{atIndex}] Text is required for Textual comment.");
                     }
                     break;
                 case CommentType.Attachment:
                     if (string.IsNullOrWhiteSpace(Text))
                     {
-                        _errors.Add("Comment Text is required for Attachment comment.");
+                        _errors.Add($"Comment [{atIndex}] Text is required for Attachment comment.");
                     }
                     if (!string.IsNullOrWhiteSpace(Text) && !Text.Contains("http"))
                     {
-                        _errors.Add("Comment Text must be a valid URL link for Attachment comment.");
+                        _errors.Add($"Comment [{atIndex}] Text must be a valid URL link for Attachment comment.");
                     }
                     break;
                 case CommentType.Bookmark:
-                    if (BookmarkPinId <= 0) { _errors.Add("Comment BookmarkPinId should be greater than 0."); }
+                    if (BookmarkPinId <= 0) { _errors.Add($"Comment [{atIndex}] BookmarkPinId should be greater than 0."); }
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException($"Unknown comment: {CommentType}");
+                    throw new ArgumentOutOfRangeException($"Unknown comment: {CommentType} at index [{atIndex}]");
             }
 
             return _errors;

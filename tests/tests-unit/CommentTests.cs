@@ -48,7 +48,7 @@ namespace Tests.Unit
         {
             var comment = Textual(TextValue, AuthorTypeValue, DateTime.UtcNow);
 
-            var actual = comment.Validate();
+            var actual = comment.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -58,7 +58,7 @@ namespace Tests.Unit
         {
             var comment = Attachment(UrlTextValue, AuthorTypeValue, DateTime.UtcNow);
 
-            var actual = comment.Validate();
+            var actual = comment.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -68,7 +68,7 @@ namespace Tests.Unit
         {
             var comment = Bookmark(BookmarkPinIdValue, AuthorTypeValue, DateTime.UtcNow);
 
-            var actual = comment.Validate();
+            var actual = comment.Validate(atIndex: 4);
 
             actual.Should().HaveCount(0);
         }
@@ -78,8 +78,8 @@ namespace Tests.Unit
         {
             var comment = Textual(null, AuthorTypeValue, DateTime.UtcNow);
 
-            var actual = comment.Validate();
-            var expected = "Comment Text is required for Textual comment.";
+            var actual = comment.Validate(atIndex: 0);
+            var expected = "Comment [0] Text is required for Textual comment.";
 
             actual.Should().HaveCount(1);
             actual[0].Should().Be(expected);
@@ -90,8 +90,8 @@ namespace Tests.Unit
         {
             var comment = Attachment("", AuthorTypeValue, DateTime.UtcNow);
 
-            var actual = comment.Validate();
-            var expected = "Comment Text is required for Attachment comment.";
+            var actual = comment.Validate(atIndex: 2);
+            var expected = "Comment [2] Text is required for Attachment comment.";
 
             actual.Should().HaveCount(1);
             actual[0].Should().Be(expected);
@@ -102,8 +102,8 @@ namespace Tests.Unit
         {
             var comment = Attachment(TextValue, AuthorTypeValue, DateTime.UtcNow);
 
-            var actual = comment.Validate();
-            var expected = "Comment Text must be a valid URL link for Attachment comment.";
+            var actual = comment.Validate(atIndex: 1);
+            var expected = "Comment [1] Text must be a valid URL link for Attachment comment.";
 
             actual.Should().HaveCount(1);
             actual[0].Should().Be(expected);

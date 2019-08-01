@@ -27,7 +27,7 @@ namespace Tests.Unit
                 new Range(1, 2),
                 MediaUrlValue);
 
-            var actual = bp.Validate();
+            var actual = bp.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -42,7 +42,7 @@ namespace Tests.Unit
                 MediaUrlValue,
                 CommentValue);
 
-            var actual = bp.Validate();
+            var actual = bp.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -98,7 +98,7 @@ namespace Tests.Unit
                 MediaUrlValue,
                 comment: null);
 
-            var actual = bp.Validate();
+            var actual = bp.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -113,8 +113,8 @@ namespace Tests.Unit
                 MediaUrlValue,
                 CommentValue);
 
-            var actual = bp.Validate();
-            var expected = "Bookmark Pin Id should be greater than 0.";
+            var actual = bp.Validate(atIndex: 0);
+            var expected = "Bookmark Pin [0] Id should be greater than 0.";
 
             actual.Should().HaveCount(1);
             actual.Should().Contain(expected);
@@ -130,8 +130,8 @@ namespace Tests.Unit
                 MediaUrlValue,
                 CommentValue);
 
-            var actual = bp.Validate();
-            var expected = "Bookmark Pin Index should be greater than 0.";
+            var actual = bp.Validate(atIndex: 1);
+            var expected = "Bookmark Pin [1] Index should be greater than 0.";
 
             actual.Should().HaveCount(1);
             actual.Should().Contain(expected);
@@ -147,8 +147,8 @@ namespace Tests.Unit
                 MediaUrlValue,
                 CommentValue);
 
-            var actual = bp.Validate();
-            var expected = "Bookmark Pin Range Start should be greater than 0.";
+            var actual = bp.Validate(atIndex: 2);
+            var expected = "Bookmark Pin [2] Range Start should be greater than 0.";
 
             actual.Should().HaveCount(1);
             actual.Should().Contain(expected);
@@ -164,8 +164,8 @@ namespace Tests.Unit
                 MediaUrlValue,
                 CommentValue);
 
-            var actual = bp.Validate();
-            var expected = "Bookmark Pin Range end number must be greater than start number.";
+            var actual = bp.Validate(atIndex: 3);
+            var expected = "Bookmark Pin [3] Range end number must be greater than start number.";
 
             actual.Should().HaveCount(1);
             actual.Should().Contain(expected);
@@ -181,8 +181,8 @@ namespace Tests.Unit
                 null,
                 CommentValue);
 
-            var actual = bp.Validate();
-            var expected = "Bookmark Pin MediaUrl is required.";
+            var actual = bp.Validate(atIndex: 4);
+            var expected = "Bookmark Pin [4] MediaUrl is required.";
 
             actual.Should().HaveCount(1);
             actual.Should().Contain(expected);

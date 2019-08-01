@@ -75,16 +75,15 @@ namespace Domain
             if (comments != null && comments.Count > 0)
             {
                 Comments = new List<Comment>();
-                int index = 1;
+                int index = 0;
 
                 foreach (var item in comments)
                 {
                     Comment comment = CreateComment(item);
-                    // TODO: Adde index to errors
-                    index++;
-                    var errors = comment.Validate();
+                    var errors = comment.Validate(index);
                     if (errors.Any()) { _errors.AddErrorRange(errors); }
                     else { Comments.Add(comment); }
+                    index++;
                 }
 
                 CommentsCount = Comments.Count;
@@ -99,7 +98,7 @@ namespace Domain
             if (bookmarkPins != null && bookmarkPins.Count > 0)
             {
                 BookmarkPins = new List<BookmarkPin>();
-
+                int index = 0;
                 foreach(var item in bookmarkPins)
                 {
                     var pin = new BookmarkPin(
@@ -108,9 +107,10 @@ namespace Domain
                         item.Range,
                         item.MediaUrl,
                         item.Comment);
-                    var errors = pin.Validate();
+                    var errors = pin.Validate(atIndex: index);
                     if (errors.Any()) { _errors.AddErrorRange(errors); }
                     else { BookmarkPins.Add(pin); }
+                    index++;
                 }
             }
             // EF Hack
@@ -144,7 +144,6 @@ namespace Domain
                     throw new ArgumentOutOfRangeException($"Unknown comment: {item.CommentType}");
             }
         }
-
 
         private List<string> CreateValidationErrors()
         {

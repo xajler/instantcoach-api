@@ -621,10 +621,15 @@ namespace Tests.Unit
                  AgentIdValue,
                  EvaluatorNameValue,
                  AgentNameValue);
-            ic.AddComments(GetCommentsWithError());
+            ic.AddComments(GetInvalidComments());
 
             var actual = ic.Validate();
             var expected = 2;
+
+            foreach(var error in actual.Errors)
+            {
+                Console.WriteLine(error);
+            }
 
             actual.IsValid.Should().BeFalse();
             actual.Errors.Should().HaveCount(expected);
@@ -641,7 +646,7 @@ namespace Tests.Unit
                  EvaluatorNameValue,
                  AgentNameValue);
             ic.AddComments(GetComments());
-            ic.AddBookmarkPins(GetBookmarkPinsWithError());
+            ic.AddBookmarkPins(GetInvalidBookmarkPins());
 
             var actual = ic.Validate();
             var expected = 1;
@@ -676,22 +681,23 @@ namespace Tests.Unit
             return result;
         }
 
-        private static List<BookmarkPin> GetBookmarkPinsWithError()
+        private static List<Comment> GetInvalidComments()
+        {
+            return new List<Comment>
+            {
+                Bookmark(bookmarkPinId: 0, authorType: EvaluationCommentAuthor.Agent, createdAt: DateTime.UtcNow),
+                Textual(null, authorType: EvaluationCommentAuthor.Evaluator, createdAt: DateTime.UtcNow)
+            };
+        }
+
+
+        private static List<BookmarkPin> GetInvalidBookmarkPins()
         {
             var result = new List<BookmarkPin>();
             var bookmarkPin = new BookmarkPin(id: 0, index: 1, new Range(1, 2),
                 mediaurl: "https://example.com/test.png", comment: "No comment");
             result.Add(bookmarkPin);
             return result;
-        }
-
-        private static List<Comment> GetCommentsWithError()
-        {
-            return new List<Comment>
-            {
-                Bookmark(bookmarkPinId: 0, authorType: EvaluationCommentAuthor.Agent, createdAt: DateTime.UtcNow),
-                Textual(null, authorType: EvaluationCommentAuthor.Evaluator, createdAt: DateTime.UtcNow),
-            };
         }
     }
 }

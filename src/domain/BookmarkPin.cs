@@ -47,18 +47,18 @@ namespace Domain
         public string Comment { get; }
         public string MediaUrl { get; }
 
-        public IReadOnlyList<string> Validate()
+        public IReadOnlyList<string> Validate(int atIndex)
         {
-            if (Id <= 0) { _errors.Add("Bookmark Pin Id should be greater than 0."); }
-            if (Index <= 0) { _errors.Add("Bookmark Pin Index should be greater than 0."); }
-            if (Range.Start <= 0) { _errors.Add("Bookmark Pin Range Start should be greater than 0."); }
+            if (Id <= 0) { _errors.Add($"Bookmark Pin [{atIndex}] Id should be greater than 0."); }
+            if (Index <= 0) { _errors.Add($"Bookmark Pin [{atIndex}] Index should be greater than 0."); }
+            if (Range.Start <= 0) { _errors.Add($"Bookmark Pin [{atIndex}] Range Start should be greater than 0."); }
             if (Range.Start >= Range.End)
             {
-                _errors.Add("Bookmark Pin Range end number must be greater than start number.");
+                _errors.Add($"Bookmark Pin [{atIndex}] Range end number must be greater than start number.");
             }
             if (string.IsNullOrWhiteSpace(MediaUrl))
             {
-                _errors.Add("Bookmark Pin MediaUrl is required.");
+                _errors.Add($"Bookmark Pin [{atIndex}] MediaUrl is required.");
             }
             return _errors;
         }
