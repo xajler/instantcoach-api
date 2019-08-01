@@ -122,20 +122,9 @@ namespace Core.Services
 
         private async Task<Result<InstantCoach>> OnSave(InstantCoach entity, ValidationResult validationResult)
         {
-            Result vResult;
-
-            if (validationResult.IsValid)
-            {
-                vResult = Result.AsSuccess();
-            }
-            else
-            {
-                vResult = Result.AsDomainError(validationResult.Errors);
-            }
-
             Result<InstantCoach> result;
 
-            if (vResult.Success)
+            if (validationResult.IsValid)
             {
                 _logger.LogInformation("Entity on Save: {@EntityModel}", entity);
                 result = await _repository.Save(entity);

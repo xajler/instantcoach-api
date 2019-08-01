@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using static Domain.Constants.Validation;
 
 namespace Domain
 {
     public sealed class Comment : ValueObject
     {
-        private readonly List<string> _errors = new List<string>();
+        private readonly Dictionary<string, IReadOnlyCollection<string>> _errors
+            = new Dictionary<string, IReadOnlyCollection<string>>();
 
         [JsonConstructor]
         private Comment(
@@ -51,31 +53,42 @@ namespace Domain
         public DateTime CreatedAt { get; }
         public int? BookmarkPinId { get; }
 
-        public IReadOnlyList<string> Validate(int atIndex)
+        public Dictionary<string, IReadOnlyCollection<string>> Validate(int atIndex)
         {
+            var textErrors = new List<string>();
             switch (CommentType)
             {
                 case CommentType.Textual:
                     if (string.IsNullOrWhiteSpace(Text))
                     {
-                        _errors.Add($"Comment [{atIndex}] Text is required for Textual comment.");
+                        textErrors.Add("Requires a value for Textual comment.");
                     }
                     break;
                 case CommentType.Attachment:
                     if (string.IsNullOrWhiteSpace(Text))
                     {
-                        _errors.Add($"Comment [{atIndex}] Text is required for Attachment comment.");
+                        textErrors.Add("Requires a value for Attachment comment.");
                     }
                     if (!string.IsNullOrWhiteSpace(Text) && !Text.Contains("http"))
                     {
-                        _errors.Add($"Comment [{atIndex}] Text must be a valid URL link for Attachment comment.");
+                        textErrors.Add("Should be a valid URL link for Attachment comment.");
                     }
                     break;
                 case CommentType.Bookmark:
-                    if (BookmarkPinId <= 0) { _errors.Add($"Comment [{atIndex}] BookmarkPinId should be greater than 0."); }
+                    if (BookmarkPinId <= 0) {
+                        _errors.Add(FullMemberName("BookmarkPinId", atIndex),
+                            new List<string>{ GreaterThanZeroMsg });
+                    }
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException($"Unknown comment: {CommentType} at index [{atIndex}]");
+                    var msg = $"Unknown comment: {CommentType} at index [{atIndex}]";
+                    _errors.Add(FullMemberName("CommentType", atIndex), new List<string>{ msg });
+                    throw new ArgumentOutOfRangeException(msg);
+            }
+
+            if (textErrors != null && textErrors.Count > 0)
+            {
+                _errors.Add(FullMemberName("Text", atIndex), textErrors);
             }
 
             return _errors;
@@ -107,6 +120,11 @@ namespace Domain
             yield return CreatedAt;
             yield return CommentType;
             yield return AuthorType;
+        }
+
+        private static string FullMemberName(string memberName, int atIndex)
+        {
+            return $"Comments[{atIndex}].{memberName}";
         }
     }
 }

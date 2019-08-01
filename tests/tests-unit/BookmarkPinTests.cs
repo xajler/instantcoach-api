@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 using Domain;
+using static Domain.Constants.Validation;
 
 namespace Tests.Unit
 {
@@ -113,11 +116,14 @@ namespace Tests.Unit
                 MediaUrlValue,
                 CommentValue);
 
-            var actual = bp.Validate(atIndex: 0);
-            var expected = "Bookmark Pin [0] Id should be greater than 0.";
+            var validationResult = bp.Validate(atIndex: 0);
+            var actual = validationResult.First();
+            var (expectedMember, expectedErrs) = CreateExpectedValues(
+                "Id", atIndex: 0, GreaterThanZeroMsg);
 
-            actual.Should().HaveCount(1);
-            actual.Should().Contain(expected);
+            actual.Value.Should().HaveCount(expectedErrs.Count);
+            actual.Key.Should().Contain(expectedMember);
+            actual.Value.First().Should().Be(expectedErrs.First());
         }
 
         [Fact]
@@ -130,11 +136,14 @@ namespace Tests.Unit
                 MediaUrlValue,
                 CommentValue);
 
-            var actual = bp.Validate(atIndex: 1);
-            var expected = "Bookmark Pin [1] Index should be greater than 0.";
+            var validationResult = bp.Validate(atIndex: 1);
+            var actual = validationResult.First();
+            var (expectedMember, expectedErrs) = CreateExpectedValues(
+                "Index", atIndex: 1, GreaterThanZeroMsg);
 
-            actual.Should().HaveCount(1);
-            actual.Should().Contain(expected);
+            actual.Value.Should().HaveCount(expectedErrs.Count);
+            actual.Key.Should().Contain(expectedMember);
+            actual.Value.First().Should().Be(expectedErrs.First());
         }
 
         [Fact]
@@ -147,11 +156,14 @@ namespace Tests.Unit
                 MediaUrlValue,
                 CommentValue);
 
-            var actual = bp.Validate(atIndex: 2);
-            var expected = "Bookmark Pin [2] Range Start should be greater than 0.";
+            var validationResult = bp.Validate(atIndex: 2);
+            var actual = validationResult.First();
+            var (expectedMember, expectedErrs) = CreateExpectedValues(
+                "Range.Start", atIndex: 2, GreaterThanZeroMsg);
 
-            actual.Should().HaveCount(1);
-            actual.Should().Contain(expected);
+            actual.Value.Should().HaveCount(expectedErrs.Count);
+            actual.Key.Should().Contain(expectedMember);
+            actual.Value.First().Should().Be(expectedErrs.First());
         }
 
         [Fact]
@@ -164,11 +176,14 @@ namespace Tests.Unit
                 MediaUrlValue,
                 CommentValue);
 
-            var actual = bp.Validate(atIndex: 3);
-            var expected = "Bookmark Pin [3] Range end number must be greater than start number.";
+            var validationResult = bp.Validate(atIndex: 3);
+            var actual = validationResult.First();
+            var (expectedMember, expectedErrs) = CreateExpectedValues(
+                "Range.End", atIndex: 3, "Should be greater than Range Start number.");
 
-            actual.Should().HaveCount(1);
-            actual.Should().Contain(expected);
+            actual.Value.Should().HaveCount(expectedErrs.Count);
+            actual.Key.Should().Contain(expectedMember);
+            actual.Value.First().Should().Be(expectedErrs.First());
         }
 
         [Fact]
@@ -181,11 +196,20 @@ namespace Tests.Unit
                 null,
                 CommentValue);
 
-            var actual = bp.Validate(atIndex: 4);
-            var expected = "Bookmark Pin [4] MediaUrl is required.";
+            var validationResult = bp.Validate(atIndex: 4);
+            var actual = validationResult.First();
+            var (expectedMember, expectedErrs) = CreateExpectedValues(
+                "MediaUrl", atIndex: 4,  RequiredMsg);
 
-            actual.Should().HaveCount(1);
-            actual.Should().Contain(expected);
+            actual.Value.Should().HaveCount(expectedErrs.Count);
+            actual.Key.Should().Contain(expectedMember);
+            actual.Value.First().Should().Be(expectedErrs.First());
+        }
+
+        private static (string, IReadOnlyCollection<string>) CreateExpectedValues(
+            string memberName, int atIndex, string errorText)
+        {
+            return ($"BookmarkPins[{atIndex}].{memberName}", new List<string> { errorText });
         }
     }
 }

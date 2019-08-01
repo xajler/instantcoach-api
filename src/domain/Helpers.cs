@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using static Domain.Constants.Validation;
 
 namespace Domain
 {
@@ -45,27 +46,27 @@ namespace Domain
 
     public static class IntExtensions
     {
-        public static string CheckGreaterThanZero(this int value, string memberName)
+        public static string CheckGreaterThanZero(this int value)
         {
-            if (value <= 0) { return $"{memberName} should be greater than 0."; }
+            if (value <= 0) { return GreaterThanZeroMsg; }
             return null;
         }
     }
 
     public static class StringExtensions
     {
-        public static string CheckForNull(this string value, string memberName)
+        public static string CheckForNull(this string value)
         {
-            if (string.IsNullOrWhiteSpace(value)) { return $"{memberName} is required."; }
+            if (string.IsNullOrWhiteSpace(value)) { return RequiredMsg; }
             return null;
         }
 
-        public static string CheckLength(this string value, string memberName, int maxLength)
+        public static string CheckLength(this string value, int maxLength)
         {
             var length = string.IsNullOrWhiteSpace(value) ? 0 : value.Length;
             if (length > maxLength)
             {
-                return $"{memberName} should not exceed {maxLength} characters.";
+                return $"Should not exceed {maxLength} characters.";
             }
             return null;
         }

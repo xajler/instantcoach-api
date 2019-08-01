@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Domain
 {
@@ -30,19 +32,30 @@ namespace Domain
         Review
     }
 
+    public static class DictionaryExtensions
+    {
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (var item in source)
+                action(item);
+        }
+
+        public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dic, Dictionary<TKey, TValue> dicToAdd)
+        {
+            dicToAdd.ForEach(x => dic.Add(x.Key, x.Value));
+        }
+    }
+
     public sealed class ValidationResult
     {
         public bool IsValid => Errors.Count == 0;
-        public List<string> Errors { get; private set; } = new List<string>();
-        public void AddError(string error)
+        public Dictionary<string, IReadOnlyCollection<string>> Errors { get; private set; }
+            = new Dictionary<string, IReadOnlyCollection<string>>();
+        public void AddError(string member, IReadOnlyCollection<string> errors)
         {
-            if (string.IsNullOrWhiteSpace(error)) { return; }
-            Errors.Add(error);
-        }
-        public void AddErrorRange(IReadOnlyList<string> errors)
-        {
+            if (string.IsNullOrWhiteSpace(member)) { return; }
             if (errors == null || errors.Count == 0) { return; }
-            Errors.AddRange(errors);
+            Errors.Add(member, errors);
         }
     }
 }

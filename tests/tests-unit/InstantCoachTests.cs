@@ -1,22 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 using Domain;
 using static Domain.Helpers;
 using static Domain.Comment;
 using static Tests.Unit.TestHelpers;
+using static Domain.Constants.Validation;
 
 namespace Tests.Unit
 {
     public sealed class InstantCoachTests
     {
-        private const string DescriptionValue = "Some description";
-        private const string TicketIdValue = "42";
-        private const int AgentIdValue = 1;
-        private const int EvaluatorIdValue = 2;
-        private const string EvaluatorNameValue = "John Evaluator";
-        private const string AgentNameValue = "Jane Agent";
+        public const string DescriptionValue = "Some description";
+        public const string TicketIdValue = "42";
+        public const int AgentIdValue = 1;
+        public const int EvaluatorIdValue = 2;
+        public const string EvaluatorNameValue = "John Evaluator";
+        public const string AgentNameValue = "Jane Agent";
 
         [Fact]
         public static void Should_be_able_to_create_correct_reference_via_GetTicksExcludingFirst5Digits()
@@ -80,7 +82,7 @@ namespace Tests.Unit
                  GetUpdateComments(),
                  bookmarkPins: null,
                  id: 1);
-            actual.Should().BeEquivalentTo(expected);
+
             actual.GetHashCode().Should().Be(expected.GetHashCode());
             actual.Equals(expected).Should().Be(true);
         }
@@ -157,11 +159,13 @@ namespace Tests.Unit
             ic.AddComments(null);
 
             var actual = ic.Validate();
-            var expected = "Comments are required to have at least one element.";
+            var expected = CreateValidationResult(
+                "Comments", "Comments are required to have at least one element.");
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -270,11 +274,13 @@ namespace Tests.Unit
                  comments: null,
                  bookmarkPins: null,
                  id: 1);
-            var expected = "Comments are required to have at least one element.";
+            var expected = CreateValidationResult(
+                "Comments", "Comments are required to have at least one element.");
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -422,11 +428,13 @@ namespace Tests.Unit
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "Description is required.";
+            var expected = CreateValidationResult("Description", RequiredMsg);
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -443,11 +451,14 @@ namespace Tests.Unit
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "Description should not exceed 1000 characters.";
+            var expected = CreateValidationResult(
+                "Description", "Should not exceed 1000 characters.");
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -463,11 +474,13 @@ namespace Tests.Unit
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "TicketId is required.";
+            var expected = CreateValidationResult("TicketId", RequiredMsg);
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -484,11 +497,14 @@ namespace Tests.Unit
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "TicketId should not exceed 64 characters.";
+            var expected = CreateValidationResult(
+                "TicketId", "Should not exceed 64 characters.");
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -497,18 +513,20 @@ namespace Tests.Unit
             var ic = new InstantCoach(
                  DescriptionValue,
                  TicketIdValue,
-                 -1,
+                 evaluatorId: -1,
                  AgentIdValue,
                  EvaluatorNameValue,
                  AgentNameValue);
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "EvaluatorId should be greater than 0.";
+            var expected = CreateValidationResult("EvaluatorId", GreaterThanZeroMsg);
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -518,17 +536,19 @@ namespace Tests.Unit
                  DescriptionValue,
                  TicketIdValue,
                  EvaluatorIdValue,
-                 0,
+                 agentId: 0,
                  EvaluatorNameValue,
                  AgentNameValue);
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "AgentId should be greater than 0.";
+            var expected = CreateValidationResult("AgentId", GreaterThanZeroMsg);
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -544,11 +564,13 @@ namespace Tests.Unit
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "EvaluatorName is required.";
+            var expected = CreateValidationResult("EvaluatorName", RequiredMsg);
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -564,11 +586,14 @@ namespace Tests.Unit
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "EvaluatorName should not exceed 128 characters.";
+            var expected = CreateValidationResult(
+                "EvaluatorName", "Should not exceed 128 characters.");
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -584,11 +609,13 @@ namespace Tests.Unit
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "AgentName is required.";
+            var expected = CreateValidationResult("AgentName", RequiredMsg);
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -604,11 +631,14 @@ namespace Tests.Unit
             ic.AddComments(GetComments());
 
             var actual = ic.Validate();
-            var expected = "AgentName should not exceed 128 characters.";
+            var expected = CreateValidationResult(
+                "AgentName", "Should not exceed 128 characters.");
 
             actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(1);
-            actual.Errors[0].Should().Be(expected);
+            actual.Errors.Should().HaveCount(expected.Errors.Count);
+            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
+            actual.Errors.First().Value.First().Should().Be(
+                expected.Errors.First().Value.First());
         }
 
         [Fact]
@@ -625,11 +655,6 @@ namespace Tests.Unit
 
             var actual = ic.Validate();
             var expected = 2;
-
-            foreach(var error in actual.Errors)
-            {
-                Console.WriteLine(error);
-            }
 
             actual.IsValid.Should().BeFalse();
             actual.Errors.Should().HaveCount(expected);
@@ -690,13 +715,20 @@ namespace Tests.Unit
             };
         }
 
-
         private static List<BookmarkPin> GetInvalidBookmarkPins()
         {
             var result = new List<BookmarkPin>();
             var bookmarkPin = new BookmarkPin(id: 0, index: 1, new Range(1, 2),
                 mediaurl: "https://example.com/test.png", comment: "No comment");
             result.Add(bookmarkPin);
+            return result;
+        }
+
+        public static ValidationResult CreateValidationResult(
+            string memberName, string errorText)
+        {
+            var result = new ValidationResult();
+            result.AddError($"{memberName}", new List<string> { errorText });
             return result;
         }
     }

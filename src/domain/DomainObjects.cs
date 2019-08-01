@@ -24,15 +24,6 @@ namespace Domain
             if (Id == 0 && id > 0) { Id = id; }
         }
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Entity other)) { return false; }
-            if (ReferenceEquals(this, other)) { return true; }
-            if (Actual.GetType() != other.Actual.GetType()) { return false;  }
-            if (Id == 0 || other.Id == 0) { return false; }
-            return Id == other.Id;
-        }
-
         public override int GetHashCode()
         {
             return (Actual.GetType().ToString() + Id).GetHashCode();
@@ -40,18 +31,10 @@ namespace Domain
 
         public bool Equals(Entity other)
         {
-            if (other is null)
-                return false;
-
-            if (ReferenceEquals(this, other))
-                return true;
-
-            if (Actual.GetType() != other.Actual.GetType())
-                return false;
-
-            if (Id == 0 || other.Id == 0)
-                return false;
-
+            if (other is null) { return false; }
+            if (ReferenceEquals(this, other)) { return true; }
+            if (Actual.GetType() != other.Actual.GetType()) { return false; }
+            if (Id == 0 || other.Id == 0) { return false; }
             return Id == other.Id;
         }
     }

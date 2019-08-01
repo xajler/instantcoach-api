@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -5,12 +6,6 @@ using Microsoft.Extensions.Logging;
 using Core.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static Core.Constants.Controller;
-
-using System.Collections.Generic;
-using static System.Console;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Converters;
 
 namespace Api.Controllers
 {
@@ -27,7 +22,8 @@ namespace Api.Controllers
             return CreateResult(result, successStatusCode, id, result.Value);
         }
 
-        protected ActionResult CreateResult(Result result, int successStatusCode, int id, object data = default)
+        protected ActionResult CreateResult(Result result, int successStatusCode,
+            int id, object data = default)
         {
             if (result.Success)
             {
@@ -35,7 +31,7 @@ namespace Api.Controllers
             }
             else
             {
-                return OnError(result.Error, id);
+                return OnError(result.Error, id, result.Errors);
             }
         }
 
@@ -47,7 +43,7 @@ namespace Api.Controllers
                     x => x.Key,
                  x => x.Value.Errors.Select(y => y.ErrorMessage))
             };
-            _logger.LogError("Validaton errors: {ValidationErrors}", errors);
+            _logger.LogInformation("Validaton errors: {@ValidationErrors}", errors);
             return BadRequest(errors);
         }
 
@@ -70,18 +66,25 @@ namespace Api.Controllers
             }
         }
 
-        private ActionResult OnError(ErrorType error, int id)
+        private ActionResult OnError(ErrorType error, int id,
+            Dictionary<string, IReadOnlyCollection<string>> errors)
         {
             if(error == ErrorType.UnknownId)
             {
                 _logger.LogInformation("Status Code: {StatusCode} NotFound", Status404NotFound);
-                return NotFound(new Msg { Message = $"Not existing id: {id}" });
+                return NotFound(new { Message = $"Not existing id: {id}" });
             }
             else
             {
                 _logger.LogInformation("Status Code: {StatusCode} BadRequest", Status400BadRequest);
-                // TODO: show errors in response.
-                return BadRequest(new Msg { Message ="Invalid data or unable to store changes." });
+                var msg = "Invalid data or unable to store changes.";
+                if (errors != null && errors.Count > 0)
+                {
+                    _logger.LogInformation("Validaton errors: {@ValidationErrors}", errors);
+                    return BadRequest(new { Message = msg, Errors = errors });
+                }
+
+                return BadRequest(new { Message = msg });
             }
         }
     }

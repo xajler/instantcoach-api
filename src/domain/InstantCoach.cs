@@ -8,7 +8,7 @@ namespace Domain
     public sealed partial class InstantCoach : AggregateRoot, IAuditable
     {
         private const string CommentsErrorMsg = "Comments are required to have at least one element.";
-        private readonly ValidationResult _errors = new ValidationResult();
+        private readonly ValidationResult _validationResult = new ValidationResult();
 
         public InstantCoach(
             string description,
@@ -64,8 +64,8 @@ namespace Domain
 
         public ValidationResult Validate()
         {
-            _errors.AddErrorRange(CreateValidationErrors());
-            return _errors;
+            CreateValidationErrors();
+            return _validationResult;
         }
 
         // TODO: Must be called when null.
@@ -81,7 +81,7 @@ namespace Domain
                 {
                     Comment comment = CreateComment(item);
                     var errors = comment.Validate(index);
-                    if (errors.Any()) { _errors.AddErrorRange(errors); }
+                    if (errors.Any()) { _validationResult.Errors.AddRange(errors); }
                     else { Comments.Add(comment); }
                     index++;
                 }
@@ -90,7 +90,10 @@ namespace Domain
                 // EF Hack
                 CommentsConvert = Comments;
             }
-            else { _errors.AddError(CommentsErrorMsg); }
+            else
+            {
+                _validationResult.AddError("Comments", new List<string> { CommentsErrorMsg });
+            }
         }
 
         public void AddBookmarkPins(List<BookmarkPin> bookmarkPins)
@@ -108,7 +111,7 @@ namespace Domain
                         item.MediaUrl,
                         item.Comment);
                     var errors = pin.Validate(atIndex: index);
-                    if (errors.Any()) { _errors.AddErrorRange(errors); }
+                    if (errors.Any()) { _validationResult.Errors.AddRange(errors); }
                     else { BookmarkPins.Add(pin); }
                     index++;
                 }
@@ -145,28 +148,59 @@ namespace Domain
             }
         }
 
-        private List<string> CreateValidationErrors()
-        {
-            return new List<string>
-                {
-                    Description.CheckForNull(nameof(Description)),
-                    Description.CheckLength(nameof(Description), 1000),
-                    TicketId.CheckForNull(nameof(TicketId)),
-                    TicketId.CheckLength(nameof(TicketId), 64),
-                    EvaluatorId.CheckGreaterThanZero(nameof(EvaluatorId)),
-                    AgentId.CheckGreaterThanZero(nameof(AgentId)),
-                    EvaluatorName.CheckForNull(nameof(EvaluatorName)),
-                    EvaluatorName.CheckLength(nameof(EvaluatorName), 128),
-                    AgentName.CheckForNull(nameof(AgentName)),
-                    AgentName.CheckLength(nameof(AgentName), 128)
-                }.CleanUpNullItems();
-        }
-
         private static string CreateReference()
         {
             string value = GetTicksExcludingFirst5Digits();
             return $"IC{value}";
         }
+
+        private void CreateValidationErrors()
+        {
+            var descErrors = new List<string>
+                {
+                    Description.CheckForNull(),
+                    Description.CheckLength(1000)
+                }.CleanUpNullItems();
+            var ticketErrors = new List<string>
+                {
+                    TicketId.CheckForNull(),
+                    TicketId.CheckLength(64)
+                }.CleanUpNullItems();
+            var evalErrors = new List<string>
+                {
+                    EvaluatorId.CheckGreaterThanZero()
+                }.CleanUpNullItems();
+            var agentErrors = new List<string>
+                {
+                    AgentId.CheckGreaterThanZero()
+                }.CleanUpNullItems();
+            var evalNameErrors = new List<string>
+                {
+                    EvaluatorName.CheckForNull(),
+                    EvaluatorName.CheckLength(128)
+                }.CleanUpNullItems();
+            var agentNameErrors = new List<string>
+                {
+                    AgentName.CheckForNull(),
+                    AgentName.CheckLength(128)
+                }.CleanUpNullItems();
+
+            AddToValidationResult(nameof(Description), descErrors);
+            AddToValidationResult(nameof(TicketId), ticketErrors);
+            AddToValidationResult(nameof(EvaluatorId), evalErrors);
+            AddToValidationResult(nameof(AgentId), agentErrors);
+            AddToValidationResult(nameof(EvaluatorName), evalNameErrors);
+            AddToValidationResult(nameof(AgentName), agentNameErrors);
+        }
+
+        private void AddToValidationResult(string memberName, List<string> errors)
+        {
+            if (errors.Count > 0)
+            {
+                _validationResult.Errors.Add(memberName, errors);
+            }
+        }
+
     }
 
     // For EF hacks

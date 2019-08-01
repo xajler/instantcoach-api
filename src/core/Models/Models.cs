@@ -26,7 +26,7 @@ namespace Core.Models
     {
         public bool Success => Error == ErrorType.None;
         public ErrorType Error { get; set; }
-        public IReadOnlyList<string> Errors { get; protected set; }
+        public Dictionary<string, IReadOnlyCollection<string>> Errors { get; protected set; }
 
         public static Result AsSuccess()
         {
@@ -38,7 +38,8 @@ namespace Core.Models
             return new Result { Error = errorType };
         }
 
-        public static Result AsDomainError(IReadOnlyList<string> errors)
+        public static Result AsDomainError(
+            Dictionary<string, IReadOnlyCollection<string>> errors)
         {
             return new Result
             {
@@ -66,7 +67,8 @@ namespace Core.Models
             return new Result<T> { Value = default, Error = errorType };
         }
 
-        public static new Result<T> AsDomainError(IReadOnlyList<string> errors)
+        public static new Result<T> AsDomainError(
+            Dictionary<string, IReadOnlyCollection<string>> errors)
         {
             return new Result<T>
             {
@@ -81,12 +83,6 @@ namespace Core.Models
         public CreatedId(int id) => Id = id;
         public int Id { get; }
     }
-
-    public sealed class Msg
-    {
-        public string Message { get; set; }
-    }
-
 
     public sealed class SqlParamValue
     {

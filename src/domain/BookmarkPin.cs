@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using static Domain.Constants.Validation;
 
 namespace Domain
 {
@@ -23,7 +24,8 @@ namespace Domain
 
     public sealed class BookmarkPin : ValueObject
     {
-        private readonly List<string> _errors = new List<string>();
+        private readonly Dictionary<string, IReadOnlyCollection<string>> _errors
+            = new Dictionary<string, IReadOnlyCollection<string>>();
 
         public BookmarkPin(int id, int index, Range range, string mediaurl)
             : this(id, index, range, mediaurl, null)
@@ -47,18 +49,31 @@ namespace Domain
         public string Comment { get; }
         public string MediaUrl { get; }
 
-        public IReadOnlyList<string> Validate(int atIndex)
+        public Dictionary<string, IReadOnlyCollection<string>> Validate(int atIndex)
         {
-            if (Id <= 0) { _errors.Add($"Bookmark Pin [{atIndex}] Id should be greater than 0."); }
-            if (Index <= 0) { _errors.Add($"Bookmark Pin [{atIndex}] Index should be greater than 0."); }
-            if (Range.Start <= 0) { _errors.Add($"Bookmark Pin [{atIndex}] Range Start should be greater than 0."); }
+            if (Id <= 0)
+            {
+                _errors.Add(FullMemberName("Id", atIndex),
+                    new List<string> { GreaterThanZeroMsg });
+            }
+            if (Index <= 0)
+            {
+                _errors.Add(FullMemberName("Index", atIndex),
+                    new List<string> { GreaterThanZeroMsg }); }
+            if (Range.Start <= 0)
+            {
+                _errors.Add(FullMemberName("Range.Start", atIndex),
+                    new List<string> { GreaterThanZeroMsg });
+            }
             if (Range.Start >= Range.End)
             {
-                _errors.Add($"Bookmark Pin [{atIndex}] Range end number must be greater than start number.");
+                _errors.Add(FullMemberName("Range.End", atIndex),
+                    new List<string> { "Should be greater than Range Start number." });
             }
             if (string.IsNullOrWhiteSpace(MediaUrl))
             {
-                _errors.Add($"Bookmark Pin [{atIndex}] MediaUrl is required.");
+                _errors.Add(FullMemberName("MediaUrl", atIndex),
+                    new List<string> { RequiredMsg });
             }
             return _errors;
         }
@@ -70,6 +85,11 @@ namespace Domain
             yield return Range;
             yield return MediaUrl;
             yield return Comment;
+        }
+
+        private static string FullMemberName(string memberName, int atIndex)
+        {
+            return $"BookmarkPins[{atIndex}].{memberName}";
         }
     }
 }

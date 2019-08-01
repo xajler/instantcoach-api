@@ -75,7 +75,56 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task Should_be_not_found_result_with_updated_by_model_and_not_existing_id_on_PUT()
+        public async Task Should_be_bad_request_result_with_invalid_domain_model_on_POST()
+        {
+            var model = new InstantCoachCreateClient
+            {
+                Description = "Some Desc",
+                TicketId = "76",
+                EvaluatorId = 1,
+                AgentId = 2,
+                EvaluatorName = "Evaluator Name",
+                AgentName = "Agent Name",
+                Comments = new List<CommentClient>
+                {
+                    new CommentClient
+                    {
+                        CommentType = CommentType.Bookmark,
+                        AuthorType = EvaluationCommentAuthor.Agent,
+                        CreatedAt = DateTime.UtcNow
+                    },
+                    new CommentClient
+                    {
+                        CommentType = CommentType.Textual,
+                        AuthorType = EvaluationCommentAuthor.Agent,
+                        CreatedAt = DateTime.UtcNow
+                    },
+                    new CommentClient
+                    {
+                        CommentType = CommentType.Attachment,
+                        Text = "Some text",
+                        AuthorType = EvaluationCommentAuthor.Agent,
+                        CreatedAt = DateTime.UtcNow
+                    }
+                },
+                BookmarkPins = new List<BookmarkPinClient>
+                {
+                    new BookmarkPinClient
+                    {
+                        Id = 1,
+                        Index = 1,
+                        Range = new RangeClient { Start = 2, End = 1 },
+                        MediaUrl = "https://example.com/test.png"
+                    }
+                }
+            };
+            var response = await _controller.PostAsync(model);
+
+            response.Should().BeOfType(typeof(BadRequestObjectResult));
+        }
+
+        [Fact]
+        public async Task Should_not_be_found_result_with_updated_by_model_and_not_existing_id_on_PUT()
         {
             int id = 1;
             var model = new InstantCoachUpdateClient

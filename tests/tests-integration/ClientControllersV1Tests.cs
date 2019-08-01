@@ -141,10 +141,21 @@ namespace Tests.Integration
                 {
                     new CommentClient
                     {
-                        CommentType = CommentType.Textual,
+                        CommentType = CommentType.Bookmark,
+                        BookmarkPinId = 1,
                         AuthorType = EvaluationCommentAuthor.Agent,
-                        CreatedAt = DateTime.UtcNow,
-                        Text = "Some Comment"
+                        CreatedAt = DateTime.UtcNow
+                    }
+                },
+                BookmarkPins = new List<BookmarkPinClient>
+                {
+                    new BookmarkPinClient
+                    {
+                        Id = 1,
+                        Index = 1,
+                        Range = new RangeClient { Start = 1, End = 2 },
+                        MediaUrl = "https://example.com/test.png",
+                        Comment = "Some comment for bookmark pin"
                     }
                 }
             };
