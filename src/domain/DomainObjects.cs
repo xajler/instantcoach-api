@@ -14,7 +14,7 @@ namespace Domain
     {
     }
 
-    public abstract class Entity : IEquatable<Entity>
+    public abstract class Entity
     {
         protected virtual object Actual => this;
         public int Id { get; private set; }
@@ -29,9 +29,9 @@ namespace Domain
             return (Actual.GetType().ToString() + Id).GetHashCode();
         }
 
-        public bool Equals(Entity other)
+        public override bool Equals(object obj)
         {
-            if (other is null) { return false; }
+            if (!(obj is Entity other)) { return false; }
             if (ReferenceEquals(this, other)) { return true; }
             if (Actual.GetType() != other.Actual.GetType()) { return false; }
             if (Id == 0 || other.Id == 0) { return false; }

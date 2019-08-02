@@ -86,7 +86,7 @@ namespace Domain
                     throw new ArgumentOutOfRangeException(msg);
             }
 
-            if (textErrors != null && textErrors.Count > 0)
+            if (textErrors.Count > 0)
             {
                 _errors.Add(FullMemberName("Text", atIndex), textErrors);
             }

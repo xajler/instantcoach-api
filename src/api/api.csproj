@@ -10,7 +10,7 @@
     <PackageReference Include="Elastic.Apm.All" Version="1.0.0-beta1" />
     <PackageReference Include="GST.Fake.Authentication.JwtBearer" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.*" />
