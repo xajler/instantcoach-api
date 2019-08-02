@@ -81,14 +81,8 @@ namespace Tests.Unit
         {
             var comment = Textual(null, AuthorTypeValue, DateTime.UtcNow);
 
-            var validationResult = comment.Validate(atIndex: 0);
-            var actual = validationResult.First();
-            var (expectedMember, expectedErrs) = CreateExpectedValues(
-                "Text", atIndex: 0, "Requires a value for Textual comment.");
-
-            actual.Value.Should().HaveCount(expectedErrs.Count);
-            actual.Key.Should().Contain(expectedMember);
-            actual.Value.First().Should().Be(expectedErrs.First());
+            RunAsserts(comment, atIndex: 0, "Text",
+                "Requires a value for Textual comment.");
         }
 
         [Fact]
@@ -96,29 +90,16 @@ namespace Tests.Unit
         {
             var comment = Attachment("", AuthorTypeValue, DateTime.UtcNow);
 
-            var validationResult = comment.Validate(atIndex: 2);
-            var actual = validationResult.First();
-            var (expectedMember, expectedErrs) = CreateExpectedValues(
-                "Text", atIndex: 2, "Requires a value for Attachment comment.");
-
-            actual.Value.Should().HaveCount(expectedErrs.Count);
-            actual.Key.Should().Contain(expectedMember);
-            actual.Value.First().Should().Be(expectedErrs.First());
+            RunAsserts(comment, atIndex: 2, "Text",
+                "Requires a value for Attachment comment.");
         }
 
         [Fact]
         public static void Should_have_errors_when_attachment_comment_have_text_without_url_via_ctor()
         {
             var comment = Attachment(TextValue, AuthorTypeValue, DateTime.UtcNow);
-
-            var validationResult = comment.Validate(atIndex: 1);
-            var actual = validationResult.First();
-            var (expectedMember, expectedErrs) = CreateExpectedValues(
-                "Text", atIndex: 1, "Should be a valid URL link for Attachment comment.");
-
-            actual.Value.Should().HaveCount(expectedErrs.Count);
-            actual.Key.Should().Contain(expectedMember);
-            actual.Value.First().Should().Be(expectedErrs.First());
+            RunAsserts(comment, atIndex: 1, "Text",
+                "Should be a valid URL link for Attachment comment.");
         }
 
         [Fact]
@@ -126,10 +107,15 @@ namespace Tests.Unit
         {
             var comment = Bookmark(0, AuthorTypeValue, DateTime.UtcNow);
 
-            var validationResult = comment.Validate(atIndex: 3);
+            RunAsserts(comment, atIndex: 3, "BookmarkPinId", GreaterThanZeroMsg);
+        }
+
+        private static void RunAsserts(Comment comment, int atIndex, string memberName, string errorMsg)
+        {
+            var validationResult = comment.Validate(atIndex: atIndex);
             var actual = validationResult.First();
             var (expectedMember, expectedErrs) = CreateExpectedValues(
-                "BookmarkPinId", atIndex: 3, GreaterThanZeroMsg);
+                memberName, atIndex: atIndex, errorMsg);
 
             actual.Value.Should().HaveCount(expectedErrs.Count);
             actual.Key.Should().Contain(expectedMember);

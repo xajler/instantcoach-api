@@ -79,7 +79,8 @@ namespace Domain
 
                 foreach (var item in comments)
                 {
-                    Comment comment = CreateComment(item);
+                    Comment comment = Comment.Create(item.CommentType, item.Text,
+                        item.AuthorType, item.CreatedAt, item.BookmarkPinId);
                     var errors = comment.Validate(index);
                     if (errors.Any()) { _validationResult.Errors.AddRange(errors); }
                     else { Comments.Add(comment); }
@@ -128,24 +129,6 @@ namespace Domain
             }
 
             return InstantCoachStatus.Waiting;
-        }
-
-        private static Comment CreateComment(Comment item)
-        {
-            switch (item.CommentType)
-            {
-                case CommentType.Textual:
-                    return Comment.Textual(
-                        item.Text, item.AuthorType, item.CreatedAt);
-                case CommentType.Attachment:
-                    return Comment.Attachment(
-                        item.Text, item.AuthorType, item.CreatedAt);
-                case CommentType.Bookmark:
-                    return Comment.Bookmark(
-                        item.BookmarkPinId, item.AuthorType, item.CreatedAt);
-                default:
-                    throw new ArgumentOutOfRangeException($"Unknown comment: {item.CommentType}");
-            }
         }
 
         private static string CreateReference()

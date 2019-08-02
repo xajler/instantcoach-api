@@ -53,14 +53,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_equal_when_same_identity()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach actual = NewInstantCoachWitComments();
 
             actual.UpdateAndValidate(
                  UpdateType.Save,
@@ -68,14 +61,7 @@ namespace Tests.Unit
                  bookmarkPins: null,
                  id: 1);
 
-            var expected = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach expected = NewInstantCoachWitComments();
 
             expected.UpdateAndValidate(
                  UpdateType.Save,
@@ -90,13 +76,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_not_be_equal_when_different_identity()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
+            InstantCoach actual = NewInstantCoach();
             actual.AddComments(GetComments());
 
             actual.UpdateAndValidate(
@@ -105,14 +85,7 @@ namespace Tests.Unit
                  bookmarkPins: null,
                  id: 1);
 
-            var expected = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach expected = NewInstantCoachWitComments();
 
             expected.UpdateAndValidate(
                  UpdateType.Save,
@@ -130,14 +103,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_on_create_IC_via_ctor()
         {
-            var ic = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            ic.AddComments(GetComments());
+            InstantCoach ic = NewInstantCoachWitComments();
 
             var actual = ic.Validate();
             int expected = 0;
@@ -149,13 +115,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_comments_are_null_on_create_IC_ctor()
         {
-            var ic = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
+            InstantCoach ic = NewInstantCoach();
             ic.AddComments(null);
 
             var actual = ic.Validate();
@@ -171,14 +131,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_on_update()
         {
-            var ic = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            ic.AddComments(GetComments());
+            InstantCoach ic = NewInstantCoachWitComments();
 
             var actual = ic.UpdateAndValidate(
                  UpdateType.Save,
@@ -194,14 +147,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_of_status_waiting_on_review_update()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach actual = NewInstantCoachWitComments();
 
             var result = actual.UpdateAndValidate(
                  UpdateType.Review,
@@ -217,14 +163,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_of_status_completed_on_update_as_completed()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach actual = NewInstantCoachWitComments();
 
             var result = actual.UpdateAsCompletedAndValidate(id: 1);
             InstantCoachStatus expected = InstantCoachStatus.Completed;
@@ -236,14 +175,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_adding_bookmark_pins_on_update()
         {
-            var ic = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            ic.AddComments(GetComments());
+            InstantCoach ic = NewInstantCoachWitComments();
 
             var actual = ic.UpdateAndValidate(
                  UpdateType.Save,
@@ -260,14 +192,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_comments_are_null_on_update()
         {
-            var ic = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            ic.AddComments(GetComments());
+            InstantCoach ic = NewInstantCoachWitComments();
 
             var actual = ic.UpdateAndValidate(
                  UpdateType.Save,
@@ -286,14 +211,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_valid_reference_on_create_IC_via_ctor()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach actual = NewInstantCoachWitComments();
             int expected = 16;
 
             actual.Reference.Should().StartWith("IC");
@@ -303,14 +221,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_of_status_New_on_create_IC_via_ctor()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach actual = NewInstantCoachWitComments();
             InstantCoachStatus expected = InstantCoachStatus.New;
 
 
@@ -320,14 +231,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_comments_count_set_on_create_IC_via_ctor()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach actual = NewInstantCoachWitComments();
             int expected = 2;
 
             actual.CommentsCount.Should().Be(expected);
@@ -336,14 +240,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_status_in_progress_on_update()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach actual = NewInstantCoachWitComments();
 
             var update = actual.UpdateAndValidate(
                  UpdateType.Save,
@@ -359,14 +256,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_comments_count_set_on_update()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach actual = NewInstantCoachWitComments();
 
             var update = actual.UpdateAndValidate(
                  UpdateType.Save,
@@ -382,14 +272,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_some_properties_on_update_same_as_on_create()
         {
-            var actual = new InstantCoach(
-                DescriptionValue,
-                TicketIdValue,
-                EvaluatorIdValue,
-                AgentIdValue,
-                EvaluatorNameValue,
-                AgentNameValue);
-            actual.AddComments(GetComments());
+            InstantCoach actual = NewInstantCoachWitComments();
 
             var reference = actual.Reference;
             var description = actual.Description;
@@ -644,13 +527,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_one_or_more_comments_are_invalid_on_create_IC_ctor()
         {
-            var ic = new InstantCoach(
-                 DescriptionValue,
-                 TicketIdValue,
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 EvaluatorNameValue,
-                 AgentNameValue);
+            InstantCoach ic = NewInstantCoach();
             ic.AddComments(GetInvalidComments());
 
             var actual = ic.Validate();
@@ -663,14 +540,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_one_or_more_bookmark_pins_are_invalid_on_create_IC_ctor()
         {
-            var ic = new InstantCoach(
-                 DescriptionValue,
-                 TicketIdValue,
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 EvaluatorNameValue,
-                 AgentNameValue);
-            ic.AddComments(GetComments());
+            InstantCoach ic = NewInstantCoachWitComments();
             ic.AddBookmarkPins(GetInvalidBookmarkPins());
 
             var actual = ic.Validate();
@@ -678,6 +548,24 @@ namespace Tests.Unit
 
             actual.IsValid.Should().BeFalse();
             actual.Errors.Should().HaveCount(expected);
+        }
+
+        private static InstantCoach NewInstantCoach()
+        {
+            return new InstantCoach(
+                DescriptionValue,
+                TicketIdValue,
+                EvaluatorIdValue,
+                AgentIdValue,
+                EvaluatorNameValue,
+                AgentNameValue);
+        }
+
+        private static InstantCoach NewInstantCoachWitComments()
+        {
+            InstantCoach result = NewInstantCoach();
+            result.AddComments(GetComments());
+            return result;
         }
 
         private static List<Comment> GetComments()

@@ -115,6 +115,22 @@ namespace Domain
             return new Comment(bookmarkPinId, authorType, createdAt);
         }
 
+        public static Comment Create(CommentType commentType, string text,
+            EvaluationCommentAuthor authorType, DateTime createdAt, int? bookmarkPinId)
+        {
+            switch (commentType)
+            {
+                case CommentType.Textual:
+                    return Textual(text, authorType, createdAt);
+                case CommentType.Attachment:
+                    return Attachment(text, authorType, createdAt);
+                case CommentType.Bookmark:
+                    return Bookmark(bookmarkPinId, authorType, createdAt);
+                default:
+                    throw new ArgumentOutOfRangeException($"Unknown comment: {commentType}");
+            }
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return CreatedAt;

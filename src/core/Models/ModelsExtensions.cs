@@ -31,7 +31,8 @@ namespace Core.Models
                 result = new List<Comment>();
                 foreach (var item in comments)
                 {
-                    result.Add(CreateComment(item));
+                    result.Add(Comment.Create(item.CommentType, item.Text, item.AuthorType,
+                        item.CreatedAt, item.BookmarkPinId));
                 }
             }
             return result;
@@ -78,21 +79,6 @@ namespace Core.Models
                 }
             }
             return result;
-        }
-
-        private static Comment CreateComment(CommentClient item)
-        {
-            switch (item.CommentType)
-            {
-                case CommentType.Textual:
-                    return Comment.Textual(item.Text, item.AuthorType, item.CreatedAt);
-                case CommentType.Attachment:
-                    return Comment.Attachment(item.Text, item.AuthorType, item.CreatedAt);
-                case CommentType.Bookmark:
-                    return Comment.Bookmark(item.BookmarkPinId, item.AuthorType, item.CreatedAt);
-                default:
-                    throw new ArgumentOutOfRangeException($"Unknown comment: {item.CommentType}");
-            }
         }
     }
 }
