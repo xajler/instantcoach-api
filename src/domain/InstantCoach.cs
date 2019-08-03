@@ -27,6 +27,8 @@ namespace Domain
             EvaluatorName = evaluatorName;
             AgentName = agentName;
             CommentsCount = 0;
+            Comments = new List<Comment>();
+            BookmarkPins = new List<BookmarkPin>();
         }
 
         public string Description { get; }
@@ -37,29 +39,29 @@ namespace Domain
         public int AgentId { get; }
         public string EvaluatorName { get; }
         public string AgentName { get; }
-        public List<Comment> Comments { get; private set; }
-        public List<BookmarkPin> BookmarkPins { get; private set; }
-        public int CommentsCount { get; private set; }
+        private List<Comment> _comments;
 
-        public ValidationResult UpdateAndValidate(UpdateType updateType,
-            List<Comment> comments, List<BookmarkPin> bookmarkPins, int id = 0)
+        public InstantCoach Update(UpdateType updateType, List<Comment> comments)
         {
-            UpdateId(id);
-            Status = SetStatus(updateType);
-            AddComments(comments);
-            AddBookmarkPins(bookmarkPins);
-            return Validate();
+            return Update(updateType, comments, new List<BookmarkPin>());
         }
 
-        public ValidationResult UpdateAsCompletedAndValidate()
-            => UpdateAsCompletedAndValidate(id: 0);
-
-
-        public ValidationResult UpdateAsCompletedAndValidate(int id)
+        // TODO: Guard those with status completed, they cannot be updated.
+        public InstantCoach Update(UpdateType updateType,
+            List<Comment> comments, List<BookmarkPin> bookmarkPins)
         {
-            UpdateId(id);
+            Status = SetStatus(updateType);
+            ClearValues(); // EF Hack
+            AddComments(comments);
+            AddBookmarkPins(bookmarkPins);
+            return this;
+        }
+
+        // TODO: Guard those with status New, they cannot be completed
+        public InstantCoach UpdateAsCompleted()
+        {
             Status = InstantCoachStatus.Completed;
-            return Validate();
+            return this;
         }
 
         public ValidationResult Validate()
@@ -68,10 +70,9 @@ namespace Domain
             return _validationResult;
         }
 
-        // TODO: Must be called when null.
-        //       Needs better solution or Factory.
         public void AddComments(List<Comment> comments)
         {
+
             if (comments != null && comments.Count > 0)
             {
                 Comments = new List<Comment>();
@@ -89,12 +90,9 @@ namespace Domain
 
                 CommentsCount = Comments.Count;
                 // EF Hack
-                CommentsConvert = Comments;
+                CommentsValue = ToJson(Comments);
             }
-            else
-            {
-                _validationResult.AddError("Comments", new List<string> { CommentsErrorMsg });
-            }
+            else { Comments = new List<Comment>(); }
         }
 
         public void AddBookmarkPins(List<BookmarkPin> bookmarkPins)
@@ -116,9 +114,11 @@ namespace Domain
                     else { BookmarkPins.Add(pin); }
                     index++;
                 }
+
+                // EF Hack
+                BookmarkPinsValue = ToJson(BookmarkPins);
             }
-            // EF Hack
-            BookmarkPinsConvert = BookmarkPins;
+            else { BookmarkPins = new List<BookmarkPin>(); }
         }
 
         private static InstantCoachStatus SetStatus(UpdateType updateType)
@@ -174,6 +174,14 @@ namespace Domain
             AddToValidationResult(nameof(AgentId), agentErrors);
             AddToValidationResult(nameof(EvaluatorName), evalNameErrors);
             AddToValidationResult(nameof(AgentName), agentNameErrors);
+
+            // Hackish second condition
+            if (Comments.Count <= 0 &&
+                !_validationResult.Errors.Select(x =>
+                    x.Key.Contains("Comments")).Any())
+            {
+                _validationResult.AddError("Comments", new List<string> { CommentsErrorMsg });
+            }
         }
 
         private void AddToValidationResult(string memberName, List<string> errors)
@@ -183,36 +191,51 @@ namespace Domain
                 _validationResult.Errors.Add(memberName, errors);
             }
         }
-
     }
 
     // For EF hacks
-    public sealed partial class InstantCoach
+    public partial class InstantCoach
     {
         // EF stuff and hacks
+        public List<Comment> Comments
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(CommentsValue))
+                {
+                    _comments = FromJson<List<Comment>>(CommentsValue);
+                }
+                return _comments;
+            }
+            private set => _comments = value;
+
+        }
+        private List<BookmarkPin> _bookmarkPins;
+        public List<BookmarkPin> BookmarkPins
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(BookmarkPinsValue))
+                {
+                    _bookmarkPins = FromJson<List<BookmarkPin>>(BookmarkPinsValue);
+                }
+                return _bookmarkPins;
+            }
+            private set => _bookmarkPins = value;
+        }
+        public int CommentsCount { get; private set; }
         public string CommentsValue { get; private set; }
         public string BookmarkPinsValue { get; private set; }
-        public List<Comment> CommentsConvert
-        {
-            get { return new List<Comment>(); }
-            private set { CommentsValue = ToJson(value); }
-        }
-        public List<BookmarkPin> BookmarkPinsConvert
-        {
-            get { return new List<BookmarkPin>(); }
-            private set
-            {
-                if (value != null && value.Count > 0)
-                {
-                    BookmarkPinsValue = ToJson(value);
-                }
-                else { BookmarkPinsValue = null; }
-            }
-        }
 
         // Not really hack, but set via EF, and not handled by Domain.
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        private void ClearValues()
+        {
+            CommentsValue = null;
+            BookmarkPinsValue = null;
+        }
         // End EF stuff and hacks
     }
 }

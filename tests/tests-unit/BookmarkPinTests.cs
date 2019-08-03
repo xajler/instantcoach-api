@@ -1,17 +1,14 @@
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
 using Domain;
 using static Domain.Constants.Validation;
+using static Tests.Unit.TestHelpers;
 
 namespace Tests.Unit
 {
     public sealed class BookmarkPinTests
     {
-        private const string MediaUrlValue = "https://example.com/test.png";
-        private const string CommentValue =  "No comment";
-
         [Fact]
         public static void Should_be_of_value_object_type()
         {
@@ -24,13 +21,13 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_bookmark_pin_via_ctor_without_comment()
         {
-            var bp = new BookmarkPin(
+            var sut = new BookmarkPin(
                 id: 1,
                 index: 1,
                 new Range(1, 2),
                 MediaUrlValue);
 
-            var actual = bp.Validate(atIndex: 0);
+            var actual = sut.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -38,9 +35,9 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_bookmark_pin_via_ctor_full()
         {
-            var bp = NewBookmarkPinWithComment();
+            var sut = NewBookmarkPinWithComment();
 
-            var actual = bp.Validate(atIndex: 0);
+            var actual = sut.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -49,7 +46,6 @@ namespace Tests.Unit
         public static void Should_be_equal_when_same_structure()
         {
             var actual = NewBookmarkPinWithComment();
-
             var expected = NewBookmarkPinWithComment();
 
             actual.Should().BeEquivalentTo(expected);
@@ -57,7 +53,7 @@ namespace Tests.Unit
         }
 
         [Fact]
-        public static void Should_not_be_equal_when_same_structure()
+        public static void Should_not_be_equal_when_not_same_structure()
         {
             var actual = NewBookmarkPinWithComment();
             var expected = new BookmarkPin(
@@ -73,14 +69,14 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_bookmark_without_comment_pin_via_ctor()
         {
-            var bp = new BookmarkPin(
+            var sut = new BookmarkPin(
                 id: 1,
                 index: 1,
                 new Range(1, 2),
                 MediaUrlValue,
                 comment: null);
 
-            var actual = bp.Validate(atIndex: 0);
+            var actual = sut.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -88,101 +84,79 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_id_smaller_or_equal_zero_via_ctor()
         {
-            var bp = new BookmarkPin(
+            var sut = new BookmarkPin(
                 id: 0,
                 index: 1,
                 new Range(1, 2),
                 MediaUrlValue,
                 CommentValue);
 
-            RunAsserts(bp, atIndex: 0, "Id", GreaterThanZeroMsg);
+            RunAsserts(sut, atIndex: 0, "Id", GreaterThanZeroMsg);
         }
 
         [Fact]
         public static void Should_have_errors_when_index_smaller_or_equal_zero_via_ctor()
         {
-            var bp = new BookmarkPin(
+            var sut = new BookmarkPin(
                 id: 1,
                 index: 0,
                 new Range(1, 2),
                 MediaUrlValue,
                 CommentValue);
 
-            RunAsserts(bp, atIndex: 1, "Index", GreaterThanZeroMsg);
+            RunAsserts(sut, atIndex: 1, "Index", GreaterThanZeroMsg);
         }
 
         [Fact]
         public static void Should_have_errors_when_range_start_smaller_or_equal_zero_via_ctor()
         {
-            var bp = new BookmarkPin(
+            var sut = new BookmarkPin(
                 id: 1,
                 index: 1,
                 new Range(0, 2),
                 MediaUrlValue,
                 CommentValue);
 
-            RunAsserts(bp, atIndex: 2, "Range.Start", GreaterThanZeroMsg);
+            RunAsserts(sut, atIndex: 2, "Range.Start", GreaterThanZeroMsg);
         }
 
         [Fact]
         public static void Should_have_errors_when_range_start_should_be_greater_then_end_via_ctor()
         {
-            var bp = new BookmarkPin(
+            var sut = new BookmarkPin(
                 id: 1,
                 index: 1,
                 new Range(2, 1),
                 MediaUrlValue,
                 CommentValue);
 
-            var validationResult = bp.Validate(atIndex: 3);
-            var actual = validationResult.First();
-            var (expectedMember, expectedErrs) = CreateExpectedValues(
-                "Range.End", atIndex: 3, "Should be greater than Range Start number.");
-
-            actual.Value.Should().HaveCount(expectedErrs.Count);
-            actual.Key.Should().Contain(expectedMember);
-            actual.Value.First().Should().Be(expectedErrs.First());
+            RunAsserts(sut, atIndex: 3, "Range.End",
+                "Should be greater than Range Start number.");
         }
 
         [Fact]
         public static void Should_have_errors_when_media_url_is_null_or_empty_via_ctor()
         {
-            var bp = new BookmarkPin(
+            var sut = new BookmarkPin(
                 id: 1,
                 index: 1,
                 new Range(1, 2),
                 null,
                 CommentValue);
 
-            RunAsserts(bp, atIndex: 4, "MediaUrl", RequiredMsg);
+            RunAsserts(sut, atIndex: 4, "MediaUrl", RequiredMsg);
         }
 
-        private static void RunAsserts(BookmarkPin bp, int atIndex, string memberName, string errorMsg)
+        private static void RunAsserts(BookmarkPin sut, int atIndex, string memberName, string errorMsg)
         {
-            var validationResult = bp.Validate(atIndex: atIndex);
+            var validationResult = sut.Validate(atIndex: atIndex);
             var actual = validationResult.First();
             var (expectedMember, expectedErrs) = CreateExpectedValues(
-                memberName, atIndex: atIndex, errorMsg);
+                "BookmarkPins", memberName, atIndex: atIndex, errorMsg);
 
             actual.Value.Should().HaveCount(expectedErrs.Count);
             actual.Key.Should().Contain(expectedMember);
             actual.Value.First().Should().Be(expectedErrs.First());
-        }
-
-        private static BookmarkPin NewBookmarkPinWithComment()
-        {
-            return new BookmarkPin(
-                id: 1,
-                index: 1,
-                new Range(1, 2),
-                MediaUrlValue,
-                CommentValue);
-        }
-
-        private static (string, IReadOnlyCollection<string>) CreateExpectedValues(
-            string memberName, int atIndex, string errorText)
-        {
-            return ($"BookmarkPins[{atIndex}].{memberName}", new List<string> { errorText });
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Domain
         protected virtual object Actual => this;
         public int Id { get; private set; }
 
-        protected void UpdateId(int id)
+        protected virtual void UpdateId(int id)
         {
             if (Id == 0 && id > 0) { Id = id; }
         }

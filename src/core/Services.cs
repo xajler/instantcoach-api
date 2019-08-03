@@ -85,31 +85,27 @@ namespace Core.Services
         public async Task<Result<InstantCoach>> Create(InstantCoachCreateClient data)
         {
             InstantCoach entity = data.ToNewInstantCoach();
-            var validationResult = entity.Validate();
-            _logger.LogInformation("Entity after validate: {@EntityModel}", entity);
-            return await OnSave(entity, validationResult);
+            _logger.LogInformation("New entity: {@EntityModel}", entity);
+            return await OnSave(entity, entity.Validate());
         }
 
         public async Task<Result> Update(int id, InstantCoachUpdateClient data)
         {
-            // TODO: Guard those with status completed, they cannot be updated.
             var entityResult = await _repository.FindById(id);
             if (!entityResult.Success) { return OnNotExistingId(id); }
-            var entity = entityResult.Value;
-            ValidationResult validationResult = entity.UpdateAndValidate(
+            var entity = entityResult.Value.Update(
                 data.UpdateType,
                 data.Comments.ToComments(),
                 data.BookmarkPins.ToBookmarkPins());
-            return await OnSave(entity, validationResult);
+            return await OnSave(entity, entity.Validate());
         }
 
         public async Task<Result> MarkCompleted(int id)
         {
             var entityResult = await _repository.FindById(id);
             if (!entityResult.Success) { return OnNotExistingId(id); }
-            var entity = entityResult.Value;
-            ValidationResult validationResult = entity.UpdateAsCompletedAndValidate();
-            return await OnSave(entity, validationResult);
+            var entity = entityResult.Value.UpdateAsCompleted();
+            return await OnSave(entity, entity.Validate());
         }
 
         public async Task<Result> Remove(int id)

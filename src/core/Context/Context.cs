@@ -98,11 +98,7 @@ namespace Core.Context
                    .IsRequired(false);
 
             builder.Ignore(x => x.Comments);
-            // HACK: Converter from JSON to Domain List<Comment>
-            builder.Ignore(x => x.CommentsConvert);
             builder.Ignore(x => x.BookmarkPins);
-            // HACK: Converter from JSON to Domain List<BookmarkPin>
-            builder.Ignore(x => x.BookmarkPinsConvert);
         }
     }
 }

@@ -5,8 +5,9 @@ using Xunit;
 using Domain;
 using Core;
 using Core.Models;
-using static Domain.Constants.Validation;
 using Helpers = Domain.Helpers;
+using static Domain.Constants.Validation;
+using static Tests.Unit.TestHelpers;
 
 namespace Tests.Unit
 {
@@ -116,16 +117,31 @@ namespace Tests.Unit
         }
 
         // Entity
+
+        [Fact]
+        public static void Should_be_equal_when_same_identity()
+        {
+            TestEntity actual = new TestEntity(id: 1);
+            TestEntity expected = new TestEntity(id: 1);
+
+            actual.GetHashCode().Should().Be(expected.GetHashCode());
+            actual.Equals(expected).Should().BeTrue();
+        }
+
+        [Fact]
+        public static void Should_not_be_equal_when_different_identity()
+        {
+            TestEntity actual = new TestEntity(id: 1);
+            TestEntity expected = new TestEntity(id: 2);
+
+            actual.Should().NotBeEquivalentTo(expected);
+            actual.GetHashCode().Should().NotBe(expected.GetHashCode());
+        }
+
         [Fact]
         public static void Should_not_be_equal_when_other_entity_is_null()
         {
-            var ic = new InstantCoach(
-                InstantCoachTests.DescriptionValue,
-                InstantCoachTests.TicketIdValue,
-                InstantCoachTests.EvaluatorIdValue,
-                InstantCoachTests.AgentIdValue,
-                InstantCoachTests.EvaluatorNameValue,
-                InstantCoachTests.AgentNameValue);
+            var ic = NewInstantCoach();
             InstantCoach nullIc = null;
 
             var actual = ic.Equals(nullIc);
@@ -136,13 +152,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_equal_when_other_entity_is_same_reference()
         {
-            var ic = new InstantCoach(
-                InstantCoachTests.DescriptionValue,
-                InstantCoachTests.TicketIdValue,
-                InstantCoachTests.EvaluatorIdValue,
-                InstantCoachTests.AgentIdValue,
-                InstantCoachTests.EvaluatorNameValue,
-                InstantCoachTests.AgentNameValue);
+            var ic = NewInstantCoach();
             InstantCoach ic2 = ic;
 
             var actual = ic.Equals(ic2);
@@ -153,20 +163,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_not_be_equal_when_both_entities_having_id_of_zero()
         {
-            var ic = new InstantCoach(
-                InstantCoachTests.DescriptionValue,
-                InstantCoachTests.TicketIdValue,
-                InstantCoachTests.EvaluatorIdValue,
-                InstantCoachTests.AgentIdValue,
-                InstantCoachTests.EvaluatorNameValue,
-                InstantCoachTests.AgentNameValue);
-            InstantCoach ic2 = new InstantCoach(
-                InstantCoachTests.DescriptionValue,
-                InstantCoachTests.TicketIdValue,
-                InstantCoachTests.EvaluatorIdValue,
-                InstantCoachTests.AgentIdValue,
-                InstantCoachTests.EvaluatorNameValue,
-                InstantCoachTests.AgentNameValue);
+            var ic = NewInstantCoach();
+            InstantCoach ic2 = NewInstantCoach();
 
             var actual = ic.Equals(ic2);
 
@@ -178,13 +176,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_able_to_deserialize_T_from_json()
         {
-            var expected = new InstantCoach(
-                InstantCoachTests.DescriptionValue,
-                InstantCoachTests.TicketIdValue,
-                InstantCoachTests.EvaluatorIdValue,
-                InstantCoachTests.AgentIdValue,
-                InstantCoachTests.EvaluatorNameValue,
-                InstantCoachTests.AgentNameValue);
+            var expected = NewInstantCoach();
             var json = Helpers.ToJson(expected);
 
             var actual = Helpers.FromJson<InstantCoach>(json);
@@ -198,7 +190,7 @@ namespace Tests.Unit
         [Fact]
         public static void Test_to_cover_context_design_time_factory_in_core()
         {
-            var factory = new Core.ICContextDesignTimeFactory();
+            var factory = new ICContextDesignTimeFactory();
             var actual = factory.CreateDbContext(new string[] { });
 
             actual.Should().NotBeNull();

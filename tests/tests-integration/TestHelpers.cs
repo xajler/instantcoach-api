@@ -40,6 +40,75 @@ namespace Tests.Integration
             return settings;
         }
 
+        public static List<CommentClient> GetClientComments()
+        {
+            return new List<CommentClient>
+            {
+                new CommentClient
+                {
+                    CommentType = CommentType.Textual,
+                    AuthorType = EvaluationCommentAuthor.Agent,
+                    CreatedAt = DateTime.UtcNow,
+                    Text = "Some Comment"
+                },
+                new CommentClient
+                {
+                    CommentType = CommentType.Attachment,
+                    AuthorType = EvaluationCommentAuthor.Agent,
+                    CreatedAt = DateTime.UtcNow,
+                    Text = "http://example.com/example.pdf"
+                },
+                new CommentClient
+                {
+                    CommentType = CommentType.Bookmark,
+                    BookmarkPinId = 1,
+                    AuthorType = EvaluationCommentAuthor.Agent,
+                    CreatedAt = DateTime.UtcNow
+                }
+            };
+        }
+
+        public static List<BookmarkPinClient> GetClientBookmarkPins()
+        {
+            return new List<BookmarkPinClient>
+            {
+                new BookmarkPinClient
+                {
+                    Id = 1,
+                    Index = 1,
+                    Range = new RangeClient { Start = 1, End = 2 },
+                    MediaUrl = "https://example.com/test.png",
+                    Comment = "Some comment for bookmark pin"
+                }
+            };
+        }
+
+        public static List<CommentClient> GetInvalidClientComments()
+        {
+            return new List<CommentClient>
+            {
+                new CommentClient
+                {
+                    CommentType = CommentType.Bookmark,
+                    AuthorType = EvaluationCommentAuthor.Agent,
+                    CreatedAt = DateTime.UtcNow
+                },
+                new CommentClient
+                {
+                    CommentType = CommentType.Textual,
+                    AuthorType = EvaluationCommentAuthor.Agent,
+                    CreatedAt = DateTime.UtcNow
+                },
+                 new CommentClient
+                    {
+                        CommentType = CommentType.Attachment,
+                        Text = "Some text",
+                        AuthorType = EvaluationCommentAuthor.Agent,
+                        CreatedAt = DateTime.UtcNow
+                    }
+            };
+        }
+
         public static async Task<List<InstantCoachList>> Insert4ItemsWith1Completed(ICContext context)
         {
             var items = new List<InstantCoachList>();
@@ -86,7 +155,7 @@ namespace Tests.Integration
             await context.Set<InstantCoach>().AddAsync(item4);
             await context.SaveChangesAsync();
             var item4Entity = await context.Set<InstantCoach>().FindAsync(item4.Id);
-            item4Entity.UpdateAsCompletedAndValidate();
+            item4Entity.UpdateAsCompleted();
             context.Entry(item4Entity).State = EntityState.Modified;
             await context.SaveChangesAsync();
             items.Add(EntityToModelList(item1));
@@ -110,7 +179,7 @@ namespace Tests.Integration
             };
         }
 
-        public static List<Comment> GetComments()
+        private static List<Comment> GetComments()
         {
             return new List<Comment>
             {
@@ -125,7 +194,7 @@ namespace Tests.Integration
             };
         }
 
-        public static List<BookmarkPin> GetBookmarkPins()
+        private static List<BookmarkPin> GetBookmarkPins()
         {
             var result = new List<BookmarkPin>();
             var bookmarkPin = new BookmarkPin(id: 1, index: 1, new Range(1, 2),

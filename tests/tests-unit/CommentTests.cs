@@ -1,21 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
 using Domain;
 using static Domain.Comment;
 using static Domain.Constants.Validation;
+using static Tests.Unit.TestHelpers;
 
 namespace Tests.Unit
 {
     public sealed class CommentTests
     {
-        private const string TextValue = "Some text value";
-        private const string UrlTextValue = "https://xxx.xxx/xxx.xml";
-        private const int BookmarkPinIdValue = 1;
-        private static readonly EvaluationCommentAuthor AuthorTypeValue = EvaluationCommentAuthor.Agent;
-
         [Fact]
         public static void Should_be_of_value_object_type()
         {
@@ -29,8 +24,10 @@ namespace Tests.Unit
         public static void Should_be_equal_when_same_structure()
         {
             var createdAt = DateTime.UtcNow;
-            var actual = Textual(TextValue, AuthorTypeValue, createdAt);
-            var expected = Textual(TextValue, AuthorTypeValue, createdAt);
+
+            var actual = NewTextualComment(createdAt);
+            var expected = NewTextualComment(createdAt);
+
             actual.Should().BeEquivalentTo(expected);
             actual.GetHashCode().Should().Be(expected.GetHashCode());
             actual.Should().Be(expected);
@@ -39,9 +36,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_not_be_equal_when_same_structure()
         {
-            var createdAt = DateTime.UtcNow;
-            var actual = Textual(TextValue, AuthorTypeValue, DateTime.UtcNow);
-            var expected = Textual(TextValue, AuthorTypeValue, createdAt);
+            var actual = NewTextualComment();
+            var expected = NewTextualComment();
             actual.GetHashCode().Should().NotBe(expected.GetHashCode());
             actual.Should().NotBe(expected);
         }
@@ -49,9 +45,9 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_textual_comment_via_ctor()
         {
-            var comment = Textual(TextValue, AuthorTypeValue, DateTime.UtcNow);
+            var sut = NewTextualComment();
 
-            var actual = comment.Validate(atIndex: 0);
+            var actual = sut.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -59,9 +55,9 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_attachment_comment_via_ctor()
         {
-            var comment = Attachment(UrlTextValue, AuthorTypeValue, DateTime.UtcNow);
+            var sut = NewAttachmentComment();
 
-            var actual = comment.Validate(atIndex: 0);
+            var actual = sut.Validate(atIndex: 0);
 
             actual.Should().HaveCount(0);
         }
@@ -69,9 +65,9 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_bookmark_comment_via_ctor()
         {
-            var comment = Bookmark(BookmarkPinIdValue, AuthorTypeValue, DateTime.UtcNow);
+            var sut = NewBookmarkComment();
 
-            var actual = comment.Validate(atIndex: 4);
+            var actual = sut.Validate(atIndex: 4);
 
             actual.Should().HaveCount(0);
         }
@@ -79,54 +75,47 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_textual_comment_have_text_null_or_empty_via_ctor()
         {
-            var comment = Textual(null, AuthorTypeValue, DateTime.UtcNow);
+            var sut = Textual(null, AuthorTypeValue, DateTime.UtcNow);
 
-            RunAsserts(comment, atIndex: 0, "Text",
+            RunAsserts(sut, atIndex: 0, "Text",
                 "Requires a value for Textual comment.");
         }
 
         [Fact]
         public static void Should_have_errors_when_attachment_comment_have_text_null_or_empty_via_ctor()
         {
-            var comment = Attachment("", AuthorTypeValue, DateTime.UtcNow);
+            var sut = Attachment("", AuthorTypeValue, DateTime.UtcNow);
 
-            RunAsserts(comment, atIndex: 2, "Text",
+            RunAsserts(sut, atIndex: 2, "Text",
                 "Requires a value for Attachment comment.");
         }
 
         [Fact]
         public static void Should_have_errors_when_attachment_comment_have_text_without_url_via_ctor()
         {
-            var comment = Attachment(TextValue, AuthorTypeValue, DateTime.UtcNow);
-            RunAsserts(comment, atIndex: 1, "Text",
+            var sut = Attachment(TextValue, AuthorTypeValue, DateTime.UtcNow);
+            RunAsserts(sut, atIndex: 1, "Text",
                 "Should be a valid URL link for Attachment comment.");
         }
 
         [Fact]
         public static void Should_have_errors_when_bookmark_have_pin_id_zero_or_less_via_ctor()
         {
-            var comment = Bookmark(0, AuthorTypeValue, DateTime.UtcNow);
+            var sut = Bookmark(0, AuthorTypeValue, DateTime.UtcNow);
 
-            RunAsserts(comment, atIndex: 3, "BookmarkPinId", GreaterThanZeroMsg);
+            RunAsserts(sut, atIndex: 3, "BookmarkPinId", GreaterThanZeroMsg);
         }
 
-        private static void RunAsserts(Comment comment, int atIndex, string memberName, string errorMsg)
+        private static void RunAsserts(Comment sut, int atIndex, string memberName, string errorMsg)
         {
-            var validationResult = comment.Validate(atIndex: atIndex);
+            var validationResult = sut.Validate(atIndex: atIndex);
             var actual = validationResult.First();
             var (expectedMember, expectedErrs) = CreateExpectedValues(
-                memberName, atIndex: atIndex, errorMsg);
+                "Comments", memberName, atIndex: atIndex, errorMsg);
 
             actual.Value.Should().HaveCount(expectedErrs.Count);
             actual.Key.Should().Contain(expectedMember);
             actual.Value.First().Should().Be(expectedErrs.First());
-        }
-
-
-        private static (string, IReadOnlyCollection<string>) CreateExpectedValues(
-            string memberName, int atIndex, string errorText)
-        {
-            return ($"Comments[{atIndex}].{memberName}", new List<string> { errorText });
         }
     }
 }

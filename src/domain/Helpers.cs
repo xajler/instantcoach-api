@@ -36,7 +36,7 @@ namespace Domain
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Formatting.None,
+                Formatting = Formatting.Indented,
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc
             };
             settings.Converters.Add(new StringEnumConverter());

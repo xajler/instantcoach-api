@@ -85,28 +85,7 @@ namespace Tests.Integration
                 AgentId = 2,
                 EvaluatorName = "Evaluator Name",
                 AgentName = "Agent Name",
-                Comments = new List<CommentClient>
-                {
-                    new CommentClient
-                    {
-                        CommentType = CommentType.Bookmark,
-                        AuthorType = EvaluationCommentAuthor.Agent,
-                        CreatedAt = DateTime.UtcNow
-                    },
-                    new CommentClient
-                    {
-                        CommentType = CommentType.Textual,
-                        AuthorType = EvaluationCommentAuthor.Agent,
-                        CreatedAt = DateTime.UtcNow
-                    },
-                    new CommentClient
-                    {
-                        CommentType = CommentType.Attachment,
-                        Text = "Some text",
-                        AuthorType = EvaluationCommentAuthor.Agent,
-                        CreatedAt = DateTime.UtcNow
-                    }
-                },
+                Comments = GetInvalidClientComments(),
                 BookmarkPins = new List<BookmarkPinClient>
                 {
                     new BookmarkPinClient
@@ -130,26 +109,8 @@ namespace Tests.Integration
             var model = new InstantCoachUpdateClient
             {
                 UpdateType = UpdateType.Save,
-                Comments = new List<CommentClient>
-                {
-                    new CommentClient
-                    {
-                        CommentType = CommentType.Bookmark,
-                        BookmarkPinId = 1,
-                        AuthorType = EvaluationCommentAuthor.Agent,
-                        CreatedAt = DateTime.UtcNow
-                    }
-                },
-                BookmarkPins = new List<BookmarkPinClient>
-                {
-                    new BookmarkPinClient
-                    {
-                        Id = 1,
-                        Index = 1,
-                        Range = new RangeClient { Start = 1, End = 2 },
-                        MediaUrl = "https://example.com/test.png"
-                    }
-                }
+                Comments = GetClientComments(),
+                BookmarkPins = GetClientBookmarkPins()
             };
             var response = await _controller.PutAsync(id, model);
 
