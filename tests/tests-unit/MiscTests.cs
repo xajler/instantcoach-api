@@ -195,5 +195,16 @@ namespace Tests.Unit
 
             actual.Should().NotBeNull();
         }
+
+        private static InstantCoach NewInstantCoach()
+        {
+            return new InstantCoach(
+                description: "Some description",
+                ticketId: "42",
+                evaluatorId: 1,
+                agentId: 2,
+                evaluatorName: "John Evaluator",
+                agentName: "Jane Agent");
+        }
     }
 }

@@ -1,12 +1,11 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Schema;
+using Domain;
 using Core.Models;
 using Core.Services;
 using static Microsoft.AspNetCore.Http.StatusCodes;
-using static Core.Helpers;
 using static Core.Constants.Controller;
 
 namespace Api.Controllers.Version1
@@ -81,10 +80,7 @@ namespace Api.Controllers.Version1
         public async Task<ActionResult> PostAsync([FromBody] InstantCoachCreateClient data)
         {
             _logger.LogInformation("POST params [data]: {@HttpBody}", data);
-            if (!ModelState.IsValid)
-            {
-                return LogModelErrorsAndReturnBadRequest();
-            }
+            if (!ModelState.IsValid) { return ReturnBadRequestWithErrors(); }
             var result = await _service.Create(data);
             int id = result.Value == null ? 0 : result.Value.Id;
             return CreateResult(result, successStatusCode: Status201Created, id: id);
@@ -99,10 +95,7 @@ namespace Api.Controllers.Version1
             [FromBody] InstantCoachUpdateClient data)
         {
             _logger.LogInformation("PUT params [id]: {Id} | [data]: {@HttpBody}", id, data);
-            if (!ModelState.IsValid)
-            {
-                return LogModelErrorsAndReturnBadRequest();
-            }
+            if (!ModelState.IsValid) { return ReturnBadRequestWithErrors(); }
             var result = await _service.Update(id, data);
             return CreateResult(result, successStatusCode: Status204NoContent, id);
         }

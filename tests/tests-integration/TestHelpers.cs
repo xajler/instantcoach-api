@@ -16,7 +16,6 @@ namespace Tests.Integration
 {
     public static class TestHelpers
     {
-
         public static T FromJson<T>(string json) where T : class
         {
             return JsonConvert.DeserializeObject<T>(json, GetJsonSettings());
@@ -47,16 +46,16 @@ namespace Tests.Integration
                 new CommentClient
                 {
                     CommentType = CommentType.Textual,
+                    Text = "Some Comment",
                     AuthorType = EvaluationCommentAuthor.Agent,
-                    CreatedAt = DateTime.UtcNow,
-                    Text = "Some Comment"
+                    CreatedAt = DateTime.UtcNow
                 },
                 new CommentClient
                 {
                     CommentType = CommentType.Attachment,
+                    Text = "http://example.com/example.pdf",
                     AuthorType = EvaluationCommentAuthor.Agent,
-                    CreatedAt = DateTime.UtcNow,
-                    Text = "http://example.com/example.pdf"
+                    CreatedAt = DateTime.UtcNow
                 },
                 new CommentClient
                 {
@@ -100,62 +99,30 @@ namespace Tests.Integration
                     CreatedAt = DateTime.UtcNow
                 },
                  new CommentClient
-                    {
-                        CommentType = CommentType.Attachment,
-                        Text = "Some text",
-                        AuthorType = EvaluationCommentAuthor.Agent,
-                        CreatedAt = DateTime.UtcNow
-                    }
+                {
+                    CommentType = CommentType.Attachment,
+                    Text = "Some text",
+                    AuthorType = EvaluationCommentAuthor.Agent,
+                    CreatedAt = DateTime.UtcNow
+                }
             };
         }
+
 
         public static async Task<List<InstantCoachList>> Insert4ItemsWith1Completed(ICContext context)
         {
             var items = new List<InstantCoachList>();
-            var item1 = new InstantCoach(
-                description: "Some description 1",
-                ticketId: "41",
-                evaluatorId: 1,
-                agentId: 2,
-                evaluatorName: "John Evaluator",
-                agentName: "Jane Agent");
-            item1.AddComments(GetComments());
-            item1.AddBookmarkPins(GetBookmarkPins());
-            var item2 = new InstantCoach(
-                description: "Some description 2",
-                ticketId: "42",
-                evaluatorId: 1,
-                agentId: 2,
-                evaluatorName: "John Evaluator",
-                agentName: "Jane Agent");
-            item2.AddComments(GetComments());
-            item2.AddBookmarkPins(GetBookmarkPins());
-            var item3 = new InstantCoach(
-                description: "Some description 3",
-                ticketId: "43",
-                evaluatorId: 1,
-                agentId: 2,
-                evaluatorName: "John Evaluator",
-                agentName: "Jane Agent");
-            item3.AddComments(GetComments());
-            item3.AddBookmarkPins(GetBookmarkPins());
-            var item4 = new InstantCoach(
-                description: "Some description 3",
-                ticketId: "43",
-                evaluatorId: 1,
-                agentId: 2,
-                evaluatorName: "John Evaluator",
-                agentName: "Jane Agent");
-            item4.AddComments(GetComments());
-            item4.AddBookmarkPins(GetBookmarkPins());
-
+            var item1 = InstantCoach.Factory.Create(InsertClientData(1));
+            var item2 = InstantCoach.Factory.Create(InsertClientData(2));
+            var item3 = InstantCoach.Factory.Create(InsertClientData(3));
+            var item4 = InstantCoach.Factory.Create(InsertClientData(4));
             await context.Set<InstantCoach>().AddAsync(item1);
             await context.Set<InstantCoach>().AddAsync(item2);
             await context.Set<InstantCoach>().AddAsync(item3);
             await context.Set<InstantCoach>().AddAsync(item4);
             await context.SaveChangesAsync();
             var item4Entity = await context.Set<InstantCoach>().FindAsync(item4.Id);
-            item4Entity.UpdateAsCompleted();
+            item4Entity = InstantCoach.Factory.UpdateAsCompleted(item4Entity);
             context.Entry(item4Entity).State = EntityState.Modified;
             await context.SaveChangesAsync();
             items.Add(EntityToModelList(item1));
@@ -179,28 +146,45 @@ namespace Tests.Integration
             };
         }
 
-        private static List<Comment> GetComments()
+        private static InstantCoachCreateClient InsertClientData(int index)
         {
-            return new List<Comment>
+            return new InstantCoachCreateClient
             {
-                Bookmark(
-                    bookmarkPinId: 1,
-                    authorType: EvaluationCommentAuthor.Agent,
-                    createdAt: DateTime.UtcNow),
-                Textual(
-                    "some comment",
-                    authorType: EvaluationCommentAuthor.Evaluator,
-                     createdAt: DateTime.UtcNow)
+                Description = $"Some description {index}",
+                TicketId = $"4{index}",
+                EvaluatorId = 1,
+                AgentId = 2,
+                EvaluatorName = "John Evaluator",
+                AgentName = "Jane Agent",
+                Comments = new List<CommentClient>
+                    {
+                        new CommentClient
+                        {
+                            CommentType = CommentType.Bookmark,
+                            BookmarkPinId = 1,
+                            AuthorType = EvaluationCommentAuthor.Agent,
+                            CreatedAt = DateTime.UtcNow
+                        },
+                        new CommentClient
+                        {
+                            CommentType = CommentType.Attachment,
+                            Text = "Some text",
+                            AuthorType = EvaluationCommentAuthor.Agent,
+                            CreatedAt = DateTime.UtcNow
+                        }
+                    },
+                BookmarkPins = new List<BookmarkPinClient>
+                    {
+                        new BookmarkPinClient
+                        {
+                            Id = 1,
+                            Index = 1,
+                            Range = new RangeClient { Start = 1, End = 2 },
+                            MediaUrl = "https://example.com/test.png",
+                            Comment = "No comment"
+                        }
+                    }
             };
-        }
-
-        private static List<BookmarkPin> GetBookmarkPins()
-        {
-            var result = new List<BookmarkPin>();
-            var bookmarkPin = new BookmarkPin(id: 1, index: 1, new Range(1, 2),
-                mediaurl: "https://example.com/test.png", comment: "No comment");
-            result.Add(bookmarkPin);
-            return result;
         }
 
         private static InstantCoachList EntityToModelList(InstantCoach entity)

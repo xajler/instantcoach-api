@@ -84,7 +84,7 @@ namespace Core.Services
 
         public async Task<Result<InstantCoach>> Create(InstantCoachCreateClient data)
         {
-            InstantCoach entity = data.ToNewInstantCoach();
+            InstantCoach entity = InstantCoach.Factory.Create(data);
             _logger.LogInformation("New entity: {@EntityModel}", entity);
             return await OnSave(entity, entity.Validate());
         }
@@ -93,10 +93,7 @@ namespace Core.Services
         {
             var entityResult = await _repository.FindById(id);
             if (!entityResult.Success) { return OnNotExistingId(id); }
-            var entity = entityResult.Value.Update(
-                data.UpdateType,
-                data.Comments.ToComments(),
-                data.BookmarkPins.ToBookmarkPins());
+            var entity = InstantCoach.Factory.Update(current: entityResult.Value, data);
             return await OnSave(entity, entity.Validate());
         }
 
@@ -104,7 +101,7 @@ namespace Core.Services
         {
             var entityResult = await _repository.FindById(id);
             if (!entityResult.Success) { return OnNotExistingId(id); }
-            var entity = entityResult.Value.UpdateAsCompleted();
+            var entity = InstantCoach.Factory.UpdateAsCompleted(current: entityResult.Value);
             return await OnSave(entity, entity.Validate());
         }
 

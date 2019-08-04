@@ -1,10 +1,15 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
+using Bogus;
 using Domain;
+using ValidationResult = Domain.ValidationResult;
 using static Domain.Helpers;
 using static Domain.Constants.Validation;
 using static Tests.Unit.TestHelpers;
+
 
 namespace Tests.Unit
 {
@@ -39,7 +44,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_on_create_IC_via_ctor()
         {
-            InstantCoach sut = NewInstantCoachWitComments();
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateFull());
 
             var actual = sut.Validate();
 
@@ -50,7 +55,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_comments_are_null_on_create_IC_ctor()
         {
-            InstantCoach sut = NewInstantCoach();
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreate());
 
             var actual = sut.Validate();
             var expected = CreateValidationResult(
@@ -66,8 +71,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_on_update()
         {
-            InstantCoach sut = NewInstantCoachWitComments();
-            var result = sut.Update(UpdateType.Save, GetUpdateComments());
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
+            var result = InstantCoach.Factory.UpdateAsCompleted(current: sut);
 
             var actual = result.Validate();
 
@@ -78,9 +83,10 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_of_status_waiting_on_review_update()
         {
-            InstantCoach sut = NewInstantCoachWitComments();
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
 
-            var actual = sut.Update(UpdateType.Review, GetUpdateComments());
+            var actual = InstantCoach.Factory.Update(current: sut,
+                ClientUpdate(UpdateType.Review));
             var result = actual.Validate();
 
             result.IsValid.Should().BeTrue();
@@ -90,9 +96,9 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_of_status_completed_on_update_as_completed()
         {
-            InstantCoach sut = NewInstantCoachWitComments();
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
 
-            var actual = sut.UpdateAsCompleted();
+            var actual = InstantCoach.Factory.UpdateAsCompleted(current: sut);
             var result = actual.Validate();
 
             result.IsValid.Should().BeTrue();
@@ -102,34 +108,22 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_adding_bookmark_pins_on_update()
         {
-            InstantCoach sut = NewInstantCoachWitComments();
-            sut.AddBookmarkPins(new System.Collections.Generic.List<BookmarkPin>
-            {
-                new BookmarkPin(id: 2, index: 1, new Range(12, 233),
-                    mediaurl: "https://example.com/test.png")
-            });
-            var bookmarkPins = new System.Collections.Generic.List<BookmarkPin>
-            {
-                new BookmarkPin(id: 2, index: 1, new Range(12, 233),
-                    mediaurl: "https://example.com/test.png"),
-                new BookmarkPin(id: 1, index: 1, new Range(1, 2),
-                    mediaurl: "https://example.com/test.png", comment: "No comment")
-            };
-            var result = sut.Update(UpdateType.Save, GetUpdateComments(), bookmarkPins);
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateFull());
+            var result = InstantCoach.Factory.Update(current: sut, ClientUpdateFull());
 
             var actual = result.Validate();
 
             actual.IsValid.Should().BeTrue();
             actual.Errors.Should().HaveCount(0);
             result.BookmarkPins.Should().HaveCount(2);
-
         }
 
         [Fact]
         public static void Should_have_errors_when_comments_are_null_on_update()
         {
-            InstantCoach sut = NewInstantCoachWitComments();
-            var result = sut.Update(UpdateType.Save, comments: null, bookmarkPins: null);
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
+            var clientUpdate = new InstantCoachUpdateClient { UpdateType = UpdateType.Save };
+            var result = InstantCoach.Factory.Update(current: sut, clientUpdate);
 
             var actual = result.Validate();
             var expected = CreateValidationResult(
@@ -145,7 +139,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_valid_reference_on_create_IC_via_ctor()
         {
-            InstantCoach actual = NewInstantCoachWitComments();
+            InstantCoach actual = InstantCoach.Factory.Create(ClientCreateWithComments());
 
             actual.Reference.Should().StartWith("IC");
             actual.Reference.Should().HaveLength(16);
@@ -154,23 +148,23 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_of_status_New_on_create_IC_via_ctor()
         {
-            InstantCoach actual = NewInstantCoachWitComments();
+            InstantCoach actual = InstantCoach.Factory.Create(ClientCreateWithComments());
             actual.Status.Should().Be(InstantCoachStatus.New);
         }
 
         [Fact]
         public static void Should_have_comments_count_set_on_create_IC_via_ctor()
         {
-            InstantCoach actual = NewInstantCoachWitComments();
+            InstantCoach actual = InstantCoach.Factory.Create(ClientCreateWithComments());
             actual.CommentsCount.Should().Be(2);
         }
 
         [Fact]
         public static void Should_have_status_in_progress_on_update()
         {
-            InstantCoach sut = NewInstantCoachWitComments();
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
 
-            var actual = sut.Update(UpdateType.Save, GetUpdateComments());
+            var actual = InstantCoach.Factory.Update(current: sut, ClientUpdate());
             var result = actual.Validate();
 
             result.IsValid.Should().BeTrue();
@@ -180,9 +174,9 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_comments_count_set_on_update()
         {
-            InstantCoach sut = NewInstantCoachWitComments();
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
 
-            var actual = sut.Update(UpdateType.Save, GetUpdateComments());
+            var actual = InstantCoach.Factory.Update(current: sut, ClientUpdate());
             var result = actual.Validate();
 
             result.IsValid.Should().BeTrue();
@@ -192,9 +186,9 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_some_properties_on_update_same_as_on_create()
         {
-            InstantCoach sut = NewInstantCoachWitComments();
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
 
-            var actual = sut.Update(UpdateType.Save, GetUpdateComments());
+            var actual = InstantCoach.Factory.Update(current: sut, ClientUpdate());
             var result = actual.Validate();
 
             result.IsValid.Should().BeTrue();
@@ -210,222 +204,156 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_description_is_empty_on_create_IC_ctor()
         {
-            var sut = new InstantCoach(
-                 description: "",
-                 TicketIdValue,
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 EvaluatorNameValue,
-                 AgentNameValue);
-            sut.AddComments(GetComments());
+            InstantCoach sut = InstantCoach.Factory.Create(
+                ClientCreateWithComments(description: ""));
 
             var actual = sut.Validate();
             var expected = CreateValidationResult("Description", RequiredMsg);
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
         public static void Should_have_errors_when_description_larger_then_1000_chars_on_create_IC_ctor()
         {
-
-            var sut = new InstantCoach(
-                 description: GenerateStringOfLength(1001),
-                 TicketIdValue,
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 EvaluatorNameValue,
-                 AgentNameValue);
-            sut.AddComments(GetComments());
+            InstantCoach sut = InstantCoach.Factory.Create(
+                ClientCreateWithComments(description: GenerateStringOfLength(1001)));
 
             var actual = sut.Validate();
             var expected = CreateValidationResult(
                 "Description", "Should not exceed 1000 characters.");
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
         public static void Should_have_errors_when_ticketId_is_empty_on_create_IC_ctor()
         {
-            var sut = new InstantCoach(
-                 DescriptionValue,
-                 ticketId: null,
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 EvaluatorNameValue,
-                 AgentNameValue);
-            sut.AddComments(GetComments());
+            InstantCoachCreateClient clientCreate = ClientCreateWithComments();
+            clientCreate.TicketId = null;
+            InstantCoach sut = InstantCoach.Factory.Create(clientCreate);
 
             var actual = sut.Validate();
             var expected = CreateValidationResult("TicketId", RequiredMsg);
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
         public static void Should_have_errors_when_ticketId_larger_then_64_chars_on_create_IC_ctor()
         {
-
-            var sut = new InstantCoach(
-                 DescriptionValue,
-                 ticketId: GenerateStringOfLength(65),
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 EvaluatorNameValue,
-                 AgentNameValue);
-            sut.AddComments(GetComments());
+            InstantCoach sut = InstantCoach.Factory.Create(
+                ClientCreateWithComments(ticketId: GenerateStringOfLength(65)));
 
             var actual = sut.Validate();
             var expected = CreateValidationResult(
                 "TicketId", "Should not exceed 64 characters.");
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
         public static void Should_have_errors_when_evaluatorId_smaller_or_equal_to_zero_on_create_IC_ctor()
         {
-            var sut = new InstantCoach(
-                 DescriptionValue,
-                 TicketIdValue,
-                 evaluatorId: -1,
-                 AgentIdValue,
-                 EvaluatorNameValue,
-                 AgentNameValue);
-            sut.AddComments(GetComments());
+            InstantCoach sut = InstantCoach.Factory.Create(
+                ClientCreateWithComments(evaluatorId: -1));
 
             var actual = sut.Validate();
             var expected = CreateValidationResult("EvaluatorId", GreaterThanZeroMsg);
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
         public static void Should_have_errors_when_agentId_smaller_or_equal_to_zero_on_create_IC_ctor()
         {
-            var sut = new InstantCoach(
-                 DescriptionValue,
-                 TicketIdValue,
-                 EvaluatorIdValue,
-                 agentId: 0,
-                 EvaluatorNameValue,
-                 AgentNameValue);
-            sut.AddComments(GetComments());
+            InstantCoachCreateClient clientCreate = ClientCreateWithComments();
+            clientCreate.AgentId = 0;
+            InstantCoach sut = InstantCoach.Factory.Create(clientCreate);
 
             var actual = sut.Validate();
             var expected = CreateValidationResult("AgentId", GreaterThanZeroMsg);
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
         public static void Should_have_errors_when_evaluator_name_is_empty_on_create_IC_ctor()
         {
-            var sut = new InstantCoach(
-                 DescriptionValue,
-                 TicketIdValue,
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 evaluatorName: "",
-                 AgentNameValue);
-            sut.AddComments(GetComments());
+            InstantCoach sut = InstantCoach.Factory.Create(
+                ClientCreateWithComments(evaluatorName: ""));
 
             var actual = sut.Validate();
+            Console.WriteLine($"Eval name: {sut.EvaluatorName}");
             var expected = CreateValidationResult("EvaluatorName", RequiredMsg);
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
         public static void Should_have_errors_when_evaluator_name_larger_then_128_chars_on_create_IC_ctor()
         {
-            var sut = new InstantCoach(
-                 DescriptionValue,
-                 TicketIdValue,
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 evaluatorName: GenerateStringOfLength(129),
-                 AgentNameValue);
-            sut.AddComments(GetComments());
+            InstantCoach sut = InstantCoach.Factory.Create(
+                ClientCreateWithComments(evaluatorName: GenerateStringOfLength(129)));
 
             var actual = sut.Validate();
             var expected = CreateValidationResult(
                 "EvaluatorName", "Should not exceed 128 characters.");
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
         public static void Should_have_errors_when_agent_name_is_empty_on_create_IC_ctor()
         {
-            var sut = new InstantCoach(
-                 DescriptionValue,
-                 TicketIdValue,
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 EvaluatorNameValue,
-                 agentName: null);
-            sut.AddComments(GetComments());
+            InstantCoachCreateClient clientCreate = ClientCreateWithComments();
+            clientCreate.AgentName = null;
+            InstantCoach sut = InstantCoach.Factory.Create(clientCreate);
 
             var actual = sut.Validate();
+            Console.WriteLine($"Agent name: {sut.AgentName}");
             var expected = CreateValidationResult("AgentName", RequiredMsg);
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
         public static void Should_have_errors_when_agent_name_larger_then_128_chars_on_create_IC_ctor()
         {
-            var sut = new InstantCoach(
-                 DescriptionValue,
-                 TicketIdValue,
-                 EvaluatorIdValue,
-                 AgentIdValue,
-                 EvaluatorNameValue,
-                 agentName: GenerateStringOfLength(129));
-            sut.AddComments(GetComments());
+            InstantCoach sut = InstantCoach.Factory.Create(
+                ClientCreateWithComments(agentName: GenerateStringOfLength(129)));
 
             var actual = sut.Validate();
             var expected = CreateValidationResult(
                 "AgentName", "Should not exceed 128 characters.");
 
+            RunGenericAsserts(actual, expected);
+        }
+
+        [Fact]
+        public static void Should_have_errors_when_one_or_more_comments_are_invalid_on_create_IC_ctor()
+        {
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateInvalidComments());
+
+            var actual = sut.Validate();
+
+            actual.IsValid.Should().BeFalse();
+            actual.Errors.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public static void Should_have_errors_when_one_or_more_bookmark_pins_are_invalid_on_create_IC_ctor()
+        {
+            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateInvalidBookmarkPins());
+
+            var actual = sut.Validate();
+
+            actual.IsValid.Should().BeFalse();
+            actual.Errors.Should().HaveCount(3);
+        }
+
+        private static void RunGenericAsserts(ValidationResult actual, ValidationResult expected)
+        {
             actual.IsValid.Should().BeFalse();
             actual.Errors.Should().HaveCount(expected.Errors.Count);
             actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
@@ -433,30 +361,171 @@ namespace Tests.Unit
                 expected.Errors.First().Value.First());
         }
 
-        [Fact]
-        public static void Should_have_errors_when_one_or_more_comments_are_invalid_on_create_IC_ctor()
+        private static ValidationResult CreateValidationResult(
+            string memberName, string errorText)
         {
-            InstantCoach sut = NewInstantCoach();
-            sut.AddComments(GetInvalidComments());
-
-            var actual = sut.Validate();
-            var expected = 2;
-
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected);
+            var result = new ValidationResult();
+            result.AddError($"{memberName}", new List<string> { errorText });
+            return result;
         }
 
-        [Fact]
-        public static void Should_have_errors_when_one_or_more_bookmark_pins_are_invalid_on_create_IC_ctor()
+        private static InstantCoachCreateClient ClientCreate(
+            string description = null, string ticketId = null, int evaluatorId = 0,
+            int agentId = 0, string evaluatorName = null, string agentName = default)
         {
-            InstantCoach sut = NewInstantCoachWitComments();
-            sut.AddBookmarkPins(GetInvalidBookmarkPins());
+            var faker = new Faker("en");
+            var lorem = new Bogus.DataSets.Lorem("en");
+            return new InstantCoachCreateClient
+            {
+                Description = description ?? lorem.Sentence(),
+                TicketId = ticketId ?? faker.Random.Number(1, 10000).ToString(),
+                EvaluatorId = evaluatorId == 0 ? faker.Random.Number(1, 10000) : evaluatorId,
+                AgentId = agentId == 0 ? faker.Random.Number(1, 10000) : agentId,
+                EvaluatorName = evaluatorName ?? faker.Name.FullName(),
+                AgentName = agentName ?? faker.Name.FullName()
+            };
+        }
 
-            var actual = sut.Validate();
-            var expected = 1;
+        private static InstantCoachCreateClient ClientCreateWithComments(
+            string description = null, string ticketId = null, int evaluatorId = 0,
+            int agentId = 0, string evaluatorName = null, string agentName = null)
+        {
+            InstantCoachCreateClient result = ClientCreate(description, ticketId,
+                evaluatorId, agentId, evaluatorName, agentName);
+            result.Comments = GetComments();
+            return result;
+        }
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected);
+        private static InstantCoachCreateClient ClientCreateFull(
+            string description = null, string ticketId = null, int evaluatorId = 0,
+            int agentId = 0, string evaluatorName = null, string agentName = null)
+        {
+            InstantCoachCreateClient result = ClientCreateWithComments(description, ticketId,
+                evaluatorId, agentId, evaluatorName, agentName);
+            result.BookmarkPins = new List<BookmarkPinClient> { GetBookmarkPin() };
+            return result;
+        }
+
+        private static InstantCoachUpdateClient ClientUpdate(
+            UpdateType updateType = UpdateType.Save)
+        {
+            return new InstantCoachUpdateClient
+            {
+                UpdateType = updateType,
+                Comments = GetUpdateComments()
+            };
+        }
+
+        private static InstantCoachUpdateClient ClientUpdateFull(
+            UpdateType updateType = UpdateType.Save)
+        {
+            return new InstantCoachUpdateClient
+            {
+                UpdateType = updateType,
+                Comments = GetUpdateComments(),
+                BookmarkPins = new List<BookmarkPinClient>
+                {
+                    GetBookmarkPin(),
+                    GetBookmarkPin()
+                }
+            };
+        }
+
+        private static List<CommentClient> GetComments()
+        {
+            var lorem = new Bogus.DataSets.Lorem("en");
+            return new List<CommentClient>
+            {
+                 new CommentClient
+                {
+                    CommentType = CommentType.Bookmark,
+                    BookmarkPinId = 1,
+                    AuthorType = EvaluationCommentAuthor.Agent,
+                    CreatedAt = DateTime.UtcNow
+                },
+                new CommentClient
+                {
+                    CommentType = CommentType.Textual,
+                    Text = lorem.Sentence(),
+                    AuthorType = EvaluationCommentAuthor.Evaluator,
+                    CreatedAt = DateTime.UtcNow
+                }
+            };
+        }
+
+        private static List<CommentClient> GetUpdateComments()
+        {
+            var faker = new Faker("en");
+            var result = GetComments();
+            result.Add(new CommentClient
+            {
+                CommentType = CommentType.Attachment,
+                Text = faker.Image.PicsumUrl(),
+                AuthorType = EvaluationCommentAuthor.Agent,
+                CreatedAt = DateTime.UtcNow
+            });
+            return result;
+        }
+
+        private static BookmarkPinClient GetBookmarkPin()
+        {
+            var faker = new Faker("en");
+            var lorem = new Bogus.DataSets.Lorem("en");
+            return  new BookmarkPinClient
+            {
+                    Id = faker.Random.Number(1, 10000),
+                    Index = faker.Random.Number(1, 23),
+                    Range = new RangeClient { Start = 1, End = 2 },
+                    MediaUrl = faker.Internet.UrlWithPath(),
+                    Comment = lorem.Sentence()
+            };
+        }
+
+        private static InstantCoachCreateClient ClientCreateInvalidComments()
+        {
+            var result = ClientCreate();
+            result.Comments = new List<CommentClient>
+            {
+                 new CommentClient
+                {
+                    CommentType = CommentType.Bookmark,
+                    BookmarkPinId = null,
+                    AuthorType = EvaluationCommentAuthor.Agent,
+                    CreatedAt = DateTime.UtcNow
+                },
+                new CommentClient
+                {
+                    CommentType = CommentType.Textual,
+                    Text = null,
+                    AuthorType = EvaluationCommentAuthor.Evaluator,
+                    CreatedAt = DateTime.UtcNow
+                },
+                new CommentClient
+                {
+                    CommentType = CommentType.Attachment,
+                    Text = "abc",
+                    AuthorType = EvaluationCommentAuthor.Evaluator,
+                    CreatedAt = DateTime.UtcNow
+                }
+            };
+            return result;
+        }
+
+        private static InstantCoachCreateClient ClientCreateInvalidBookmarkPins()
+        {
+            var result = ClientCreate();
+            result.BookmarkPins = new List<BookmarkPinClient>
+            {
+                new BookmarkPinClient
+                {
+                    Id = 0,
+                    Index = 0,
+                    Range = new RangeClient { Start = 2, End = 1 },
+                    MediaUrl = "https://example.com/test.png",
+                    Comment = "Some comment for bookmark pin"
+                }
+            };
+            return result;
         }
     }
 }

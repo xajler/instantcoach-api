@@ -9,6 +9,9 @@ namespace Tests.Unit
 {
     public sealed class BookmarkPinTests
     {
+        private const string MediaUrlValue = "https://example.com/test.png";
+        private const string CommentValue = "No comment";
+
         [Fact]
         public static void Should_be_of_value_object_type()
         {
@@ -21,11 +24,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_bookmark_pin_via_ctor_without_comment()
         {
-            var sut = new BookmarkPin(
-                id: 1,
-                index: 1,
-                new Range(1, 2),
-                MediaUrlValue);
+            var sut = NewBookmarkPin(comment: null);
 
             var actual = sut.Validate(atIndex: 0);
 
@@ -35,7 +34,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_bookmark_pin_via_ctor_full()
         {
-            var sut = NewBookmarkPinWithComment();
+            var sut = NewBookmarkPin();
 
             var actual = sut.Validate(atIndex: 0);
 
@@ -45,8 +44,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_equal_when_same_structure()
         {
-            var actual = NewBookmarkPinWithComment();
-            var expected = NewBookmarkPinWithComment();
+            var actual = NewBookmarkPin();
+            var expected = NewBookmarkPin();
 
             actual.Should().BeEquivalentTo(expected);
             actual.GetHashCode().Should().Be(expected.GetHashCode());
@@ -55,7 +54,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_not_be_equal_when_not_same_structure()
         {
-            var actual = NewBookmarkPinWithComment();
+            var actual = NewBookmarkPin();
             var expected = new BookmarkPin(
                 id: 1,
                 index: 2,
@@ -69,12 +68,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_bookmark_without_comment_pin_via_ctor()
         {
-            var sut = new BookmarkPin(
-                id: 1,
-                index: 1,
-                new Range(1, 2),
-                MediaUrlValue,
-                comment: null);
+            var sut = NewBookmarkPin(comment: null);
 
             var actual = sut.Validate(atIndex: 0);
 
@@ -88,8 +82,7 @@ namespace Tests.Unit
                 id: 0,
                 index: 1,
                 new Range(1, 2),
-                MediaUrlValue,
-                CommentValue);
+                MediaUrlValue);
 
             RunAsserts(sut, atIndex: 0, "Id", GreaterThanZeroMsg);
         }
@@ -157,6 +150,16 @@ namespace Tests.Unit
             actual.Value.Should().HaveCount(expectedErrs.Count);
             actual.Key.Should().Contain(expectedMember);
             actual.Value.First().Should().Be(expectedErrs.First());
+        }
+
+        private static BookmarkPin NewBookmarkPin(string comment = CommentValue)
+        {
+            return new BookmarkPin(
+                id: 1,
+                index: 1,
+                new Range(1, 2),
+                MediaUrlValue,
+                comment);
         }
     }
 }

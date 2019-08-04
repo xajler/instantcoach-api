@@ -35,7 +35,7 @@ namespace Api.Controllers
             }
         }
 
-        protected ActionResult LogModelErrorsAndReturnBadRequest()
+        protected ActionResult ReturnBadRequestWithErrors()
         {
             var errors = new {
                 ModelState.IsValid,

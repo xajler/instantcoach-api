@@ -11,6 +11,12 @@ namespace Tests.Unit
 {
     public sealed class CommentTests
     {
+        private const string TextValue = "Some text value";
+        private const string UrlTextValue = "https://xxx.xxx/xxx.xml";
+        private const int BookmarkPinIdValue = 1;
+        private static readonly EvaluationCommentAuthor AuthorTypeValue =
+            EvaluationCommentAuthor.Agent;
+
         [Fact]
         public static void Should_be_of_value_object_type()
         {
@@ -116,6 +122,26 @@ namespace Tests.Unit
             actual.Value.Should().HaveCount(expectedErrs.Count);
             actual.Key.Should().Contain(expectedMember);
             actual.Value.First().Should().Be(expectedErrs.First());
+        }
+
+        private static Comment NewTextualComment()
+        {
+            return NewTextualComment(createdAt: DateTime.UtcNow);
+        }
+
+        private static Comment NewTextualComment(DateTime createdAt)
+        {
+            return Textual(TextValue, AuthorTypeValue, createdAt);
+        }
+
+        private static Comment NewAttachmentComment()
+        {
+            return Attachment(UrlTextValue, AuthorTypeValue, DateTime.UtcNow);
+        }
+
+        private static Comment NewBookmarkComment()
+        {
+            return Bookmark(BookmarkPinIdValue, AuthorTypeValue, DateTime.UtcNow);
         }
     }
 }

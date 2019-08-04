@@ -39,29 +39,42 @@ namespace Domain
         public int AgentId { get; }
         public string EvaluatorName { get; }
         public string AgentName { get; }
-        private List<Comment> _comments;
 
-        public InstantCoach Update(UpdateType updateType, List<Comment> comments)
+        public static class Factory
         {
-            return Update(updateType, comments, new List<BookmarkPin>());
-        }
+            public static InstantCoach Create(InstantCoachCreateClient data)
+            {
+                var result = new InstantCoach(
+                    description: data.Description,
+                    ticketId: data.TicketId,
+                    evaluatorId: data.EvaluatorId,
+                    agentId: data.AgentId,
+                    evaluatorName: data.EvaluatorName,
+                    agentName: data.AgentName);
+                result.AddComments(data.Comments);
+                result.AddBookmarkPins(data.BookmarkPins);
+                return result;
+            }
+            // TODO: Guard those with status completed, they cannot be updated.
+            public static InstantCoach Update(
+                InstantCoach current, InstantCoachUpdateClient data)
+            {
+                InstantCoach result = current;
+                result.Status = SetStatus(data.UpdateType);
+                result.CommentsValue = null;     // EF Hack
+                result.BookmarkPinsValue = null; // EF Hack
+                result.AddComments(data.Comments);
+                result.AddBookmarkPins(data.BookmarkPins);
+                return result;
+            }
 
-        // TODO: Guard those with status completed, they cannot be updated.
-        public InstantCoach Update(UpdateType updateType,
-            List<Comment> comments, List<BookmarkPin> bookmarkPins)
-        {
-            Status = SetStatus(updateType);
-            ClearValues(); // EF Hack
-            AddComments(comments);
-            AddBookmarkPins(bookmarkPins);
-            return this;
-        }
-
-        // TODO: Guard those with status New, they cannot be completed
-        public InstantCoach UpdateAsCompleted()
-        {
-            Status = InstantCoachStatus.Completed;
-            return this;
+            // TODO: Guard those with status New, they cannot be completed
+            public static InstantCoach UpdateAsCompleted(InstantCoach current)
+            {
+                InstantCoach result = current;
+                result.Status = InstantCoachStatus.Completed;
+                return result;
+            }
         }
 
         public ValidationResult Validate()
@@ -70,9 +83,8 @@ namespace Domain
             return _validationResult;
         }
 
-        public void AddComments(List<Comment> comments)
+        internal void AddComments(List<CommentClient> comments)
         {
-
             if (comments != null && comments.Count > 0)
             {
                 Comments = new List<Comment>();
@@ -95,7 +107,7 @@ namespace Domain
             else { Comments = new List<Comment>(); }
         }
 
-        public void AddBookmarkPins(List<BookmarkPin> bookmarkPins)
+        internal void AddBookmarkPins(List<BookmarkPinClient> bookmarkPins)
         {
             if (bookmarkPins != null && bookmarkPins.Count > 0)
             {
@@ -106,7 +118,7 @@ namespace Domain
                     var pin = new BookmarkPin(
                         item.Id,
                         item.Index,
-                        item.Range,
+                        new Range(item.Range.Start, item.Range.End),
                         item.MediaUrl,
                         item.Comment);
                     var errors = pin.Validate(atIndex: index);
@@ -197,6 +209,7 @@ namespace Domain
     public partial class InstantCoach
     {
         // EF stuff and hacks
+        private List<Comment> _comments;
         public List<Comment> Comments
         {
             get
@@ -230,12 +243,6 @@ namespace Domain
         // Not really hack, but set via EF, and not handled by Domain.
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-
-        private void ClearValues()
-        {
-            CommentsValue = null;
-            BookmarkPinsValue = null;
-        }
         // End EF stuff and hacks
     }
 }
