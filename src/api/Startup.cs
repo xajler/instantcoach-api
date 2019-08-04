@@ -12,7 +12,6 @@ using Core.Context;
 using Core;
 using Core.Repositories;
 using Core.Services;
-using static System.Console;
 using static Core.Constants;
 
 namespace Api
@@ -63,6 +62,7 @@ namespace Api
             services.AddScoped<InstantCoachRepository>();
             services.AddScoped<IInstantCoachService, InstantCoachService>();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddScoped<ExceptionLogger>();
         }
 
         public void Configure(IApplicationBuilder app,

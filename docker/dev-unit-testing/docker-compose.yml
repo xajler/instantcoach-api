@@ -5,9 +5,4 @@ services:
       context:  ../../
       dockerfile: docker/dev-unit-testing/Dockerfile
     volumes:
-      - ~/src/instantcoach:/app
-    environment:
-      - DB_HOST=localhost
-      - DB_NAME=test-sut
-      - DB_USER=sa
-      - DB_PASSWORD=password
+      - ~/src/instantcoach:/app/

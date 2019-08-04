@@ -9,7 +9,6 @@ using Domain;
 using Core;
 using Core.Context;
 using Core.Models;
-using static Domain.Comment;
 
 
 namespace Tests.Integration
