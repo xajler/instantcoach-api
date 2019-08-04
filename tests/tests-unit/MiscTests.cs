@@ -198,13 +198,16 @@ namespace Tests.Unit
 
         private static InstantCoach NewInstantCoach()
         {
-            return new InstantCoach(
-                description: "Some description",
-                ticketId: "42",
-                evaluatorId: 1,
-                agentId: 2,
-                evaluatorName: "John Evaluator",
-                agentName: "Jane Agent");
+            var clientCreate = new InstantCoachCreateClient
+            {
+                Description = "Some description",
+                TicketId = "42",
+                EvaluatorId = 1,
+                AgentId = 2,
+                EvaluatorName = "John Evaluator",
+                AgentName = "Jane Agent"
+            };
+            return InstantCoach.Factory.Create(clientCreate);
         }
     }
 }

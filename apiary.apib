@@ -9,7 +9,7 @@ InstantCoach is an API making easy instant coaching between an Evaluator and an 
 
 ### List All InstantCoaches [GET /api/instantcoach{?skip}{?take}{?showCompleted}]
 
-List of all InstantCoaches paginated, by default page is containing 10 items. 
+List of all InstantCoaches paginated, by default page is containing 10 items.
 By default returns InstantCoaches that are not `Completed`, to show all Instant Coaches use `showCompleted` and set it to `true`.
 
 + Request Success
@@ -18,12 +18,12 @@ By default returns InstantCoaches that are not `Completed`, to show all Instant 
         + skip: 0 (number, optional) -  Page number, starts with 0.
             + default: 0
         + take: 10 (number, optional) - Page row number, greater or equal 1.
-            + default: 10  
+            + default: 10
         + showCompleted: false (boolean, optional) - When true show all InstantCoaches, when false - default, shows all except those with status Completed.
-            + default: false             
+            + default: false
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
@@ -33,9 +33,9 @@ By default returns InstantCoaches that are not `Completed`, to show all Instant 
 
             Api-Supported-Versions: 1.0, 2.0
             X-Response-Time: 24ms
-    
+
     + Body
-    
+
             {
               "items": [
                 {
@@ -61,19 +61,19 @@ By default returns InstantCoaches that are not `Completed`, to show all Instant 
               ],
               "totalCount": 22
             }
-            
+
 + Request No Data
 
     + Parameters
         + skip: 0 (number, optional) -  Page number, starts with 0.
             + default: 0
         + take: 10 (number, optional) - Page row number, greater or equal 1.
-            + default: 10  
+            + default: 10
         + showCompleted: false (boolean, optional) - When true show all InstantCoaches, when false - default, shows all except those with status Completed.
-            + default: false            
+            + default: false
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
@@ -83,26 +83,26 @@ By default returns InstantCoaches that are not `Completed`, to show all Instant 
 
             Api-Supported-Versions: 1.0, 2.0
             X-Response-Time: 24ms
-    
+
     + Body
-    
+
             {
               "items": [],
               "totalCount": 0
             }
- 
+
 
 ### Create a new InstantCoach [POST]
 
-Create a new InstantCoach using this action. 
-It takes a JSON object containing an InstantCoach properties, 
-collection of a comments (at least one required) and a bookmark pin(s) collection, 
+Create a new InstantCoach using this action.
+It takes a JSON object containing an InstantCoach properties,
+collection of a comments (at least one required) and a bookmark pin(s) collection,
 if referenced in a comments collection.
 
 + Request Success (application/json)
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
@@ -148,7 +148,7 @@ if referenced in a comments collection.
                 }
               ]
             }
-            
+
     + Schema
 
             {
@@ -350,7 +350,7 @@ if referenced in a comments collection.
                     "comments"
                 ]
             }
-        
+
 
 + Response 201 (application/json)
 
@@ -365,11 +365,11 @@ if referenced in a comments collection.
             {
               "id": 1
             }
-            
+
 + Request Bad Request (application/json)
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
@@ -399,12 +399,11 @@ if referenced in a comments collection.
                     "start": 0,
                     "end": 0
                   },
-                  "comment": "string",
                   "mediaUrl": "string"
                 }
               ]
             }
-        
+
 
 + Response 400 (application/json)
 
@@ -416,6 +415,7 @@ if referenced in a comments collection.
     + Body
 
             {
+              "isValid": false,
               "errors": {
                 "AgentId": [
                   "The field Agent Id must be between 1 and 2147483647."
@@ -435,10 +435,7 @@ if referenced in a comments collection.
                 "BookmarkPins[0].Range.Start": [
                   "The field Start must be between 1 and 2147483647."
                 ]
-              },
-              "title": "One or more validation errors occurred.",
-              "status": 400,
-              "traceId": "|bc21ea10-4a30f8be5c028e5b."
+              }
             }
 
 
@@ -452,10 +449,10 @@ Get existing data for wanted InstantCoach using this action.
         + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
-        
+
 
 + Response 200 (application/json)
 
@@ -463,7 +460,7 @@ Get existing data for wanted InstantCoach using this action.
 
             Api-Supported-Versions: 1.0, 2.0
             X-Response-Time: 24ms
-            
+
     + Body
 
             {
@@ -505,11 +502,10 @@ Get existing data for wanted InstantCoach using this action.
                     "start": 10,
                     "end": 32
                   },
-                  "comment": "Some comment for pin",
                   "mediaUrl": "https://example.com/example.mp3"
                 }
               ]
-            }            
+            }
 
 
 + Request Not Found
@@ -518,12 +514,12 @@ Get existing data for wanted InstantCoach using this action.
         + id: 12 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ\
-        
 
-+ Response 404 (application/json)  
+
++ Response 404 (application/json)
 
     + Headers
 
@@ -535,13 +531,13 @@ Get existing data for wanted InstantCoach using this action.
             {
               "message": "Not existing id: 12"
             }
-            
+
 
 ### Update an existing InstantCoach [PUT /api/instantcoaches/{id}]
 
-Update an existing InstantCoach using this action. 
-It takes a JSON object containing an _Update Type_ (`Save` or `Review`), 
-collection of a comments (at least one required) and a bookmark pin(s) collection, 
+Update an existing InstantCoach using this action.
+It takes a JSON object containing an _Update Type_ (`Save` or `Review`),
+collection of a comments (at least one required) and a bookmark pin(s) collection,
 if referenced in a comments collection.
 
 + Request Success (application/json)
@@ -550,7 +546,7 @@ if referenced in a comments collection.
         + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
@@ -582,7 +578,7 @@ if referenced in a comments collection.
                   "text": "Agent's reply to Evaluator's comment",
                   "authorType": "Agent",
                   "createdAt": "2019-07-22T20:04:44.000Z"
-                }                
+                }
               ],
               "bookmarkPins": [
                 {
@@ -597,7 +593,7 @@ if referenced in a comments collection.
                 }
               ]
             }
-            
+
     + Schema
 
             {
@@ -766,7 +762,7 @@ if referenced in a comments collection.
                     "comments"
                 ]
             }
-        
+
 
 + Response 204
 
@@ -782,7 +778,7 @@ if referenced in a comments collection.
         + id: 12 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
@@ -800,9 +796,9 @@ if referenced in a comments collection.
                 }
               ]
             }
-        
 
-+ Response 404 (application/json)  
+
++ Response 404 (application/json)
 
     + Headers
 
@@ -816,14 +812,14 @@ if referenced in a comments collection.
             }
 
 
-            
+
 + Request Bad Request (application/json)
 
     + Parameters
         + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
 
@@ -853,7 +849,7 @@ if referenced in a comments collection.
                 }
               ]
             }
-        
+
 
 + Response 400 (application/json)
 
@@ -865,6 +861,7 @@ if referenced in a comments collection.
     + Body
 
             {
+              "isValid": false,
               "errors": {
                 "BookmarkPins[0].Id": [
                   "The field Id must be between 1 and 2147483647."
@@ -878,10 +875,7 @@ if referenced in a comments collection.
                 "BookmarkPins[0].Range.Start": [
                   "The field Start must be between 1 and 2147483647."
                 ]
-              },
-              "title": "One or more validation errors occurred.",
-              "status": 400,
-              "traceId": "|bc21ea2e-4a30f8be5c028e5b."
+              }
             }
 
 
@@ -895,10 +889,10 @@ Make an existing InstantCoach completed using this action.
         + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
-        
+
 
 + Response 204
 
@@ -914,12 +908,12 @@ Make an existing InstantCoach completed using this action.
         + id: 12 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
-        
 
-+ Response 404 (application/json)  
+
++ Response 404 (application/json)
 
     + Headers
 
@@ -931,7 +925,7 @@ Make an existing InstantCoach completed using this action.
             {
               "message": "Not existing id: 12"
             }
-            
+
 ### Delete an existing InstantCoach [DELETE /api/instantcoaches/{id}]
 
 Delete an existing InstantCoach using this action.
@@ -942,10 +936,10 @@ Delete an existing InstantCoach using this action.
         + id: 1 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
-        
+
 
 + Response 204
 
@@ -961,12 +955,12 @@ Delete an existing InstantCoach using this action.
         + id: 12 (number, required) - Id of an InstantCoch, greater than zero.
 
     + Headers
-    
+
             X-Api-Version: 2.0
             Authorization: Bearer eyJ0eFNGx7...L8UtEJQ
-        
 
-+ Response 404 (application/json)  
+
++ Response 404 (application/json)
 
     + Headers
 

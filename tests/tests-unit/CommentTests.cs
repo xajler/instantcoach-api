@@ -3,7 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Xunit;
 using Domain;
-using static Domain.Comment;
+
 using static Domain.Constants.Validation;
 using static Tests.Unit.TestHelpers;
 
@@ -81,7 +81,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_textual_comment_have_text_null_or_empty_via_ctor()
         {
-            var sut = Textual(null, AuthorTypeValue, DateTime.UtcNow);
+            var sut = Comment.Factory.Textual(null, AuthorTypeValue, DateTime.UtcNow);
 
             RunAsserts(sut, atIndex: 0, "Text",
                 "Requires a value for Textual comment.");
@@ -90,7 +90,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_attachment_comment_have_text_null_or_empty_via_ctor()
         {
-            var sut = Attachment("", AuthorTypeValue, DateTime.UtcNow);
+            var sut = Comment.Factory.Attachment("", AuthorTypeValue, DateTime.UtcNow);
 
             RunAsserts(sut, atIndex: 2, "Text",
                 "Requires a value for Attachment comment.");
@@ -99,7 +99,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_attachment_comment_have_text_without_url_via_ctor()
         {
-            var sut = Attachment(TextValue, AuthorTypeValue, DateTime.UtcNow);
+            var sut = Comment.Factory.Attachment(TextValue, AuthorTypeValue, DateTime.UtcNow);
             RunAsserts(sut, atIndex: 1, "Text",
                 "Should be a valid URL link for Attachment comment.");
         }
@@ -107,7 +107,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_bookmark_have_pin_id_zero_or_less_via_ctor()
         {
-            var sut = Bookmark(0, AuthorTypeValue, DateTime.UtcNow);
+            var sut = Comment.Factory.Bookmark(0, AuthorTypeValue, DateTime.UtcNow);
 
             RunAsserts(sut, atIndex: 3, "BookmarkPinId", GreaterThanZeroMsg);
         }
@@ -131,17 +131,17 @@ namespace Tests.Unit
 
         private static Comment NewTextualComment(DateTime createdAt)
         {
-            return Textual(TextValue, AuthorTypeValue, createdAt);
+            return Comment.Factory.Textual(TextValue, AuthorTypeValue, createdAt);
         }
 
         private static Comment NewAttachmentComment()
         {
-            return Attachment(UrlTextValue, AuthorTypeValue, DateTime.UtcNow);
+            return Comment.Factory.Attachment(UrlTextValue, AuthorTypeValue, DateTime.UtcNow);
         }
 
         private static Comment NewBookmarkComment()
         {
-            return Bookmark(BookmarkPinIdValue, AuthorTypeValue, DateTime.UtcNow);
+            return Comment.Factory.Bookmark(BookmarkPinIdValue, AuthorTypeValue, DateTime.UtcNow);
         }
     }
 }

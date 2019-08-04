@@ -6,6 +6,7 @@ namespace Domain
         {
             public const string RequiredMsg = "Requires a value.";
             public const string GreaterThanZeroMsg = "Should be greater than 0.";
+            public const string CommentsErrorMsg = "Comments are required to have at least one element.";
         }
         public static class Model
         {

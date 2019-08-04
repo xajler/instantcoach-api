@@ -7,9 +7,6 @@ namespace Domain
 {
     public sealed class Comment : ValueObject
     {
-        private readonly Dictionary<string, IReadOnlyCollection<string>> _errors
-            = new Dictionary<string, IReadOnlyCollection<string>>();
-
         [JsonConstructor]
         private Comment(
             CommentType commentType,
@@ -25,28 +22,6 @@ namespace Domain
             BookmarkPinId = bookmarkPinId;
         }
 
-        private Comment(
-            CommentType type,
-            string text,
-            EvaluationCommentAuthor authorType,
-            DateTime createdAt)
-        {
-            CommentType = type;
-            AuthorType = authorType;
-            CreatedAt = createdAt;
-            Text = text;
-        }
-
-        private Comment(int? bookmarkPinId,
-            EvaluationCommentAuthor authorType,
-            DateTime createdAt)
-        {
-            CommentType = CommentType.Bookmark;
-            AuthorType = authorType;
-            CreatedAt = createdAt;
-            BookmarkPinId = bookmarkPinId;
-        }
-
         public CommentType CommentType { get;  }
         public string Text { get; }
         public EvaluationCommentAuthor AuthorType { get; }
@@ -55,6 +30,61 @@ namespace Domain
 
         public Dictionary<string, IReadOnlyCollection<string>> Validate(int atIndex)
         {
+            return ValidateForIndex(atIndex);
+        }
+
+        public static class Factory
+        {
+            public static Comment Create(CommentType commentType, string text,
+                EvaluationCommentAuthor authorType, DateTime createdAt, int? bookmarkPinId)
+            {
+                switch (commentType)
+                {
+                    case CommentType.Textual:
+                        return Textual(text, authorType, createdAt);
+                    case CommentType.Attachment:
+                        return Attachment(text, authorType, createdAt);
+                    case CommentType.Bookmark:
+                        return Bookmark(bookmarkPinId, authorType, createdAt);
+                    default:
+                        throw new ArgumentOutOfRangeException($"Unknown comment: {commentType}");
+                }
+            }
+
+            public static Comment Textual(string text,
+                EvaluationCommentAuthor authorType, DateTime createdAt)
+            {
+                return new Comment(CommentType.Textual, text, authorType, createdAt,
+                    bookmarkPinId: null);
+            }
+
+            public static Comment Attachment(string text,
+                EvaluationCommentAuthor authorType,
+                DateTime createdAt)
+            {
+                return new Comment(CommentType.Attachment, text, authorType, createdAt,
+                    bookmarkPinId: null);
+            }
+
+            public static Comment Bookmark(int? bookmarkPinId,
+                 EvaluationCommentAuthor authorType,
+                 DateTime createdAt)
+            {
+                return new Comment(CommentType.Bookmark, text: null, authorType, createdAt,
+                    bookmarkPinId);
+            }
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return CreatedAt;
+            yield return CommentType;
+            yield return AuthorType;
+        }
+
+        private Dictionary<string, IReadOnlyCollection<string>> ValidateForIndex(int atIndex)
+        {
+            var result = new Dictionary<string, IReadOnlyCollection<string>>();
             var textErrors = new List<string>();
             switch (CommentType)
             {
@@ -75,67 +105,24 @@ namespace Domain
                     }
                     break;
                 case CommentType.Bookmark:
-                    if (BookmarkPinId <= 0) {
-                        _errors.Add(FullMemberName("BookmarkPinId", atIndex),
-                            new List<string>{ GreaterThanZeroMsg });
+                    if (BookmarkPinId <= 0)
+                    {
+                        result.Add(FullMemberName("BookmarkPinId", atIndex),
+                            new List<string> { GreaterThanZeroMsg });
                     }
                     break;
                 default:
                     var msg = $"Unknown comment: {CommentType} at index [{atIndex}]";
-                    _errors.Add(FullMemberName("CommentType", atIndex), new List<string>{ msg });
+                    result.Add(FullMemberName("CommentType", atIndex), new List<string> { msg });
                     throw new ArgumentOutOfRangeException(msg);
             }
 
             if (textErrors.Count > 0)
             {
-                _errors.Add(FullMemberName("Text", atIndex), textErrors);
+                result.Add(FullMemberName("Text", atIndex), textErrors);
             }
 
-            return _errors;
-        }
-
-        public static Comment Textual(string text,
-            EvaluationCommentAuthor authorType,
-            DateTime createdAt)
-        {
-            return new Comment(CommentType.Textual, text, authorType, createdAt);
-        }
-
-        public static Comment Attachment(string text,
-            EvaluationCommentAuthor authorType,
-            DateTime createdAt)
-        {
-            return new Comment(CommentType.Attachment, text, authorType, createdAt);
-        }
-
-        public static Comment Bookmark(int? bookmarkPinId,
-             EvaluationCommentAuthor authorType,
-             DateTime createdAt)
-        {
-            return new Comment(bookmarkPinId, authorType, createdAt);
-        }
-
-        public static Comment Create(CommentType commentType, string text,
-            EvaluationCommentAuthor authorType, DateTime createdAt, int? bookmarkPinId)
-        {
-            switch (commentType)
-            {
-                case CommentType.Textual:
-                    return Textual(text, authorType, createdAt);
-                case CommentType.Attachment:
-                    return Attachment(text, authorType, createdAt);
-                case CommentType.Bookmark:
-                    return Bookmark(bookmarkPinId, authorType, createdAt);
-                default:
-                    throw new ArgumentOutOfRangeException($"Unknown comment: {commentType}");
-            }
-        }
-
-        protected override IEnumerable<object> GetAtomicValues()
-        {
-            yield return CreatedAt;
-            yield return CommentType;
-            yield return AuthorType;
+            return result;
         }
 
         private static string FullMemberName(string memberName, int atIndex)

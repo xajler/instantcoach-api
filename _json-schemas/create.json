@@ -101,7 +101,6 @@
                 "id",
                 "index",
                 "range",
-                "comment",
                 "mediaUrl"
             ]
         },
@@ -157,10 +156,8 @@
             },
             "required": [
                 "commentType",
-                "text",
                 "authorType",
-                "createdAt",
-                "bookmarkPinId"
+                "createdAt"
             ]
         },
         "RangeClient": {
@@ -197,7 +194,6 @@
         "agentId",
         "evaluatorName",
         "agentName",
-        "comments",
-        "bookmarkPins"
+        "comments"
     ]
 }

@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Schema;
 using Domain;
 using Core.Models;
 using Core.Services;
@@ -60,17 +59,6 @@ namespace Api.Controllers.Version1
             _logger.LogInformation("GET by Id params [id]: {Id}", id);
             var result = await _service.GetById(id);
             return CreateResult(result, successStatusCode: Status200OK, id);
-        }
-
-        /// <summary>Gets JSON schema for Create or Update.</summary>
-        [HttpGet("schema/{schemaType}")]
-        [ProducesResponseType(typeof(JSchema), Status200OK)]
-        [ProducesResponseType(Status400BadRequest)]
-        public ActionResult GetAsync(string schemaType)
-        {
-            var result = _service.GetJsonSchema(schemaType);
-            if (result.Success) { return Ok(result.Value); }
-            return BadRequest($"Valid schema types are: '{SchemaCreate}' or '{SchemaUpdate}'!");
         }
 
         /// <summary>Creates InstantCoach with Status from Config.InstantCoachStatusDefault.</summary>

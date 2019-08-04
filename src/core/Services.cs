@@ -1,14 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Schema.Generation;
-using Newtonsoft.Json.Schema;
 using Core.Repositories;
 using Domain;
 using Core.Models;
 using ErrorType = Core.Models.ErrorType;
-using static Core.Helpers;
-using static Core.Constants.Controller;
 
 namespace Core.Services
 {
@@ -16,7 +11,6 @@ namespace Core.Services
     {
         Task<ListResult<InstantCoachList>> GetList(int skip, int take, bool showCompleted);
         Task<Result<InstantCoachForId>> GetById(int id);
-        Result<JSchema> GetJsonSchema(string schemaType);
         Task<Result<InstantCoach>> Create(InstantCoachCreateClient data);
         Task<Result> Update(int id, InstantCoachUpdateClient data);
         Task<Result> MarkCompleted(int id);
@@ -56,37 +50,11 @@ namespace Core.Services
             return Result<InstantCoachForId>.AsSuccess(result.Value.ToInstantCoachForId());
         }
 
-        public Result<JSchema> GetJsonSchema(string schemaType)
-        {
-            if (schemaType == SchemaCreate || schemaType == SchemaUpdate)
-            {
-                _logger.LogInformation("GET schema by type: {@SchemaType}", schemaType);
-                var generator = new JSchemaGenerator
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                };
-                generator.GenerationProviders.Add(new StringEnumGenerationProvider());
-
-                if (schemaType == SchemaCreate)
-                {
-                    return Result<JSchema>.AsSuccess(
-                    generator.Generate(typeof(InstantCoachCreateClient)));
-                }
-                else
-                {
-                    return Result<JSchema>.AsSuccess(
-                        generator.Generate(typeof(InstantCoachUpdateClient)));
-                }
-            }
-
-            return Result<JSchema>.AsError(ErrorType.InvalidData);
-        }
-
         public async Task<Result<InstantCoach>> Create(InstantCoachCreateClient data)
         {
             InstantCoach entity = InstantCoach.Factory.Create(data);
             _logger.LogInformation("New entity: {@EntityModel}", entity);
-            return await OnSave(entity, entity.Validate());
+            return await OnSave(entity);
         }
 
         public async Task<Result> Update(int id, InstantCoachUpdateClient data)
@@ -94,7 +62,7 @@ namespace Core.Services
             var entityResult = await _repository.FindById(id);
             if (!entityResult.Success) { return OnNotExistingId(id); }
             var entity = InstantCoach.Factory.Update(current: entityResult.Value, data);
-            return await OnSave(entity, entity.Validate());
+            return await OnSave(entity);
         }
 
         public async Task<Result> MarkCompleted(int id)
@@ -102,7 +70,7 @@ namespace Core.Services
             var entityResult = await _repository.FindById(id);
             if (!entityResult.Success) { return OnNotExistingId(id); }
             var entity = InstantCoach.Factory.UpdateAsCompleted(current: entityResult.Value);
-            return await OnSave(entity, entity.Validate());
+            return await OnSave(entity);
         }
 
         public async Task<Result> Remove(int id)
@@ -113,18 +81,18 @@ namespace Core.Services
             return result;
         }
 
-        private async Task<Result<InstantCoach>> OnSave(InstantCoach entity, ValidationResult validationResult)
+        private async Task<Result<InstantCoach>> OnSave(InstantCoach entity)
         {
             Result<InstantCoach> result;
 
-            if (validationResult.IsValid)
+            if (entity.IsValid)
             {
                 _logger.LogInformation("Entity on Save: {@EntityModel}", entity);
                 result = await _repository.Save(entity);
             }
             else
             {
-                result = Result<InstantCoach>.AsDomainError(validationResult.Errors);
+                result = Result<InstantCoach>.AsDomainError(entity.Errors);
             }
 
             _logger.LogInformation("Create Result: {@Result}", result);

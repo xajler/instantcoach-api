@@ -273,47 +273,6 @@ namespace Tests.Integration
             }
         }
 
-        [Fact]
-        public async Task Should_return_JSON_schema_for_create()
-        {
-            string schemaType = "create";
-            var request = GetRequestUrlAndSetToken($"/schema/{schemaType}");
-
-            using(var response = await _client.GetAsync(request))
-            {
-                Action result = () => response.EnsureSuccessStatusCode();
-                result.Should().NotThrow();
-            }
-        }
-
-        [Fact]
-        public async Task Should_return_JSON_schema_for_update()
-        {
-            string schemaType = "update";
-            var request = GetRequestUrlAndSetToken($"/schema/{schemaType}");
-
-            using(var response = await _client.GetAsync(request))
-            {
-                Action result = () => response.EnsureSuccessStatusCode();
-                result.Should().NotThrow();
-            }
-        }
-
-        [Fact]
-        public async Task Should_return_bad_request_when_sent_invalid_JSON_schema_type()
-        {
-            string schemaType = "notSupportedType";
-            var request = GetRequestUrlAndSetToken($"/schema/{schemaType}");
-
-            using(var response = await _client.GetAsync(request))
-            {
-                int actual = (int)response.StatusCode;
-                int expected = 400;
-
-                actual.Should().Be(expected);
-            }
-        }
-
         public void Dispose()
         {
             _client.Dispose();

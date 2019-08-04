@@ -44,9 +44,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_be_valid_on_create_IC_via_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateFull());
-
-            var actual = sut.Validate();
+            InstantCoach actual = InstantCoach.Factory.Create(ClientCreateFull());
 
             actual.IsValid.Should().BeTrue();
             actual.Errors.Should().HaveCount(0);
@@ -55,9 +53,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_comments_are_null_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(ClientCreate());
-
-            var actual = sut.Validate();
+            InstantCoach actual = InstantCoach.Factory.Create(ClientCreate());
             var expected = CreateValidationResult(
                 "Comments", "Comments are required to have at least one element.");
 
@@ -72,9 +68,8 @@ namespace Tests.Unit
         public static void Should_be_valid_on_update()
         {
             InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
-            var result = InstantCoach.Factory.UpdateAsCompleted(current: sut);
 
-            var actual = result.Validate();
+            var actual = InstantCoach.Factory.UpdateAsCompleted(current: sut);
 
             actual.Errors.Should().HaveCount(0);
             actual.IsValid.Should().BeTrue();
@@ -87,9 +82,8 @@ namespace Tests.Unit
 
             var actual = InstantCoach.Factory.Update(current: sut,
                 ClientUpdate(UpdateType.Review));
-            var result = actual.Validate();
 
-            result.IsValid.Should().BeTrue();
+            actual.IsValid.Should().BeTrue();
             actual.Status.Should().Be(InstantCoachStatus.Waiting);
         }
 
@@ -99,9 +93,8 @@ namespace Tests.Unit
             InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
 
             var actual = InstantCoach.Factory.UpdateAsCompleted(current: sut);
-            var result = actual.Validate();
 
-            result.IsValid.Should().BeTrue();
+            actual.IsValid.Should().BeTrue();
             actual.Status.Should().Be(InstantCoachStatus.Completed);
         }
 
@@ -109,13 +102,13 @@ namespace Tests.Unit
         public static void Should_be_valid_adding_bookmark_pins_on_update()
         {
             InstantCoach sut = InstantCoach.Factory.Create(ClientCreateFull());
-            var result = InstantCoach.Factory.Update(current: sut, ClientUpdateFull());
 
-            var actual = result.Validate();
+
+            var actual = InstantCoach.Factory.Update(current: sut, ClientUpdateFull());
 
             actual.IsValid.Should().BeTrue();
             actual.Errors.Should().HaveCount(0);
-            result.BookmarkPins.Should().HaveCount(2);
+            actual.BookmarkPins.Should().HaveCount(2);
         }
 
         [Fact]
@@ -123,9 +116,8 @@ namespace Tests.Unit
         {
             InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
             var clientUpdate = new InstantCoachUpdateClient { UpdateType = UpdateType.Save };
-            var result = InstantCoach.Factory.Update(current: sut, clientUpdate);
 
-            var actual = result.Validate();
+            var actual = InstantCoach.Factory.Update(current: sut, clientUpdate);
             var expected = CreateValidationResult(
                 "Comments", "Comments are required to have at least one element.");
 
@@ -165,9 +157,8 @@ namespace Tests.Unit
             InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
 
             var actual = InstantCoach.Factory.Update(current: sut, ClientUpdate());
-            var result = actual.Validate();
 
-            result.IsValid.Should().BeTrue();
+            actual.IsValid.Should().BeTrue();
             actual.Status.Should().Be(InstantCoachStatus.InProgress);
         }
 
@@ -177,9 +168,8 @@ namespace Tests.Unit
             InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
 
             var actual = InstantCoach.Factory.Update(current: sut, ClientUpdate());
-            var result = actual.Validate();
 
-            result.IsValid.Should().BeTrue();
+            actual.IsValid.Should().BeTrue();
             actual.CommentsCount.Should().Be(3);
         }
 
@@ -189,9 +179,8 @@ namespace Tests.Unit
             InstantCoach sut = InstantCoach.Factory.Create(ClientCreateWithComments());
 
             var actual = InstantCoach.Factory.Update(current: sut, ClientUpdate());
-            var result = actual.Validate();
 
-            result.IsValid.Should().BeTrue();
+            actual.IsValid.Should().BeTrue();
             actual.Reference.Should().Be(sut.Reference);
             actual.Description.Should().Be(sut.Description);
             actual.TicketId.Should().Be(sut.TicketId);
@@ -204,10 +193,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_description_is_empty_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(
+            InstantCoach actual = InstantCoach.Factory.Create(
                 ClientCreateWithComments(description: ""));
-
-            var actual = sut.Validate();
             var expected = CreateValidationResult("Description", RequiredMsg);
 
             RunGenericAsserts(actual, expected);
@@ -216,10 +203,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_description_larger_then_1000_chars_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(
+            InstantCoach actual = InstantCoach.Factory.Create(
                 ClientCreateWithComments(description: GenerateStringOfLength(1001)));
-
-            var actual = sut.Validate();
             var expected = CreateValidationResult(
                 "Description", "Should not exceed 1000 characters.");
 
@@ -231,9 +216,9 @@ namespace Tests.Unit
         {
             InstantCoachCreateClient clientCreate = ClientCreateWithComments();
             clientCreate.TicketId = null;
-            InstantCoach sut = InstantCoach.Factory.Create(clientCreate);
 
-            var actual = sut.Validate();
+
+            InstantCoach actual = InstantCoach.Factory.Create(clientCreate);
             var expected = CreateValidationResult("TicketId", RequiredMsg);
 
             RunGenericAsserts(actual, expected);
@@ -242,10 +227,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_ticketId_larger_then_64_chars_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(
+            InstantCoach actual = InstantCoach.Factory.Create(
                 ClientCreateWithComments(ticketId: GenerateStringOfLength(65)));
-
-            var actual = sut.Validate();
             var expected = CreateValidationResult(
                 "TicketId", "Should not exceed 64 characters.");
 
@@ -255,10 +238,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_evaluatorId_smaller_or_equal_to_zero_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(
+            InstantCoach actual = InstantCoach.Factory.Create(
                 ClientCreateWithComments(evaluatorId: -1));
-
-            var actual = sut.Validate();
             var expected = CreateValidationResult("EvaluatorId", GreaterThanZeroMsg);
 
             RunGenericAsserts(actual, expected);
@@ -269,9 +250,8 @@ namespace Tests.Unit
         {
             InstantCoachCreateClient clientCreate = ClientCreateWithComments();
             clientCreate.AgentId = 0;
-            InstantCoach sut = InstantCoach.Factory.Create(clientCreate);
 
-            var actual = sut.Validate();
+            InstantCoach actual = InstantCoach.Factory.Create(clientCreate);
             var expected = CreateValidationResult("AgentId", GreaterThanZeroMsg);
 
             RunGenericAsserts(actual, expected);
@@ -280,11 +260,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_evaluator_name_is_empty_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(
+            InstantCoach actual = InstantCoach.Factory.Create(
                 ClientCreateWithComments(evaluatorName: ""));
-
-            var actual = sut.Validate();
-            Console.WriteLine($"Eval name: {sut.EvaluatorName}");
             var expected = CreateValidationResult("EvaluatorName", RequiredMsg);
 
             RunGenericAsserts(actual, expected);
@@ -293,10 +270,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_evaluator_name_larger_then_128_chars_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(
+            InstantCoach actual = InstantCoach.Factory.Create(
                 ClientCreateWithComments(evaluatorName: GenerateStringOfLength(129)));
-
-            var actual = sut.Validate();
             var expected = CreateValidationResult(
                 "EvaluatorName", "Should not exceed 128 characters.");
 
@@ -308,10 +283,8 @@ namespace Tests.Unit
         {
             InstantCoachCreateClient clientCreate = ClientCreateWithComments();
             clientCreate.AgentName = null;
-            InstantCoach sut = InstantCoach.Factory.Create(clientCreate);
 
-            var actual = sut.Validate();
-            Console.WriteLine($"Agent name: {sut.AgentName}");
+            InstantCoach actual = InstantCoach.Factory.Create(clientCreate);
             var expected = CreateValidationResult("AgentName", RequiredMsg);
 
             RunGenericAsserts(actual, expected);
@@ -320,10 +293,8 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_agent_name_larger_then_128_chars_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(
+            InstantCoach actual = InstantCoach.Factory.Create(
                 ClientCreateWithComments(agentName: GenerateStringOfLength(129)));
-
-            var actual = sut.Validate();
             var expected = CreateValidationResult(
                 "AgentName", "Should not exceed 128 characters.");
 
@@ -333,9 +304,7 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_one_or_more_comments_are_invalid_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateInvalidComments());
-
-            var actual = sut.Validate();
+            InstantCoach actual = InstantCoach.Factory.Create(ClientCreateInvalidComments());
 
             actual.IsValid.Should().BeFalse();
             actual.Errors.Should().HaveCount(2);
@@ -344,15 +313,14 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_one_or_more_bookmark_pins_are_invalid_on_create_IC_ctor()
         {
-            InstantCoach sut = InstantCoach.Factory.Create(ClientCreateInvalidBookmarkPins());
-
-            var actual = sut.Validate();
+            InstantCoach actual = InstantCoach.Factory.Create(
+                ClientCreateInvalidBookmarkPins());
 
             actual.IsValid.Should().BeFalse();
             actual.Errors.Should().HaveCount(3);
         }
 
-        private static void RunGenericAsserts(ValidationResult actual, ValidationResult expected)
+        private static void RunGenericAsserts(InstantCoach actual, ValidationResult expected)
         {
             actual.IsValid.Should().BeFalse();
             actual.Errors.Should().HaveCount(expected.Errors.Count);

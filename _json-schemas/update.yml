@@ -61,7 +61,6 @@ definitions:
     - id
     - index
     - range
-    - comment
     - mediaUrl
   CommentClient:
     title: InstantCoach Comments
@@ -108,10 +107,8 @@ definitions:
         - 'null'
     required:
     - commentType
-    - text
     - authorType
     - createdAt
-    - bookmarkPinId
   RangeClient:
     title: Bookmark Pin Range
     description: The range of pin with starting and ending point in seconds. Required.
@@ -137,4 +134,3 @@ definitions:
 required:
 - updateType
 - comments
-- bookmarkPins

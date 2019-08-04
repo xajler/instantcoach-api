@@ -6,7 +6,8 @@ namespace Domain
 {
     public sealed class Range : ValueObject
     {
-        public Range(int start, int end)
+        [JsonConstructor]
+        private Range(int start, int end)
         {
             Start = start;
             End = end;
@@ -14,6 +15,14 @@ namespace Domain
 
         public int Start { get; private set; }
         public int End { get; private set; }
+
+        public static class Factory
+        {
+            public static Range Create(int start, int end)
+            {
+                return new Range(start, end);
+            }
+        }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
@@ -24,16 +33,8 @@ namespace Domain
 
     public sealed class BookmarkPin : ValueObject
     {
-        private readonly Dictionary<string, IReadOnlyCollection<string>> _errors
-            = new Dictionary<string, IReadOnlyCollection<string>>();
-
-        public BookmarkPin(int id, int index, Range range, string mediaurl)
-            : this(id, index, range, mediaurl, null)
-        {
-        }
-
         [JsonConstructor]
-        public BookmarkPin(int id, int index, Range range,
+        private BookmarkPin(int id, int index, Range range,
             string mediaurl, string comment)
         {
             Id = id;
@@ -49,33 +50,43 @@ namespace Domain
         public string Comment { get; }
         public string MediaUrl { get; }
 
+        public static class Factory
+        {
+            public static BookmarkPin Create(int id, int index, Range range,
+                string mediaurl, string comment)
+            {
+                return new BookmarkPin(id, index, range, mediaurl, comment);
+            }
+        }
+
         public Dictionary<string, IReadOnlyCollection<string>> Validate(int atIndex)
         {
+            var result = new Dictionary<string, IReadOnlyCollection<string>>();
             if (Id <= 0)
             {
-                _errors.Add(FullMemberName("Id", atIndex),
+                result.Add(FullMemberName("Id", atIndex),
                     new List<string> { GreaterThanZeroMsg });
             }
             if (Index <= 0)
             {
-                _errors.Add(FullMemberName("Index", atIndex),
+                result.Add(FullMemberName("Index", atIndex),
                     new List<string> { GreaterThanZeroMsg }); }
             if (Range.Start <= 0)
             {
-                _errors.Add(FullMemberName("Range.Start", atIndex),
+                result.Add(FullMemberName("Range.Start", atIndex),
                     new List<string> { GreaterThanZeroMsg });
             }
             if (Range.Start >= Range.End)
             {
-                _errors.Add(FullMemberName("Range.End", atIndex),
+                result.Add(FullMemberName("Range.End", atIndex),
                     new List<string> { "Should be greater than Range Start number." });
             }
             if (string.IsNullOrWhiteSpace(MediaUrl))
             {
-                _errors.Add(FullMemberName("MediaUrl", atIndex),
+                result.Add(FullMemberName("MediaUrl", atIndex),
                     new List<string> { RequiredMsg });
             }
-            return _errors;
+            return result;
         }
 
         protected override IEnumerable<object> GetAtomicValues()

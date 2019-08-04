@@ -55,10 +55,10 @@ namespace Tests.Unit
         public static void Should_not_be_equal_when_not_same_structure()
         {
             var actual = NewBookmarkPin();
-            var expected = new BookmarkPin(
+            var expected = BookmarkPin.Factory.Create(
                 id: 1,
                 index: 2,
-                new Range(1, 2),
+                Range.Factory.Create(1, 2),
                 MediaUrlValue,
                 CommentValue);
 
@@ -78,11 +78,12 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_id_smaller_or_equal_zero_via_ctor()
         {
-            var sut = new BookmarkPin(
+            var sut = BookmarkPin.Factory.Create(
                 id: 0,
                 index: 1,
-                new Range(1, 2),
-                MediaUrlValue);
+                Range.Factory.Create(1, 2),
+                MediaUrlValue,
+                comment: null);
 
             RunAsserts(sut, atIndex: 0, "Id", GreaterThanZeroMsg);
         }
@@ -90,10 +91,10 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_index_smaller_or_equal_zero_via_ctor()
         {
-            var sut = new BookmarkPin(
+            var sut = BookmarkPin.Factory.Create(
                 id: 1,
                 index: 0,
-                new Range(1, 2),
+                Range.Factory.Create(1, 2),
                 MediaUrlValue,
                 CommentValue);
 
@@ -103,10 +104,10 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_range_start_smaller_or_equal_zero_via_ctor()
         {
-            var sut = new BookmarkPin(
+            var sut = BookmarkPin.Factory.Create(
                 id: 1,
                 index: 1,
-                new Range(0, 2),
+                Range.Factory.Create(0, 2),
                 MediaUrlValue,
                 CommentValue);
 
@@ -116,10 +117,10 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_range_start_should_be_greater_then_end_via_ctor()
         {
-            var sut = new BookmarkPin(
+            var sut = BookmarkPin.Factory.Create(
                 id: 1,
                 index: 1,
-                new Range(2, 1),
+                Range.Factory.Create(2, 1),
                 MediaUrlValue,
                 CommentValue);
 
@@ -130,10 +131,10 @@ namespace Tests.Unit
         [Fact]
         public static void Should_have_errors_when_media_url_is_null_or_empty_via_ctor()
         {
-            var sut = new BookmarkPin(
+            var sut = BookmarkPin.Factory.Create(
                 id: 1,
                 index: 1,
-                new Range(1, 2),
+                Range.Factory.Create(1, 2),
                 null,
                 CommentValue);
 
@@ -154,10 +155,10 @@ namespace Tests.Unit
 
         private static BookmarkPin NewBookmarkPin(string comment = CommentValue)
         {
-            return new BookmarkPin(
+            return BookmarkPin.Factory.Create(
                 id: 1,
                 index: 1,
-                new Range(1, 2),
+                Range.Factory.Create(1, 2),
                 MediaUrlValue,
                 comment);
         }

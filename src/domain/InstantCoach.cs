@@ -1,16 +1,18 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using static Domain.Helpers;
+using static Domain.Constants.Validation;
 
 namespace Domain
 {
     public sealed partial class InstantCoach : AggregateRoot, IAuditable
     {
-        private const string CommentsErrorMsg = "Comments are required to have at least one element.";
         private readonly ValidationResult _validationResult = new ValidationResult();
 
-        public InstantCoach(
+        [JsonConstructor]
+        private InstantCoach(
             string description,
             string ticketId,
             int evaluatorId,
@@ -40,6 +42,10 @@ namespace Domain
         public string EvaluatorName { get; }
         public string AgentName { get; }
 
+        public Dictionary<string, IReadOnlyCollection<string>> Errors
+            => _validationResult.Errors;
+        public bool IsValid => _validationResult.IsValid;
+
         public static class Factory
         {
             public static InstantCoach Create(InstantCoachCreateClient data)
@@ -53,8 +59,10 @@ namespace Domain
                     agentName: data.AgentName);
                 result.AddComments(data.Comments);
                 result.AddBookmarkPins(data.BookmarkPins);
+                result.Validate();
                 return result;
             }
+
             // TODO: Guard those with status completed, they cannot be updated.
             public static InstantCoach Update(
                 InstantCoach current, InstantCoachUpdateClient data)
@@ -65,6 +73,7 @@ namespace Domain
                 result.BookmarkPinsValue = null; // EF Hack
                 result.AddComments(data.Comments);
                 result.AddBookmarkPins(data.BookmarkPins);
+                result.Validate();
                 return result;
             }
 
@@ -73,17 +82,12 @@ namespace Domain
             {
                 InstantCoach result = current;
                 result.Status = InstantCoachStatus.Completed;
+                result.Validate();
                 return result;
             }
         }
 
-        public ValidationResult Validate()
-        {
-            CreateValidationErrors();
-            return _validationResult;
-        }
-
-        internal void AddComments(List<CommentClient> comments)
+        private void AddComments(List<CommentClient> comments)
         {
             if (comments != null && comments.Count > 0)
             {
@@ -92,7 +96,7 @@ namespace Domain
 
                 foreach (var item in comments)
                 {
-                    Comment comment = Comment.Create(item.CommentType, item.Text,
+                    Comment comment = Comment.Factory.Create(item.CommentType, item.Text,
                         item.AuthorType, item.CreatedAt, item.BookmarkPinId);
                     var errors = comment.Validate(index);
                     if (errors.Any()) { _validationResult.Errors.AddRange(errors); }
@@ -107,7 +111,7 @@ namespace Domain
             else { Comments = new List<Comment>(); }
         }
 
-        internal void AddBookmarkPins(List<BookmarkPinClient> bookmarkPins)
+        private void AddBookmarkPins(List<BookmarkPinClient> bookmarkPins)
         {
             if (bookmarkPins != null && bookmarkPins.Count > 0)
             {
@@ -115,10 +119,10 @@ namespace Domain
                 int index = 0;
                 foreach(var item in bookmarkPins)
                 {
-                    var pin = new BookmarkPin(
+                    var pin = BookmarkPin.Factory.Create(
                         item.Id,
                         item.Index,
-                        new Range(item.Range.Start, item.Range.End),
+                        Range.Factory.Create(item.Range.Start, item.Range.End),
                         item.MediaUrl,
                         item.Comment);
                     var errors = pin.Validate(atIndex: index);
@@ -149,7 +153,7 @@ namespace Domain
             return $"IC{value}";
         }
 
-        private void CreateValidationErrors()
+        private void Validate()
         {
             var descErrors = new List<string>
                 {
