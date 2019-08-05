@@ -31,14 +31,14 @@ namespace Tests.Unit
         public static void Should_be_of_aggregate_root_type()
         {
             var actual = typeof(InstantCoach);
-            actual.Should().BeDerivedFrom(typeof(AggregateRoot));
+            actual.Should().Implement(typeof(IAggregateRoot));
         }
 
         [Fact]
         public static void Should_be_of_entity_type()
         {
             var actual = typeof(InstantCoach);
-            actual.Should().BeDerivedFrom(typeof(Entity));
+            actual.Should().BeDerivedFrom(typeof(EntityBase));
         }
 
         [Fact]

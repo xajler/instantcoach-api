@@ -4,7 +4,7 @@ using static Domain.Constants.Validation;
 
 namespace Domain
 {
-    public sealed class Range : ValueObject
+    public sealed class Range : ValueObjectBase
     {
         [JsonConstructor]
         private Range(int start, int end)
@@ -31,7 +31,7 @@ namespace Domain
         }
     }
 
-    public sealed class BookmarkPin : ValueObject
+    public sealed class BookmarkPin : ValueObjectBase
     {
         [JsonConstructor]
         private BookmarkPin(int id, int index, Range range,

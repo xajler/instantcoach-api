@@ -11,7 +11,7 @@ using static Core.Constants.Db;
 
 namespace Core.Repositories
 {
-    public class Repository<T> where T : AggregateRoot
+    public class Repository<T> where T : EntityBase, IAggregateRoot
     {
         private readonly ILogger<Repository<T>> _logger;
         private readonly DbContext _context;

@@ -5,7 +5,7 @@ using Domain;
 
 namespace Tests.Unit
 {
-    public sealed class TestEntity : Entity
+    public sealed class TestEntity : EntityBase
     {
         public TestEntity(int id)
         {

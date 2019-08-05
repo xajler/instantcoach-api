@@ -40,7 +40,7 @@ namespace Core.Context
         private void SetAuditInfo()
         {
             var entries = ChangeTracker.Entries()
-                                       .Where(x => x.Entity is Entity
+                                       .Where(x => x.Entity is EntityBase
                                                 && (x.State == EntityState.Added
                                                     || x.State == EntityState.Modified));
             foreach (var entry in entries)

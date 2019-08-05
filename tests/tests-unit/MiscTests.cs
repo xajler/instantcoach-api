@@ -7,7 +7,6 @@ using Core;
 using Core.Models;
 using Helpers = Domain.Helpers;
 using static Domain.Constants.Validation;
-using static Tests.Unit.TestHelpers;
 
 namespace Tests.Unit
 {
@@ -123,7 +122,9 @@ namespace Tests.Unit
         {
             TestEntity actual = new TestEntity(id: 1);
             TestEntity expected = new TestEntity(id: 1);
+            bool result = actual == expected;
 
+            result.Should().BeTrue();
             actual.GetHashCode().Should().Be(expected.GetHashCode());
             actual.Equals(expected).Should().BeTrue();
         }
@@ -133,7 +134,9 @@ namespace Tests.Unit
         {
             TestEntity actual = new TestEntity(id: 1);
             TestEntity expected = new TestEntity(id: 2);
+            bool result = actual != expected;
 
+            result.Should().BeTrue();
             actual.Should().NotBeEquivalentTo(expected);
             actual.GetHashCode().Should().NotBe(expected.GetHashCode());
         }

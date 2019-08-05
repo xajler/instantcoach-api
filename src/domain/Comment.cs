@@ -5,7 +5,7 @@ using static Domain.Constants.Validation;
 
 namespace Domain
 {
-    public sealed class Comment : ValueObject
+    public sealed class Comment : ValueObjectBase
     {
         [JsonConstructor]
         private Comment(

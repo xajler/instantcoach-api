@@ -10,11 +10,11 @@ namespace Domain
         DateTime UpdatedAt { get; set; }
     }
 
-    public abstract class AggregateRoot : Entity
+    public interface IAggregateRoot
     {
     }
 
-    public abstract class Entity
+    public abstract class EntityBase
     {
         protected virtual object Actual => this;
         public int Id { get; private set; }
@@ -29,9 +29,20 @@ namespace Domain
             return (Actual.GetType().ToString() + Id).GetHashCode();
         }
 
+        public static bool operator ==(EntityBase a, EntityBase b)
+        {
+            if (a is null && b is null) { return true; }
+            if (a is null || b is null) { return false; }
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(EntityBase a, EntityBase b)
+            =>  !(a == b);
+
+
         public override bool Equals(object obj)
         {
-            if (!(obj is Entity other)) { return false; }
+            if (!(obj is EntityBase other)) { return false; }
             if (ReferenceEquals(this, other)) { return true; }
             if (Actual.GetType() != other.Actual.GetType()) { return false; }
             if (Id == 0 || other.Id == 0) { return false; }
@@ -39,7 +50,7 @@ namespace Domain
         }
     }
 
-    public abstract class ValueObject
+    public abstract class ValueObjectBase
     {
         protected abstract IEnumerable<object> GetAtomicValues();
 
@@ -47,7 +58,7 @@ namespace Domain
         {
             if (obj == null || obj.GetType() != GetType()) { return false; }
 
-            ValueObject other = (ValueObject)obj;
+            ValueObjectBase other = (ValueObjectBase)obj;
             IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
             IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
             while (thisValues.MoveNext() && otherValues.MoveNext())

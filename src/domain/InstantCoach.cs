@@ -7,7 +7,7 @@ using static Domain.Constants.Validation;
 
 namespace Domain
 {
-    public sealed partial class InstantCoach : AggregateRoot, IAuditable
+    public sealed partial class InstantCoach : EntityBase, IAggregateRoot, IAuditable
     {
         private readonly ValidationResult _validationResult = new ValidationResult();
 

@@ -16,7 +16,7 @@ namespace Tests.Unit
         public static void Should_be_of_value_object_type()
         {
             var actual = typeof(BookmarkPin);
-            var expected = typeof(ValueObject);
+            var expected = typeof(ValueObjectBase);
 
             actual.Should().BeDerivedFrom(expected);
         }
