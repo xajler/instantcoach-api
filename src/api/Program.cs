@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,14 +21,14 @@ namespace Api
             .AddEnvironmentVariables()
             .Build();
 
-        public static int Main()
+        public static async Task<int> Main()
         {
             var esUrl = GetEnvironmentVariable(Constants.EsUrlEnVar);
             Log.Logger = new Logging(Configuration, esUrl).Logger;
             try
             {
                 Log.Information("Starting web host");
-                CreateWebHostBuilder(new string[]{}).Build().Run();
+                await CreateWebHostBuilder(new string[] {}).Build().RunAsync();
                 return 0;
             }
             catch (Exception ex)

@@ -8,6 +8,8 @@ namespace Core
         public const string ResponseTimeHeader = "X-Response-Time";
         public const string PossibleBugText = "****POSSIBLE BUG******.";
         public const string EsUrlEnVar = "ELASTICSEARCH_URL";
+        public const string GenericExceptionMsg = "Exception of Type: {ExceptionType} and Message: {Message}";
+        public const string UnhandledExceptionMsg = "Unknown exception of Type: {ExceptionType} an Message: {Message}";
 
         public static class Controller
         {

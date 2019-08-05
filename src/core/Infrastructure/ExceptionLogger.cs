@@ -46,13 +46,13 @@ namespace Core
                     return OnDbException(sEx);
                 case Exception ex when IsUsualExceptionsFilter(ex):
                     return new LogResult(LogLevel.Error,
-                        $"{PossibleBugText} {GetGenericMsg()}");
+                        $"{PossibleBugText} {GenericExceptionMsg}");
                 default:
-                    return new LogResult(LogLevel.Critical, GetUnhandledMsg());
+                    return new LogResult(LogLevel.Critical, UnhandledExceptionMsg);
             }
         }
 
-        private LogResult OnDbUpdateException(DbUpdateException ex)
+        private static LogResult OnDbUpdateException(DbUpdateException ex)
         {
 
             if (ex.InnerException != null && ex.InnerException is SqlException)
@@ -61,17 +61,17 @@ namespace Core
             }
             else
             {
-                var msg = $"Failed to Save DB Changes. {GetGenericMsg()}";
+                var msg = $"Failed to Save DB Changes. {GenericExceptionMsg}";
                 return new LogResult(LogLevel.Critical, msg);
             }
         }
 
-        private LogResult OnDbException(SqlException ex)
+        private static LogResult OnDbException(SqlException ex)
         {
             var dbError = GetError(ex);
             if (dbError == DatabaseError.Unhandled)
             {
-                var msg = $"Unhandled DB exception. Possible connection error. {GetGenericMsg()}";
+                var msg = $"Unhandled DB exception. Possible connection error. {GenericExceptionMsg}";
                 return new LogResult(LogLevel.Critical, msg);
             }
             else
@@ -114,15 +114,6 @@ namespace Core
                 default:
                     return DatabaseError.Unhandled;
             }
-        }
-
-        private static string GetGenericMsg()
-        {
-            return "Exception of Type: {ExceptionType} and Message: {Message}";
-        }
-        private static string GetUnhandledMsg()
-        {
-            return "Unknown exception of Type: {ExceptionType} an Message: {Message}";
         }
     }
 }

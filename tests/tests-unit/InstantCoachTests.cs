@@ -57,11 +57,7 @@ namespace Tests.Unit
             var expected = CreateValidationResult(
                 "Comments", "Comments are required to have at least one element.");
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
@@ -121,11 +117,7 @@ namespace Tests.Unit
             var expected = CreateValidationResult(
                 "Comments", "Comments are required to have at least one element.");
 
-            actual.IsValid.Should().BeFalse();
-            actual.Errors.Should().HaveCount(expected.Errors.Count);
-            actual.Errors.First().Key.Should().Be(expected.Errors.First().Key);
-            actual.Errors.First().Value.First().Should().Be(
-                expected.Errors.First().Value.First());
+            RunGenericAsserts(actual, expected);
         }
 
         [Fact]
